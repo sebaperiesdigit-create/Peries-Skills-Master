@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Skill catalog — searchable, sortable reference documenting every user-created Claude Code skill in the Peries-Skills-Master repository.">
+<title>Peries Skill Catalog — Task-02</title>
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #f3f5f3;
+    --paper-raised: #ffffff;
+    --paper-sunken: #eaedea;
+    --ink: #16211d;
+    --ink-muted: #52625c;
+    --line: #d7ded9;
+    --line-strong: #bfc9c3;
+    --accent: #0e6b58;
+    --accent-strong: #0a4f41;
+    --accent-soft: #e1f0ea;
+    --warn: #8a5f12;
+    --warn-soft: #fbf0d9;
+    --warn-line: #e7ce95;
+    --focus: #0e6b58;
+    --shadow: 0 1px 2px rgba(20,30,27,.07);
+    --radius-lg: 10px;
+    --radius-sm: 4px;
+    --font-display: 'Iowan Old Style', 'Sitka Text', Palatino, 'Palatino Linotype', Georgia, serif;
+    --font-body: 'Avenir Next', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'Cascadia Code', 'JetBrains Mono', Consolas, 'SFMono-Regular', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #121a18; --paper-raised: #182421; --paper-sunken: #0f1614;
+      --ink: #e7eeea; --ink-muted: #9fb0a9; --line: #2b3936; --line-strong: #3a4a46;
+      --accent: #4bc3a6; --accent-strong: #7fdcc3; --accent-soft: #16332c;
+      --warn: #e3b75b; --warn-soft: #33280f; --warn-line: #5c4a1e;
+      --focus: #4bc3a6; --shadow: 0 1px 2px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #121a18; --paper-raised: #182421; --paper-sunken: #0f1614;
+    --ink: #e7eeea; --ink-muted: #9fb0a9; --line: #2b3936; --line-strong: #3a4a46;
+    --accent: #4bc3a6; --accent-strong: #7fdcc3; --accent-soft: #16332c;
+    --warn: #e3b75b; --warn-soft: #33280f; --warn-line: #5c4a1e;
+    --focus: #4bc3a6; --shadow: 0 1px 2px rgba(0,0,0,.45);
+  }
+  :root[data-theme="light"] {
+    --paper: #f3f5f3; --paper-raised: #ffffff; --paper-sunken: #eaedea;
+    --ink: #16211d; --ink-muted: #52625c; --line: #d7ded9; --line-strong: #bfc9c3;
+    --accent: #0e6b58; --accent-strong: #0a4f41; --accent-soft: #e1f0ea;
+    --warn: #8a5f12; --warn-soft: #fbf0d9; --warn-line: #e7ce95;
+    --focus: #0e6b58; --shadow: 0 1px 2px rgba(20,30,27,.07);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; min-width: 320px; background: var(--paper); color: var(--ink);
+    font-family: var(--font-body); line-height: 1.55; font-size: 16px;
+  }
+  button, input, select { font: inherit; }
+  button, select { cursor: pointer; }
+  button:focus-visible, input:focus-visible, select:focus-visible, .table-scroll:focus-visible {
+    outline: 2.5px solid var(--focus); outline-offset: 2px;
+  }
+  .skip-link {
+    position: fixed; left: 1rem; top: -4rem; z-index: 1000;
+    padding: .6rem 1rem; border-radius: var(--radius-sm); background: var(--ink); color: var(--paper); transition: top .15s ease;
+  }
+  .skip-link:focus { top: 1rem; }
+  .page { max-width: 1480px; margin: 0 auto; padding: 32px 24px 56px; }
+
+  .masthead {
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(220px, 320px);
+    gap: 28px; align-items: end; padding-bottom: 20px; border-bottom: 3px solid var(--ink); position: relative;
+  }
+  .masthead::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px; background: var(--line-strong);
+  }
+  .eyebrow {
+    margin: 0 0 10px; font-family: var(--font-mono); font-size: .72rem; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--accent-strong);
+  }
+  .masthead h1 {
+    margin: 0 0 10px; font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(1.65rem, 2.6vw, 2.25rem); letter-spacing: -.01em; text-wrap: balance; color: var(--ink);
+  }
+  .masthead .lede { margin: 0; color: var(--ink-muted); max-width: 62ch; font-size: .98rem; }
+  .stamp {
+    padding: 16px 18px; border: 1px solid var(--line-strong); border-radius: var(--radius-lg);
+    background: var(--paper-raised); box-shadow: var(--shadow);
+  }
+  .stamp .stamp-label {
+    font-family: var(--font-mono); font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--warn); margin: 0 0 6px;
+  }
+  .stamp p { margin: 0; font-size: .87rem; color: var(--ink); }
+  .stamp hr { border: 0; border-top: 1px solid var(--line); margin: 12px 0; }
+  .stamp .stamp-meta {
+    font-family: var(--font-mono); font-size: .76rem; color: var(--ink-muted); font-variant-numeric: tabular-nums;
+  }
+
+  .specline {
+    display: flex; flex-wrap: wrap; margin: 22px 0; border: 1px solid var(--line); border-radius: var(--radius-lg);
+    background: var(--paper-raised); overflow: hidden; box-shadow: var(--shadow);
+  }
+  .specline .item { flex: 1 1 170px; padding: 13px 18px; border-right: 1px solid var(--line); }
+  .specline .item:last-child { border-right: 0; }
+  .specline .n {
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.3rem; font-weight: 600; color: var(--ink);
+  }
+  .specline .l { font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-muted); margin-top: 2px; }
+
+  .panel { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--paper-raised); overflow: hidden; box-shadow: var(--shadow); }
+  .toolbar {
+    display: grid; grid-template-columns: minmax(220px,1fr) 200px; gap: 14px; padding: 16px 18px;
+    border-bottom: 1px solid var(--line); background: var(--paper-sunken);
+  }
+  .field label {
+    display: block; margin-bottom: 6px; font-family: var(--font-mono); font-size: .7rem; font-weight: 600;
+    letter-spacing: .05em; text-transform: uppercase; color: var(--ink-muted);
+  }
+  input[type="search"], select {
+    width: 100%; min-height: 42px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+    padding: 8px 12px; background: var(--paper-raised); color: var(--ink);
+  }
+  .meta-row {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 10px 18px;
+    border-bottom: 1px solid var(--line); color: var(--ink-muted); font-size: .86rem;
+  }
+  .meta-row strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .table-scroll { overflow: auto; max-height: 74vh; }
+  table { width: 100%; min-width: 2200px; border-collapse: separate; border-spacing: 0; font-size: .86rem; }
+  caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  th, td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+  th:last-child, td:last-child { border-right: 0; }
+  thead th {
+    position: sticky; top: 0; z-index: 4; background: var(--paper-sunken); font-family: var(--font-mono);
+    font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; box-shadow: 0 1px 0 var(--line-strong);
+  }
+  thead th:nth-child(1), tbody td:nth-child(1) { position: sticky; left: 0; min-width: 190px; max-width: 190px; z-index: 3; background: var(--paper-raised); }
+  thead th:nth-child(1) { z-index: 6; background: var(--line); }
+  tbody tr:nth-child(even) td { background: var(--paper-sunken); }
+  tbody tr:nth-child(even) td:nth-child(1) { background: var(--paper-sunken); }
+  tbody tr:hover td { background: var(--accent-soft); }
+  tbody tr:last-child td { border-bottom: 0; }
+  .sort-btn {
+    display: flex; align-items: center; gap: 6px; width: 100%; border: 0; padding: 0; background: transparent; color: inherit;
+    text-align: left; font: inherit; font-weight: inherit; text-transform: inherit; letter-spacing: inherit;
+  }
+  .sort-btn:hover { color: var(--accent-strong); }
+  .sort-ico { font-size: .8rem; color: var(--ink-muted); }
+  .skill-id { font-weight: 600; color: var(--accent-strong); font-family: var(--font-mono); letter-spacing: -.01em; }
+  .skill-name { font-weight: 700; }
+  .status-tag {
+    display: inline-block; padding: 3px 8px; border-radius: var(--radius-sm); border: 1px solid var(--warn-line);
+    background: var(--warn-soft); color: var(--warn); font-family: var(--font-mono); font-size: .7rem;
+    font-weight: 600; letter-spacing: .03em; text-transform: uppercase; white-space: nowrap;
+  }
+  .nc { color: var(--ink-muted); font-style: italic; }
+  .empty { display: none; place-items: center; padding: 48px 20px; text-align: center; color: var(--ink-muted); }
+  .empty.show { display: grid; }
+  .empty h2 { margin: 0 0 6px; font-family: var(--font-display); font-size: 1.1rem; color: var(--ink); }
+  footer.bottom { margin-top: 22px; color: var(--ink-muted); font-size: .84rem; }
+  footer.bottom p { margin: 4px 0; }
+  footer.bottom strong { color: var(--ink); }
+  @media (max-width: 900px) {
+    .masthead { grid-template-columns: 1fr; }
+    .toolbar { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .table-scroll { max-height: none; padding: 10px; background: var(--paper-sunken); }
+    table { min-width: 0; }
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    tbody { display: grid; gap: 12px; }
+    tbody tr { display: block; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--paper-raised); overflow: hidden; }
+    tbody td {
+      position: static; display: grid; grid-template-columns: minmax(120px,38%) 1fr; gap: 10px;
+      min-width: 0; max-width: none; padding: 10px 12px; border-right: 0; border-bottom: 1px solid var(--line); background: var(--paper-raised) !important;
+    }
+    tbody td:last-child { border-bottom: 0; }
+    tbody td::before { content: attr(data-label); font-family: var(--font-mono); font-size: .68rem; font-weight: 700; text-transform: uppercase; color: var(--ink-muted); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+  }
+  @media print {
+    .toolbar, .skip-link { display: none !important; }
+    .table-scroll { overflow: visible; max-height: none; }
+    table { min-width: 0; font-size: 8pt; }
+    thead th { position: static; }
+    thead th:nth-child(1), tbody td:nth-child(1) { position: static; min-width: 0; max-width: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#skills-table">Skip to skills table</a>
+<div class="page">
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Skill Catalog · Task-02 Reference</p>
+      <h1>Peries Skill Documentation</h1>
+      <p class="lede">One entry per unique, current, user-created Claude Code skill in this repository — purpose, trigger, invocation, required inputs, expected output, and known limitations, sourced only from each skill's own file and this repository's <code>CLAUDE.md</code>.</p>
+    </div>
+    <aside class="stamp" aria-label="Review status">
+      <p class="stamp-label">Review gate</p>
+      <p>Not approved for documentation-hub integration until reviewed and confirmed by the designated reviewer.</p>
+      <hr>
+      <p class="stamp-meta">Rev. 2026-07-22 · Peries-Skills-Master</p>
+    </aside>
+  </header>
+
+  <section class="specline" aria-label="Inventory summary">
+    <div class="item"><div class="n" id="stat-total">13</div><div class="l">Skills catalogued</div></div>
+    <div class="item"><div class="n" id="stat-visible">13</div><div class="l">Currently shown</div></div>
+    <div class="item"><div class="n">0</div><div class="l">Currently discoverable</div></div>
+    <div class="item"><div class="n">12</div><div class="l">Columns (not 13)</div></div>
+  </section>
+
+  <section class="panel" aria-labelledby="table-heading">
+    <h2 id="table-heading" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Skill documentation table</h2>
+    <div class="toolbar" role="search" aria-label="Table controls">
+      <div class="field">
+        <label for="search">Search every column</label>
+        <input id="search" type="search" autocomplete="off" placeholder="e.g. CSV, refund, onboarding, Read/Grep...">
+      </div>
+      <div class="field">
+        <label for="status-filter">Filter by status</label>
+        <select id="status-filter">
+          <option value="">All statuses</option>
+          <option>Draft</option>
+          <option>Testing</option>
+          <option>Completed</option>
+          <option>Needs Confirmation</option>
+        </select>
+      </div>
+    </div>
+    <div class="meta-row" aria-live="polite" aria-atomic="true">
+      <span>Showing <strong id="visible-count">13</strong> of <strong id="total-count">13</strong> skills</span>
+      <span id="sort-state">Default order — workflow skills first (Start, New Joinee, Skill Builder), then task skills A–Z</span>
+    </div>
+    <div id="skills-table" class="table-scroll" tabindex="0" aria-label="Scrollable skill documentation table">
+      <table id="skill-table">
+        <caption>Task-02 user-created Claude skill inventory for Peries-Skills-Master</caption>
+        <thead><tr id="header-row"></tr></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+    <div id="empty-state" class="empty" role="status">
+      <div>
+        <h2>No matching skills</h2>
+        <p>Try a broader search term or clear the status filter.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bottom">
+    <p><strong>Last updated:</strong> 2026-07-22 (deliverable build date — not a skill creation date).</p>
+    <p>Unverified Created Date, Status, and Version values are marked <strong>Needs Confirmation</strong> rather than guessed; see <code>skill-documentation-review-notes.md</code> for full evidence and known limitations.</p>
+  </footer>
+</div>
+
+<script id="skill-data" type="application/json">
+[
+{"Skill ID":"start","Skill Name":"Start","Created Date":"Needs Confirmation","Purpose":"Runs a short, interactive onboarding session that teaches the four-layer model (Data/Tools → MCP → Claude Code + Skills → Output) using a diagram, a restaurant analogy, and comprehension checks, adapted to the employee's role and experience.","When to Use":"Someone says \"I'm new here,\" \"onboard me,\" \"explain how this works,\" \"how does our AI system work,\" or shows confusion about MCP/Skills while asking a task question (per frontmatter description).","Where to Use":"General, lightweight onboarding for any role (dev, PM, designer, support, sales, data) — not tied to a specific department in the skill file.","How to Use":"Documented design: invoke /start or matching natural language (auto-invocation enabled; disable-model-invocation not set). Not currently functional — file sits at .claude/skills/skill-files/SKILL_start.md, not the .claude/skills/start/SKILL.md path Claude Code requires for discovery (see CLAUDE.md).","Input Requirements":"Role and prior AI/CLI-tool experience (asked conversationally); explicit yes/no confirmation before any file is written.","Expected Output":"Chat-based interactive lesson with comprehension checks. Optionally, only after explicit confirmation: output/onboarding/cheat-sheet.md (Step 9) and/or output/onboarding/completion-summary.md (Step 11).","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"No allowed-tools restriction in frontmatter, but the skill's own \"File-Writing Safety\" section self-restricts writes to output/onboarding/ only, with confirmation required each time. Source: SKILL_start.md."},
+{"Skill ID":"new-joinee","Skill Name":"New Joinee","Created Date":"Needs Confirmation","Purpose":"Runs a thorough, multi-stage onboarding for absolute beginners and non-technical hires covering a seven-layer model, ending only when the employee passes both a teach-back and an independent-task assessment.","When to Use":"\"I am new here,\" \"This is my first task,\" \"I have never used Claude Code,\" \"I do not understand MCP,\" \"Help me understand the company workflow,\" or shows confusion about the AI system (frontmatter description).","Where to Use":"Formal new-employee onboarding and first-task readiness assessment; role-agnostic (dev, PM, designer, support, sales, data, student).","How to Use":"Documented design: invoke /new-joinee [role or first-task context] or matching natural language; $ARGUMENTS pre-fills role/task context. Not currently functional — same discovery-path issue as every skill in this repo (see CLAUDE.md).","Input Requirements":"Name, role, first assigned task, and prior tool experience (Step 1); explicit permission before generating any onboarding-output file (Step 14).","Expected Output":"onboarding-output/NEW_EMPLOYEE_CHEAT_SHEET.md and onboarding-output/LEARNING_SUMMARY.md on completion; onboarding-output/ONBOARDING_COMPLETION_CERTIFICATE.md only if both the teach-back and independent-task assessments pass.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Tool/behaviour conflict: frontmatter allowed-tools is Read, Glob, Grep only (no Write), but Step 14 requires writing files to onboarding-output/ — unresolved, flagged Needs Confirmation. Also links to company-workflow.md and templates/certificate-template.md / templates/cheat-sheet-template.md; company-workflow_new_joinee.md exists under a different name and the templates/ folder does not exist at all (see CLAUDE.md). Source: SKILL_new_joinee.md."},
+{"Skill ID":"skill-builder","Skill Name":"Skill Builder","Created Date":"Needs Confirmation","Purpose":"Guides building a new Claude Code skill through a structured discovery interview, or auditing/optimising an existing skill against a documented best-practices checklist.","When to Use":"Creating new skills, optimising existing skills, auditing skill quality, or choosing advanced skill features (frontmatter description).","Where to Use":"Skill authoring and governance for this repository's .claude/skills/ directory.","How to Use":"Documented design: invoke /skill-builder or matching natural language; no argument-hint defined. The 6-round Discovery Interview (via AskUserQuestion) must complete before any file is built. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"Answers to the Discovery Interview (goal, name, triggers, process steps, inputs/outputs, guardrails), unless the user already supplied enough detail upfront.","Expected Output":"A new or audited SKILL.md plus supporting files if needed, following the frontmatter/content/integration/quality checklist. No fixed output path — depends on the skill being built.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Links to reference.md; the actual file is reference_skill_builder.md, so this relative link does not resolve under the current flat layout (see CLAUDE.md). Source: SKILL_skill_builder.md."},
+{"Skill ID":"customer-email-reply-drafter","Skill Name":"Customer Email Reply Drafter","Created Date":"Needs Confirmation","Purpose":"Drafts a polite, on-brand reply to a customer email (order status, delivery delay, refund/return, product question, or complaint) for human review — never sends it.","When to Use":"Someone asks to draft a reply to a customer email about orders, refunds, delivery, or product questions (frontmatter description).","Where to Use":"Customer-support reply review in an e-commerce context; this file does not itself name a brand (compare product-description-writer, which does).","How to Use":"Documented design: invoke /customer-email-reply-drafter [customer email] or matching natural language, pasting or providing the email content. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"Customer email content (required); optional customer name, order number, issue type.","Expected Output":"A plain-text draft reply in chat, with explicit placeholders (e.g. [insert tracking number]) for any missing details. No file written, no email sent.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Explicit guardrail against fabricating missing order/refund details and against auto-sending. Source: SKILL_customer_email_reply_drafter.md."},
+{"Skill ID":"existing-asset-finder","Skill Name":"Existing Asset Finder","Created Date":"Needs Confirmation","Purpose":"Searches the project (and a Postgres connector, if available) for an existing asset that already solves a problem before anything new is built, returning exactly one of REUSE / EXTEND / MERGE / CREATE / STOP.","When to Use":"Checking whether something already exists, avoiding duplicate work, or proactively before creating any new file, script, report, skill, database object, dashboard, or workflow (frontmatter description).","Where to Use":"Pre-build discovery across this repository's files, skills, docs, and — if connected — database metadata.","How to Use":"Documented design: invoke /existing-asset-finder [proposed asset] or matching natural language; runs in a forked Explore subagent (context: fork, agent: Explore) with tool access limited to Read, Grep, Glob, Bash(git *), Bash(find *), Bash(ls *), Bash(psql *). Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"A proposed asset name, problem description, or file path ($ARGUMENTS); if too vague, asks one clarifying question first.","Expected Output":"An \"Asset Discovery Report\" in chat with a findings table and exactly one recommendation. Read-only — never creates, edits, or deletes anything itself, and never acts on its own recommendation.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Database check is explicitly conditional on a live Postgres connector/psql access being available; otherwise falls back to code/doc search only. Source: SKILL_existing_asset_finder.md."},
+{"Skill ID":"first-task-mapper","Skill Name":"First Task Mapper","Created Date":"Needs Confirmation","Purpose":"Turns a vague work request into a labelled execution map (Confirmed / Assumption / Unknown / Not confirmed per field), ending in a readiness decision — plans only, never executes.","When to Use":"\"I need to do X but I'm not sure how,\" \"help me plan this task,\" \"break down this request,\" or a vague/incomplete work request (frontmatter description).","Where to Use":"Pre-execution task planning, especially for unclear or first-time requests; role-agnostic.","How to Use":"Documented design: invoke /first-task-mapper [vague request] or matching natural language; answers clarifying questions conversationally. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"An initial request (via $ARGUMENTS or asked directly), then conversational answers covering business goal, expected output, data source, required MCP connector, existing skill/SOP, permissions, validation method, and reviewer.","Expected Output":"An \"Execution Map\" shown in chat first; saved to output/first-task-mapper/[task-name]-execution-map.md only after the user explicitly confirms.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Explicit guardrail against inventing a reviewer, source, permission, or validation rule — uses \"Not confirmed\" instead. Source: SKILL_first_task_mapper.md."},
+{"Skill ID":"markdown-document-formatter","Skill Name":"Markdown Document Formatter","Created Date":"Needs Confirmation","Purpose":"Cleans up a messy Markdown file's structure and syntax (headings, lists, spacing, tables, links, code fences) without changing its content or meaning.","When to Use":"Cleaning up messy Markdown, fixing heading structure, or polishing a Markdown document for review (frontmatter description).","Where to Use":"Markdown document cleanup and review; not tied to a specific department in the skill file.","How to Use":"Documented design: invoke /markdown-document-formatter [file.md] or matching natural language, or paste raw Markdown directly. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"A path to a .md file, or pasted Markdown text.","Expected Output":"A cleaned copy saved as [original-name]-formatted.md alongside the original, plus a summary of fixes and any items flagged for manual review.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Explicit guardrail against overwriting the original file or rewriting/shortening content — formatting/syntax fixes only. Source: SKILL_markdown_document_formatter.md."},
+{"Skill ID":"meeting-note-summariser","Skill Name":"Meeting Note Summariser","Created Date":"Needs Confirmation","Purpose":"Converts raw or unstructured meeting notes into a structured summary of attendees, key decisions, action items (with owners/deadlines), and open questions.","When to Use":"Summarizing meeting notes, recapping a meeting, or formatting meeting minutes (frontmatter description).","Where to Use":"Post-meeting follow-up and decision/action tracking; role-agnostic.","How to Use":"Documented design: invoke /meeting-note-summariser [meeting topic or date] or matching natural language, then paste notes or provide a file path. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"Raw meeting notes (pasted or file path); optional title/topic/date argument.","Expected Output":"A structured summary returned in chat by default; written to output/meeting-note-summariser/[title]-summary.md only if the user explicitly asks to save it.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Explicit guardrail against inventing attendees, decisions, owners, or deadlines — unclear items are marked \"TBD\" or \"Unclassified\" instead. Source: SKILL_meeting_note_summariser.md."},
+{"Skill ID":"order-status-summary","Skill Name":"Order Status Summary","Created Date":"Needs Confirmation","Purpose":"Reads an orders CSV and classifies every order into one of five delivery-status buckets (Delivered, Cancelled, Shipped on time, Delayed not yet shipped, Delayed past expected delivery), flagging the most overdue first.","When to Use":"Summarizing order status from a CSV, identifying delayed orders, or reporting delivery buckets (frontmatter description).","Where to Use":"Order operations and delivery monitoring; expects order_id, customer_name, order_date, ship_date, expected_delivery_date, and status columns.","How to Use":"Documented design: invoke /order-status-summary [orders.csv] or matching natural language, providing a CSV path or pasted CSV content. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"A CSV path or pasted CSV with the columns listed above, or clearly mappable equivalents.","Expected Output":"A plain-text report in chat: total/bucket counts, a delayed-orders table sorted by days overdue, and notes on any skipped/invalid rows. No file is written.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Stops and asks the user to correct the input if required columns are missing, rather than guessing. Source: SKILL_order_status_summary.md."},
+{"Skill ID":"order-summary-report","Skill Name":"Order Summary Report","Created Date":"Needs Confirmation","Purpose":"Reads an orders CSV and reports total unique orders, total revenue, and the top 3 best-selling products.","When to Use":"Summarizing orders data, calculating revenue totals, or listing top-selling products from an orders CSV (frontmatter description).","Where to Use":"Basic e-commerce order/revenue reporting; expects order_id, order_total, and a product identifier column.","How to Use":"Documented design: invoke /order-summary-report [orders.csv] or matching natural language, providing the CSV path. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"A path to orders.csv (or similarly structured file) with order_id, order_total, and a product/item identifier.","Expected Output":"A plain-text summary in chat: total orders, total revenue, top 3 products with quantities, and any skipped/invalid rows with reasons. No file is written, no external services called.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Explicit guardrail against modifying the CSV or inventing missing data. Source: SKILL_order_summary_report.md."},
+{"Skill ID":"product-description-writer","Skill Name":"Product Description Writer","Created Date":"Needs Confirmation","Purpose":"Turns a product name plus feature/spec bullet points into a ready-to-publish e-commerce product description in UK English.","When to Use":"Writing a product description, turning product features into copy, or generating an e-commerce listing description (frontmatter description).","Where to Use":"E-commerce content preparation. Default tone is explicitly \"Digitweb Lanka standard e-commerce tone — clear, benefit-focused, concise, UK English\" per this skill's own Notes.","How to Use":"Documented design: invoke /product-description-writer [product-name] or matching natural language, supplying product name and feature bullets. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"Required: product name and feature/spec bullet points. Optional: tone/format preference, target length.","Expected Output":"A product title line (if needed) and a final description in plain text or simple Markdown, ready to paste into a listing. No file created, no external API calls.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Explicit guardrail against fabricating product details when information is missing — asks instead. Source: SKILL_product_description_writer.md."},
+{"Skill ID":"project-discovery","Skill Name":"Project Discovery","Created Date":"Needs Confirmation","Purpose":"Performs a read-only, step-by-step inspection of an unfamiliar project (root files, folder structure, .claude/skills/, MCP config, Git status) and produces a beginner-friendly summary with a recommended first safe action.","When to Use":"Asking to explore, understand, get a tour of, analyze, or map a project (frontmatter description).","Where to Use":"New-project orientation, read-only, within the current project root only.","How to Use":"Documented design: invoke /project-discovery [path or folder] or matching natural language. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"Optional path/folder argument (defaults to project root); relies on whatever project files/config are present.","Expected Output":"A conversational, structured summary (purpose, folders, skills, connectors, rules, restrictions, missing information, one recommended next action). Explicitly creates no report files.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Tool/behaviour conflict: frontmatter allowed-tools includes unrestricted Bash, but the skill's own Notes restrict Bash usage to exactly git status, git branch --show-current, and git log --oneline -5; enforced scope is Needs Confirmation. Source: SKILL_project_discovery.md."},
+{"Skill ID":"requirements-validator","Skill Name":"Requirements Validator","Created Date":"Needs Confirmation","Purpose":"Reviews a requirements document, PRD, ticket, or brief for gaps, ambiguity, and missing or weak acceptance criteria before implementation begins.","When to Use":"Needing to review, validate, or improve requirements documents, acceptance criteria, or implementation briefs (frontmatter description).","Where to Use":"Pre-development requirements and acceptance-criteria review; role-agnostic.","How to Use":"Documented design: invoke /requirements-validator [requirements.md] or matching natural language, supplying the document or pasted text. Not currently functional under the current flat file layout (see CLAUDE.md).","Input Requirements":"A requirements document, PRD, ticket, spec, or pasted text; optional business-goal/constraint context.","Expected Output":"A validation review in chat — issues/risks list, improved acceptance criteria, and unresolved questions. No output file path is specified in this skill file.","Status":"Needs Confirmation","Version":"Needs Confirmation","Notes":"Explicit guardrail against inventing requirements not supported by the source material, and against rewriting the whole document unnecessarily. Source: SKILL_requirements_validator.md."}
+]
+</script>
+
+<script>
+(() => {
+  'use strict';
+  const columns = ["Skill ID","Skill Name","Created Date","Purpose","When to Use","Where to Use","How to Use","Input Requirements","Expected Output","Status","Version","Notes"];
+  const sortableCols = new Set(["Skill ID","Skill Name","Created Date","Status","Version"]);
+  const data = JSON.parse(document.getElementById('skill-data').textContent).map((row, i) => ({ ...row, __idx: i }));
+
+  const search = document.getElementById('search');
+  const statusFilter = document.getElementById('status-filter');
+  const headerRow = document.getElementById('header-row');
+  const tbody = document.getElementById('table-body');
+  const table = document.getElementById('skill-table');
+  const empty = document.getElementById('empty-state');
+  const visibleCount = document.getElementById('visible-count');
+  const totalCount = document.getElementById('total-count');
+  const statTotal = document.getElementById('stat-total');
+  const statVisible = document.getElementById('stat-visible');
+  const sortState = document.getElementById('sort-state');
+
+  let sortField = null;
+  let ascending = true;
+
+  function esc(v) {
+    return String(v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+  }
+
+  function renderHeaders() {
+    headerRow.innerHTML = columns.map(col => {
+      if (!sortableCols.has(col)) return `<th scope="col">${esc(col)}</th>`;
+      return `<th scope="col" data-col="${esc(col)}" aria-sort="none"><button class="sort-btn" type="button" data-sort="${esc(col)}"><span>${esc(col)}</span><span class="sort-ico" aria-hidden="true">↕</span></button></th>`;
+    }).join('');
+    headerRow.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const field = btn.dataset.sort;
+        if (sortField === field) { ascending = !ascending; } else { sortField = field; ascending = true; }
+        render();
+      });
+    });
+  }
+
+  function cellHTML(col, value) {
+    const safe = esc(value);
+    if (col === 'Skill ID') return `<span class="skill-id">${safe}</span>`;
+    if (col === 'Skill Name') return `<span class="skill-name">${safe}</span>`;
+    if (col === 'Status') return `<span class="status-tag">${safe}</span>`;
+    if (String(value).trim() === 'Needs Confirmation') return `<span class="nc">${safe}</span>`;
+    return safe;
+  }
+
+  function fieldValue(raw, field) {
+    const text = String(raw ?? '').trim();
+    if (text.toLowerCase() === 'needs confirmation') return { missing: true, value: '' };
+    if (field === 'Created Date') {
+      const t = Date.parse(text);
+      return { missing: false, value: Number.isNaN(t) ? text.toLowerCase() : t };
+    }
+    if (field === 'Version') {
+      const parts = text.replace(/^v/i, '').split('.').map(Number);
+      if (parts.length && parts.every(Number.isFinite)) return { missing: false, value: parts };
+    }
+    return { missing: false, value: text.toLowerCase() };
+  }
+
+  function compareField(a, b, field) {
+    const av = fieldValue(a[field], field);
+    const bv = fieldValue(b[field], field);
+    // Needs Confirmation always sorts after confirmed values, regardless of direction.
+    if (av.missing !== bv.missing) return av.missing ? 1 : -1;
+    if (av.missing && bv.missing) return 0;
+    let cmp;
+    if (Array.isArray(av.value) && Array.isArray(bv.value)) {
+      const n = Math.max(av.value.length, bv.value.length);
+      cmp = 0;
+      for (let i = 0; i < n; i++) { const d = (av.value[i] || 0) - (bv.value[i] || 0); if (d) { cmp = d; break; } }
+    } else if (typeof av.value === 'number' && typeof bv.value === 'number') {
+      cmp = av.value - bv.value;
+    } else {
+      cmp = String(av.value).localeCompare(String(bv.value), undefined, { numeric: true, sensitivity: 'base' });
+    }
+    return ascending ? cmp : -cmp;
+  }
+
+  function updateHeaderSortState() {
+    headerRow.querySelectorAll('th[data-col]').forEach(th => {
+      th.setAttribute('aria-sort', 'none');
+      th.querySelector('.sort-ico').textContent = '↕';
+    });
+    if (!sortField) return;
+    const th = [...headerRow.querySelectorAll('th[data-col]')].find(x => x.dataset.col === sortField);
+    if (th) {
+      th.setAttribute('aria-sort', ascending ? 'ascending' : 'descending');
+      th.querySelector('.sort-ico').textContent = ascending ? '↑' : '↓';
+    }
+  }
+
+  function render() {
+    const q = search.value.trim().toLowerCase();
+    const status = statusFilter.value;
+    let rows = data.filter(row =>
+      (!q || columns.some(c => String(row[c]).toLowerCase().includes(q))) &&
+      (!status || row['Status'] === status)
+    );
+    if (sortField) {
+      rows = rows.slice().sort((a, b) => {
+        const d = compareField(a, b, sortField);
+        return d === 0 ? a.__idx - b.__idx : d;
+      });
+    }
+    tbody.innerHTML = rows.map(row =>
+      `<tr>${columns.map(c => `<td data-label="${esc(c)}">${cellHTML(c, row[c])}</td>`).join('')}</tr>`
+    ).join('');
+    visibleCount.textContent = String(rows.length);
+    statVisible.textContent = String(rows.length);
+    const showEmpty = rows.length === 0;
+    table.hidden = showEmpty;
+    empty.classList.toggle('show', showEmpty);
+    sortState.textContent = sortField
+      ? `Sorted by ${sortField} (${ascending ? 'ascending' : 'descending'})`
+      : 'Default order (workflow-first, then alphabetical)';
+    updateHeaderSortState();
+  }
+
+  search.addEventListener('input', render);
+  statusFilter.addEventListener('change', render);
+
+  totalCount.textContent = String(data.length);
+  statTotal.textContent = String(data.length);
+  renderHeaders();
+  render();
+})();
+</script>
+</body>
+</html>
