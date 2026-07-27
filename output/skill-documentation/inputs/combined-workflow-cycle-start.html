@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Combined Workflow — Cycle View</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg:#0e1420; --panel:#141c2b; --ink:#e8edf6; --sub:#93a2ba;
+    --lw:#f2789a; --lm:#45c7d1; --l1:#f2a154; --l2:#4fa3f7; --l3:#b385f0; --l4:#3ecf8e;
+    --req:#4fa3f7; --loop:#f2a154; --res:#3ecf8e;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh;
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter',sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    padding:30px 12px;
+  }
+  .wrap{max-width:640px; width:100%;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); text-align:center; margin-bottom:6px;}
+  h1{font-size:clamp(18px,3vw,24px); text-align:center; margin:0 0 26px; font-weight:700;}
+
+  .stage{
+    position:relative;
+    width:100%;
+    aspect-ratio:1/0.92;
+    margin:0 auto 18px;
+  }
+  svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible;}
+  .edge{fill:none; stroke:rgba(255,255,255,0.14); stroke-width:2; stroke-dasharray:5 6;}
+  .edge-loop{stroke:rgba(242,161,84,0.4); stroke-width:2.5;}
+
+  .node{
+    position:absolute;
+    width:84px; height:84px;
+    transform:translate(-50%,-50%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:3px;
+    border-radius:16px;
+    background:var(--panel);
+    border:2px solid rgba(255,255,255,0.08);
+    transition:box-shadow .3s, border-color .3s, transform .3s;
+    z-index:2;
+  }
+  .node .ic{font-size:24px;}
+  .node .lb{font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.04em; text-align:center; color:var(--sub); line-height:1.2; padding:0 3px;}
+
+  #nUser.active{border-color:var(--lw); box-shadow:0 0 22px rgba(242,120,154,.45); transform:translate(-50%,-50%) scale(1.08);}
+  #nMachine.active{border-color:var(--lm); box-shadow:0 0 22px rgba(69,199,209,.45); transform:translate(-50%,-50%) scale(1.08);}
+  #nClaude.active{border-color:var(--l3); box-shadow:0 0 22px rgba(179,133,240,.45); transform:translate(-50%,-50%) scale(1.08);}
+  #nMCP.active{border-color:var(--loop); box-shadow:0 0 22px rgba(242,161,84,.45); transform:translate(-50%,-50%) scale(1.08);}
+  #nData.active{border-color:var(--l1); box-shadow:0 0 22px rgba(242,161,84,.45); transform:translate(-50%,-50%) scale(1.08);}
+
+  .loop-badge{
+    position:absolute;
+    font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.05em;
+    color:var(--loop); background:rgba(242,161,84,0.1);
+    border:1px solid rgba(242,161,84,0.35);
+    padding:3px 8px; border-radius:20px;
+    white-space:nowrap;
+    z-index:2;
+  }
+
+  .packet{
+    position:absolute;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--req);
+    box-shadow:0 0 12px 3px var(--req);
+    transform:translate(-50%,-50%);
+    transition:left 1.4s cubic-bezier(.65,0,.35,1), top 1.4s cubic-bezier(.65,0,.35,1), background .3s, box-shadow .3s;
+    z-index:3;
+  }
+  .packet.loop{background:var(--loop); box-shadow:0 0 12px 3px var(--loop);}
+  .packet.res{background:var(--res); box-shadow:0 0 12px 3px var(--res);}
+
+  .caption{
+    text-align:center; min-height:150px;
+    font-size:14.5px; color:var(--ink); opacity:.95;
+    padding-top:2px;
+  }
+  .caption b{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em;}
+  .caption .detail{
+    display:block; margin-top:8px; font-size:13px; color:var(--sub);
+    max-width:520px; margin-left:auto; margin-right:auto; line-height:1.5;
+  }
+  .caption .example{
+    display:block; margin-top:10px; font-size:12.5px; color:var(--ink); opacity:.85;
+    max-width:520px; margin-left:auto; margin-right:auto; line-height:1.5;
+    font-style:italic; padding:8px 12px;
+    background:rgba(255,255,255,0.03); border-radius:8px;
+    border-left:2px solid rgba(255,255,255,0.2);
+  }
+  .example b{font-style:normal; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.05em; color:var(--sub); text-transform:uppercase;}
+  .req-b{color:var(--req);} .loop-b{color:var(--loop);} .res-b{color:var(--res);}
+
+  .legend{display:flex; flex-wrap:wrap; justify-content:center; gap:18px; margin-top:10px; font-size:12px; color:var(--sub);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .dot{width:9px; height:9px; border-radius:50%; display:inline-block;}
+
+  .controls{
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    margin-top:18px;
+  }
+  .ctl-btn{
+    font-family:'Inter',sans-serif; font-size:14px; font-weight:600;
+    padding:10px 20px; border-radius:10px; border:1px solid rgba(255,255,255,0.14);
+    background:var(--panel); color:var(--ink); cursor:pointer;
+    transition:background .2s, border-color .2s, opacity .2s;
+  }
+  .ctl-btn:hover:not(:disabled){border-color:rgba(255,255,255,0.3);}
+  .ctl-btn:disabled{opacity:.35; cursor:not-allowed;}
+  .ctl-btn.primary{background:var(--req); border-color:var(--req); color:#0e1420;}
+  .ctl-btn.primary.loop{background:var(--loop); border-color:var(--loop);}
+  .ctl-btn.primary.res{background:var(--res); border-color:var(--res);}
+  .progress{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--sub);
+    min-width:80px; text-align:center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Combined Workflow — Cycle View</div>
+  <h1>Request in, loop, response out</h1>
+
+  <div class="stage" id="stage">
+    <svg viewBox="0 0 100 92" preserveAspectRatio="none">
+      <path class="edge" d="M 50,14 L 84,39" />
+      <path class="edge" d="M 84,39 L 71,79" />
+      <path class="edge edge-loop" d="M 71,79 L 29,79" />
+      <path class="edge" d="M 29,79 L 16,39" />
+      <path class="edge" d="M 16,39 L 50,14" />
+    </svg>
+
+    <div class="node" id="nUser" style="left:50%; top:15.2%;"><div class="ic">🧑</div><div class="lb">USER</div></div>
+    <div class="node" id="nMachine" style="left:84%; top:42.4%;"><div class="ic">💻</div><div class="lb">MACHINE</div></div>
+    <div class="node" id="nClaude" style="left:71%; top:85.9%;"><div class="ic">👨‍🍳</div><div class="lb">CLAUDE +<br>SKILLS</div></div>
+    <div class="node" id="nMCP" style="left:29%; top:85.9%;"><div class="ic">🧑‍🍳</div><div class="lb">MCP</div></div>
+    <div class="node" id="nData" style="left:16%; top:42.4%;"><div class="ic">🥕</div><div class="lb">DATA &amp;<br>TOOLS</div></div>
+
+    <div class="loop-badge" style="left:50%; top:98%; transform:translate(-50%,0);">↺ may repeat</div>
+
+    <div class="packet" id="packet" style="left:50%; top:15.2%;"></div>
+  </div>
+
+  <div class="caption" id="caption">Click "Start" to trace the full cycle.</div>
+  <div class="controls">
+    <button id="prevBtn" class="ctl-btn">← Back</button>
+    <div class="progress" id="progress">Step 0 / 9</div>
+    <button id="nextBtn" class="ctl-btn primary">Start →</button>
+  </div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--req)"></span> request</span>
+    <span><span class="dot" style="background:var(--loop)"></span> internal loop</span>
+    <span><span class="dot" style="background:var(--res)"></span> response</span>
+  </div>
+</div>
+
+<script>
+const positions = {
+  User:    {left:'50%',  top:'15.2%'},
+  Machine: {left:'84%',  top:'42.4%'},
+  Claude:  {left:'71%',  top:'85.9%'},
+  MCP:     {left:'29%',  top:'85.9%'},
+  Data:    {left:'16%',  top:'42.4%'},
+};
+const nodeEls = {
+  User: document.getElementById('nUser'),
+  Machine: document.getElementById('nMachine'),
+  Claude: document.getElementById('nClaude'),
+  MCP: document.getElementById('nMCP'),
+  Data: document.getElementById('nData'),
+};
+const packet = document.getElementById('packet');
+const caption = document.getElementById('caption');
+
+const path = [
+  {node:'User',    phase:'req',  text:'<b class="req-b">REQUEST →</b> You ask in plain language'
+    ,detail:'This is where everything starts. You don\'t write code or configure anything — you just describe the task the way you\'d ask a coworker.'
+    ,example:'<b>Example:</b> As an automation trainee, you type: "Pull yesterday\'s automation error logs and email me a summary before my 9am standup."'},
+  {node:'Machine', phase:'req',  text:'<b class="req-b">REQUEST →</b> Your device sends it onward'
+    ,detail:'Your machine doesn\'t think or decide anything here — it\'s purely the doorway that carries your exact words up to Claude.'
+    ,example:'<b>Example:</b> Whether you typed that in a terminal, a chat window, or a mobile app, your device\'s only job is delivery — same as pressing "send" on a text message.'},
+  {node:'Claude',  phase:'req',  text:'<b class="req-b">REQUEST →</b> Claude receives it, decides what\'s needed'
+    ,detail:'This is the first real decision point. Claude reads your request and works out that it can\'t answer from memory alone — it needs to go get real data.'
+    ,example:'<b>Example:</b> Claude thinks: "I need yesterday\'s actual log file — I can\'t guess what errors happened. I\'ll need a connector to reach it."'},
+  {node:'MCP',     phase:'loop', text:'<b class="loop-b">INTERNAL →</b> MCP reaches out to the right connector'
+    ,detail:'Claude can\'t open a log file, database, or inbox by itself. MCP is the only bridge — a dedicated connector built for that one specific system.'
+    ,example:'<b>Example:</b> Here, MCP is the connector built specifically for your company\'s logging system — like a key that only opens that one door.'},
+  {node:'Data',    phase:'loop', text:'<b class="loop-b">INTERNAL →</b> Data & Tools returns the raw information'
+    ,detail:'This is the actual source system doing its normal job — it doesn\'t know or care that Claude asked; it just returns what was requested.'
+    ,example:'<b>Example:</b> The logging system hands back yesterday\'s raw entries: timestamps, error codes, which automation job failed and why.'},
+  {node:'MCP',     phase:'loop', text:'<b class="loop-b">INTERNAL ↺</b> MCP hands the data back'
+    ,detail:'The connector carries the raw data back up to Claude. If Claude realizes it needs more — say, a second file — this MCP ⟷ Data loop can repeat.'
+    ,example:'<b>Example:</b> If Claude sees an error code it doesn\'t recognize, it might call MCP again to pull a second reference file before continuing — that\'s the "may repeat" part.'},
+  {node:'Claude',  phase:'res',  text:'<b class="res-b">RESPONSE →</b> Claude writes the final answer'
+    ,detail:'With everything it needs now in hand, Claude stops looping and does the actual thinking — reading, filtering, and writing in plain language.'
+    ,example:'<b>Example:</b> Claude turns 200 raw log lines into: "3 automation jobs failed yesterday — all due to a timeout on the vendor API. Here\'s a summary."'},
+  {node:'Machine', phase:'res',  text:'<b class="res-b">RESPONSE →</b> Sent back to your device'
+    ,detail:'The finished result now travels back the same way the request came in — over the network, to the same machine you started from.'
+    ,example:'<b>Example:</b> The summary arrives back on your laptop or phone, ready to display — just like a reply landing in your inbox.'},
+  {node:'User',    phase:'res',  text:'<b class="res-b">DELIVERED →</b> You read the reply'
+    ,detail:'Full cycle complete. One plain-language ask became a finished answer, with Claude and MCP doing every bit of the work in between.'
+    ,example:'<b>Example:</b> You open your device before standup and the summary is already there — no manual log-digging required.'},
+];
+
+const allSteps = [{phase:'start'}, ...path];
+let current = 0;
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progress = document.getElementById('progress');
+
+function clearActive(){ Object.values(nodeEls).forEach(n=>n.classList.remove('active')); }
+
+function render(){
+  const step = allSteps[current];
+  clearActive();
+  packet.classList.remove('loop','res');
+
+  if(step.phase === 'start'){
+    caption.textContent = 'Click "Start" to trace the full cycle.';
+    packet.style.left = positions.User.left;
+    packet.style.top = positions.User.top;
+  } else {
+    if(step.phase !== 'req') packet.classList.add(step.phase);
+    nodeEls[step.node].classList.add('active');
+    packet.style.left = positions[step.node].left;
+    packet.style.top = positions[step.node].top;
+    caption.innerHTML = step.text + '<span class="detail">' + step.detail + '</span>' + '<span class="example">' + step.example + '</span>';
+  }
+
+  progress.textContent = `Step ${current} / ${allSteps.length - 1}`;
+  prevBtn.disabled = current === 0;
+
+  nextBtn.classList.remove('loop','res');
+  if(current === allSteps.length - 1){
+    nextBtn.textContent = '↻ Restart';
+  } else if(current === 0){
+    nextBtn.textContent = 'Start →';
+  } else {
+    nextBtn.textContent = 'Next →';
+    const upcoming = allSteps[current+1];
+    if(upcoming && upcoming.phase !== 'req') nextBtn.classList.add(upcoming.phase);
+  }
+}
+
+nextBtn.addEventListener('click', ()=>{
+  if(current === allSteps.length - 1){ current = 0; }
+  else { current++; }
+  render();
+});
+prevBtn.addEventListener('click', ()=>{
+  if(current > 0){ current--; render(); }
+});
+
+render();
+</script>
+</body>
+</html>

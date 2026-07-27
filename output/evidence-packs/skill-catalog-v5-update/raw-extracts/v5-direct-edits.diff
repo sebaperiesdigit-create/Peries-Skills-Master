@@ -1,0 +1,40 @@
+Direct find/replace edits applied to output/skill-documentation/skill-documentation-table-v5.html
+via the Edit tool BEFORE the Node script ran (so these are not captured in the JSON-block diff).
+Reproduced exactly from the tool calls actually executed in this session.
+
+--- Stat counts (specline section) ---
+BEFORE:
+    <div class="item"><div class="n" id="stat-total">14</div><div class="l">Skills catalogued</div></div>
+    <div class="item"><div class="n" id="stat-visible">14</div><div class="l">Currently shown</div></div>
+    <div class="item"><div class="n">14</div><div class="l">Currently discoverable</div></div>
+    <div class="item"><div class="n">13</div><div class="l">Columns (12 + Files)</div></div>
+AFTER:
+    <div class="item"><div class="n" id="stat-total">15</div><div class="l">Skills catalogued</div></div>
+    <div class="item"><div class="n" id="stat-visible">15</div><div class="l">Currently shown</div></div>
+    <div class="item"><div class="n">15</div><div class="l">Currently discoverable</div></div>
+    <div class="item"><div class="n">13</div><div class="l">Columns (12 + Files)</div></div>
+
+--- Meta-row counts ---
+BEFORE:
+      <span>Showing <strong id="visible-count">14</strong> of <strong id="total-count">14</strong> skills</span>
+AFTER:
+      <span>Showing <strong id="visible-count">15</strong> of <strong id="total-count">15</strong> skills</span>
+
+--- Footer last-updated date ---
+BEFORE:
+    <p><strong>Last updated:</strong> 2026-07-23 (deliverable build date — not a skill creation date).</p>
+AFTER:
+    <p><strong>Last updated:</strong> 2026-07-24 (deliverable build date — not a skill creation date).</p>
+
+--- Workflow-group filter mapping (skillGroups object) ---
+BEFORE:
+    '007': 'Review & Quality Checks',
+    '014': 'Planning & Building Skills'
+AFTER:
+    '007': 'Review & Quality Checks',
+    '014': 'Planning & Building Skills',
+    '015': 'Planning & Building Skills'
+
+Note: stat-total/stat-visible/visible-count/total-count are also JS-computed from data.length
+at page load (confirmed by reading render(), lines ~490-506 of the file) — these direct edits
+were belt-and-suspenders for the raw HTML source, not strictly required for the rendered page.

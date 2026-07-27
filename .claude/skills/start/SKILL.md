@@ -9,6 +9,14 @@ Guides new employees through an interactive onboarding session that teaches how 
 
 ## Process
 
+### Step 0: Check for Prior Progress or Completion
+
+Before Step 1, check in this order:
+
+1. Does `onboarding-output/onboarding-progress.md` exist with status `IN PROGRESS`? If so, ask via AskUserQuestion: **Resume from the next incomplete step** / **Restart onboarding from Step 1** / **View saved progress** (just show its contents, then ask again).
+2. Otherwise, does `onboarding-output/completion-summary.md` exist? If so, ask via AskUserQuestion whether they want a full re-run or a quick refresher (skip straight to Step 10, Role Personalization).
+3. Otherwise (first run), proceed to Step 1 normally.
+
 ### Step 1: Role & Calibration
 
 Ask the user:
@@ -17,8 +25,9 @@ Ask the user:
 
 Use their answers to:
 - Adapt examples throughout (dev gets code/PR examples, support gets ticket examples, etc.)
+- If their role isn't dev/PM/designer/support/sales/data, ask one follow-up: "What kind of tasks would you bring to Claude day-to-day?" and build examples from that answer instead of guessing a proxy role.
 - Calibrate quiz difficulty (beginner gets recall questions, experienced gets applied questions)
-- If they're advanced, offer to skip to Step 10 (Role Personalization) and Step 8.5 (Real Project Files)
+- If they're advanced, offer to skip to Step 10 (Role Personalization) and Step 7.5 (Real Project Files)
 
 ### Step 2: Big Picture
 
@@ -77,13 +86,13 @@ Walk through the flow: You (customer) -> MCP (waiter) takes your order -> Chef (
 | **Claude Code + Skills** | The AI brain with reusable recipe books (skills) for each task |
 | **Output** | The final result — a file, a chart, a summary, a command |
 
-**D. Comprehension check** (one question, then move on):
-**"In your own words, what is one thing from each layer?"**
+**D. Comprehension check** (one question via AskUserQuestion, then move on):
 
-If they answer well, praise and proceed. If they struggle, re-explain using the restaurant analogy before continuing.
+Ask: "Which pair correctly matches a layer to what it does?" with one correct option (e.g. "MCP — the bridge that connects Claude to your tools") and 2-3 plausible mismatches (e.g. pairing MCP with "the AI brain that follows recipes," or Output with "where company data lives").
 
-Also share this interactive visual for hands-on exploration:
-https://claude.ai/public/artifacts/26d37fe5-9ec7-4c51-a020-0c9aa3cc3505
+If they answer correctly, praise and proceed. If they pick a distractor, re-explain using the restaurant analogy before continuing.
+
+Also offer an interactive visual for hands-on exploration of the four-layer model. Point the user to `output/skill-documentation/inputs/combined-workflow-cycle-start.html` (open/reference it directly), or to the published artifact version at https://claude.ai/public/artifacts/26d37fe5-9ec7-4c51-a020-0c9aa3cc3505 if they'd rather use a link. Either is fine — let the user pick.
 
 ### Step 3: Data Layer
 
@@ -92,7 +101,7 @@ Explain where company data lives and how Claude accesses it:
 - Skills = task-specific procedures (loaded when invoked)
 - MCP connectors = bridges to external tools
 
-**Check-in:** "If you wanted Claude to follow a coding style rule, where would you put it?"
+**Check-in (AskUserQuestion):** "If you wanted Claude to follow a coding style rule, where would you put it?" — correct: CLAUDE.md; distractors: a skill file, MCP config, an output file.
 
 ### Step 4: MCP Layer
 
@@ -101,7 +110,7 @@ Explain MCP (Model Context Protocol):
 - How it works: Connector sits between Claude and the tool
 - Examples: Database queries, API calls, file system access
 
-**Check-in:** "Why can't Claude just directly call a database without MCP?"
+**Check-in (AskUserQuestion):** "Why can't Claude just directly call a database without MCP?" — correct: MCP provides a standard, safe bridge/connector between Claude and each tool; distractors: "Claude doesn't know SQL," "Databases are too slow for Claude," "It's a licensing restriction."
 
 ### Step 5: Claude Code + Skills
 
@@ -111,7 +120,7 @@ Explain how skills work:
 - CLAUDE.md rules always apply inside skills
 - Supporting files load only when needed
 
-**Check-in:** "What's the difference between CLAUDE.md and a skill?"
+**Check-in (AskUserQuestion):** "What's the difference between CLAUDE.md and a skill?" — correct: CLAUDE.md is always-loaded project-wide rules, a skill is task-specific instructions loaded only when invoked; distractors: "CLAUDE.md is for code, skills are for chat," "They're the same thing, just different file names," "Skills override CLAUDE.md."
 
 ### Step 6: Output Layer
 
@@ -121,7 +130,7 @@ Explain what Claude produces:
 - Commands executed
 - Visual output (HTML, charts)
 
-**Check-in:** "Name two types of output Claude can produce."
+**Check-in (AskUserQuestion):** "Which of these is NOT a type of output Claude can produce?" — correct answer to select: a distractor like "A direct edit to a live production database with no file trail"; genuine output types (text response, written file, executed command, visual/HTML) serve as the other options.
 
 ### Step 7: Full Workflow Example
 
@@ -134,7 +143,7 @@ Walk through a complete example using a sales-report scenario (adapt to user's r
 5. Claude processes and formats the report
 6. Output: Sales report file in `output/sales-report/`
 
-**Check-in:** "Which layer was doing the actual work of fetching data?"
+**Check-in (AskUserQuestion):** "Which layer was doing the actual work of fetching data?" — correct: MCP (Layer 2); distractors: Claude Code + Skills (Layer 3), Output (Layer 4), Data & Tools (Layer 1 — the source, not the fetcher).
 
 ### Step 7.5: Real Project Files (Optional)
 
@@ -149,15 +158,15 @@ If no real files exist, say: "There's nothing connected yet in this project — 
 
 ### Step 8: Comprehension Check
 
-Run a comprehension check adjusted to their skill level:
-- **Beginner:** Recall questions ("What does MCP stand for?")
-- **Experienced:** Applied questions ("Why would this task fail without the MCP step?")
+Run a comprehension check via AskUserQuestion, adjusted to their skill level:
+- **Beginner:** Recall questions with plausible distractors (e.g. "What does MCP stand for?" with 3 wrong expansions alongside "Model Context Protocol")
+- **Experienced:** Applied questions with plausible distractors (e.g. "Why would this task fail without the MCP step?" with wrong-but-plausible failure reasons alongside the correct one)
 
 Re-teach any weak spots before moving on. Don't skip this gate.
 
 ### Step 9: Generate Cheat Sheet
 
-Before writing, confirm with the user: *"I'd like to save a cheat sheet to output/onboarding/cheat-sheet.md — is that okay?"* Only write after they say yes.
+Before writing, confirm with the user: *"I'd like to save a cheat sheet to onboarding-output/cheat-sheet.md — is that okay?"* Only write after they say yes.
 
 Use this fixed template, filling in their specific details:
 
@@ -203,7 +212,7 @@ Use this fixed template, filling in their specific details:
 
 **Important:** After writing, tell the user the file was saved and where to find it.
 
-Write to `output/onboarding/cheat-sheet.md`. Never write anywhere else.
+Write to `onboarding-output/cheat-sheet.md`. Never write anywhere else.
 
 ### Step 10: Role Personalization
 
@@ -219,11 +228,11 @@ Ask: "On a scale of 1-5, how confident do you feel using this system?"
 
 - **4-5:** Offer optional completion summary, confirm they're ready
 - **3:** Re-teach the weakest area, then re-check
-- **1-2:** Offer to pause and continue later, or re-teach from the start
+- **1-2:** Offer to pause and continue later (see "Pausing Mid-Session" below), or re-teach from the start
 
-If they want a completion summary, confirm first: *"I'll save a completion summary to output/onboarding/completion-summary.md — okay?"*
+If they want a completion summary, confirm first: *"I'll save a completion summary to onboarding-output/completion-summary.md — okay?"*
 
-Only write after they say yes. Use this fixed template:
+Only write after they say yes. If an `onboarding-output/onboarding-progress.md` file exists from an earlier paused session, delete it once completion-summary.md is written — the progress file is superseded by completion. Use this fixed template:
 
 ```markdown
 # Onboarding Completion Summary
@@ -246,16 +255,34 @@ Generated by the `/start` onboarding skill.
 
 **Important:** After writing, tell the user the file was saved and where to find it.
 
-Write to `output/onboarding/completion-summary.md`. Never write anywhere else.
+Write to `onboarding-output/completion-summary.md`. Never write anywhere else.
+
+### Pausing Mid-Session
+
+Triggered by the Step 11 low-confidence (1-2) path, or anytime the user goes quiet or says "this is too much" (per Session Guidelines). Confirm first: *"I'll save your progress to onboarding-output/onboarding-progress.md so you can resume later — okay?"* Only write after they say yes.
+
+```markdown
+# Onboarding Progress
+**Status:** IN PROGRESS
+**Role:** {{ role }}
+**Task context:** {{ what they said they'd bring to Claude, if role was unlisted }}
+**Last completed step:** {{ step number/name }}
+**Next step:** {{ step number/name }}
+**Assessment scores so far:** {{ correct/missed check-ins }}
+**Date:** {{ date }}
+```
+
+Write to `onboarding-output/onboarding-progress.md`. This is the one file this skill may write before Step 9 — every other file still waits until its named step.
 
 ## File-Writing Safety
 
 - The only files this skill may write are:
-  - `output/onboarding/cheat-sheet.md` (Step 9, with user confirmation)
-  - `output/onboarding/completion-summary.md` (Step 11, with user confirmation)
-- Never create files before the user reaches the output stage (Step 9 or later)
+  - `onboarding-output/onboarding-progress.md` (on pause, any step, with user confirmation)
+  - `onboarding-output/cheat-sheet.md` (Step 9, with user confirmation)
+  - `onboarding-output/completion-summary.md` (Step 11, with user confirmation; deletes onboarding-progress.md if present)
+- Never create `cheat-sheet.md` or `completion-summary.md` before the user reaches their named step (Step 9 / Step 11) — `onboarding-progress.md` is the sole exception, written only on an explicit pause
 - Always ask for confirmation before writing any file
-- Write only inside `output/onboarding/` — never elsewhere
+- Write only inside `onboarding-output/` — never elsewhere
 - Never modify project source files, .claude/ configuration, MCP settings, credentials, or external systems
 - Never print raw config contents, keys, or tokens
 - Never run destructive commands
@@ -264,5 +291,5 @@ Write to `output/onboarding/completion-summary.md`. Never write anywhere else.
 
 - Default to a lean pace (~15 min), but allow longer if the employee is genuinely confused
 - Never fabricate company-specific facts not present in company-workflow.md or CLAUDE.md
-- If user goes quiet or says "this is too much", offer to pause or simplify
+- If user goes quiet or says "this is too much", offer to pause (see "Pausing Mid-Session") or simplify
 - Step 7.5 reads are opt-in only, never automatic

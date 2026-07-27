@@ -1,0 +1,65 @@
+Verbatim console output from the verification scripts actually run during this task,
+in the order they were run. Captured immediately after each run (not reconstructed later).
+
+=== Pre-work discovery: is the CSV already stale? ===
+$ node -e "... check CSV for skill-finder row + stale caveat/path text ..."
+CSV data rows: 14
+Contains skill-finder row: true
+Contains stale install-guide caveat text: true
+Contains stale output/onboarding/ path: true
+
+=== Post-patch verification #1: JSON integrity + cross-block consistency ===
+$ node -e "... JSON.parse both blocks, check ID sets match, check byte-identical fileContent ..."
+skill-data parses OK, rows = 15
+skill-files-data parses OK, keys = 15
+IDs match exactly: true
+No duplicate IDs: true
+grill-me in data: true
+grill-me in files: true
+015 in group map: true
+start fileContent byte-identical to disk: true
+grill-me fileContent byte-identical to disk: true
+(this run then hit an unrelated ENOENT on an unset SCRATCH env var for the final
+ "unexpected diffs" check — fixed and rerun below; all checks above this line completed
+ successfully before the crash)
+
+=== Post-patch verification #2: confirm no unintended rows/entries changed ===
+$ node -e "... diff filesData/skillData before vs after, excluding the two intended rows ..."
+Unexpected Files diffs (should be empty): []
+Unexpected skillData row diffs (should be empty): []
+
+=== CSV patch run ===
+$ node update_csv.js
+CSV header: [
+  'Skill ID',      'Skill Name',
+  'Created Date',  'Purpose',
+  'When to Use',   'Where to Use',
+  'How to Use',    'Input Requirements',
+  'Expected Output','Status',
+  'Version',       'Notes',
+  'Files'
+]
+Rows before: 14 -> after: 15
+WROTE C:\Users\LED 269\Desktop\Peries-Skills-Master\output\skill-documentation\inputs\Skills_documentation_table -Final.csv
+
+=== CSV post-patch verification ===
+$ node -e "... parse CSV before/after, check ID set, check row 001 no longer stale, confirm row 015 ..."
+Rows after (incl header): 16 | before: 15
+IDs after: [
+  '001', '002', '003',
+  '004', '005', '006',
+  '007', '008', '009',
+  '010', '011', '012',
+  '013', '014', '015'
+]
+No dup IDs: true
+Unexpected row diffs (should be empty): []
+001 still has stale caveat text: false
+001 still has stale output/onboarding path: false
+015 Skill Name: /grill-me
+
+=== Summary ===
+All 7 verification checks that were run returned the expected/passing result.
+No check was skipped or asserted without running it.
+No browser-based (visual/interactive) verification was performed in this task —
+see Limitations in assumptions-and-limitations.md.
