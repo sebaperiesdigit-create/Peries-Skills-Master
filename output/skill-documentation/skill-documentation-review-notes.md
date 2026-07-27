@@ -286,3 +286,41 @@ node --env-file=.env push_to_hub.js "skill-documentation-table-v5.html" "skill-c
 ```
 
 Pushed successfully — `hub_pages` id=4, `updated_at` 2026-07-27T08:29:00.729Z. The 17-skill catalog including the "View and Copy Installation Prompt" feature (§30) is now live on the Vercel-facing hub. No local changes remain unpushed as of this entry.
+
+## 32. Skill Add (2026-07-27, same day) — `task-closure` (18th skill)
+
+A new skill, `task-closure`, was built via `skill-builder`'s Discovery Interview (verifies whether a task is genuinely ready to close — nine dimensions checked against real evidence, with requirement-level traceability, an evidence-freshness rule, classified temporary-file handling, an explicit verdict-precedence order, and a final decision-quality gate before returning exactly one of COMPLETE / COMPLETE WITH LIMITATIONS / REVIEW REQUIRED / BLOCKED / INCOMPLETE) and synced into the catalog as row **018**, positioned last.
+
+**Files changed this round:** `output/skill-documentation/skill-documentation-table-v5.html`, `output/skill-documentation/inputs/Skills_documentation_table -Final.csv`, plus `.claude/skills/task-closure/SKILL.md` (new) and `CLAUDE.md` (inventory bumped 17→18) as separate, direct skill-authoring changes outside the catalog itself.
+
+**Row 018 added** with full Files treatment (`filename`, `fileContent`, `guideFilename`, `guideContent`, `tryPhrase`) and a new `skill-install-data` entry (single file, `SKILL.md`, sha256 `9e0dab128d080b97a106258de815f1456bd72f95c3aabefaf00e6f6c8ecc4141`), matching the pattern used for every prior addition (§28/§29). Workflow group: **Review & Quality Checks** (with existing-asset-finder, markdown-document-formatter, requirements-validator, evidence-pack-builder) — it's a verification/review skill by nature. `fileContent` verified byte-identical to `.claude/skills/task-closure/SKILL.md` (11,150 bytes) both immediately after the splice and via a real headless-Chrome click-through.
+
+**Stat/footer text:** "Skills catalogued" / "Currently shown" (JS-computed from `data.length`, automatic) and the static "Currently discoverable" figure bumped 17→18. Footer "Last updated" bumped to 2026-07-27.
+
+**CSV:** row 018 appended (19 total lines including header) using the same corrected-column style as prior rows. No other rows touched.
+
+**Payload change:** `v5.html` grew from 333,410 to 360,424 bytes (+27,014 bytes, +8.1%) — one skill's worth of `SKILL.md` content plus its catalog/guide/install-prompt data. No functional issues found (see verification below).
+
+**Execution and verification:** a scratch build script (not committed) asserted the pre-sync state was exactly 17 entries everywhere before touching anything, appended the new row/entries to all three data structures plus the `skillGroups` JS mapping, re-serialized with the same `</script`-safety escaping used throughout, and verified post-splice: 18/18/18 entries across `skill-data`/`skill-files-data`/`skill-install-data`, the full 001–018 Skill ID set present with nothing missing or duplicated, and 018's embedded content/hash matching the real file on disk exactly. A real headless-Chrome run then confirmed 18 rendered rows, 18 install buttons, and — critically — clicked the actual "View install prompt" button for 018 and verified the resulting modal opens with the correct title, destination path, and full STEP 1–9 workflow text, with zero console errors.
+
+**Not pushed to the hub.** Per explicit user instruction ("let know before push hub i will confirm it"), this sync is local-only until separately approved.
+
+## 33. Skill Add (2026-07-27, same day) — `claude-code-basics` (19th skill)
+
+A new skill, `claude-code-basics`, was built via `skill-builder`'s Discovery Interview — an interactive, slash-command-only lesson in the physical mechanics of VS Code + Claude Code (opening a folder, Explorer, paths, panel, slash commands, prompts, terminal, tool results, and the real permission/edit-approval UI), deliberately complementary to (not overlapping with) `start`/`new-joinee`'s conceptual architecture teaching. Synced into the catalog as row **019**, positioned last.
+
+**Design highlights, per explicit user refinement of the initial discovery summary:** `allowed-tools` deliberately excludes `Write` and `Edit` — every file operation in the lesson (creating and editing a practice file in Topic 9) is a genuinely unapproved tool call, so the learner experiences the real permission/diff prompt rather than a simulation. `Write`/`Edit` are scoped in the skill's own instructions to exactly three paths (`onboarding-output/claude-code-basics-practice.txt`, `-progress.md`, `-cheat-sheet.md`) and never elsewhere. No delete capability exists anywhere in `allowed-tools`, so the skill explicitly tells the learner how to remove the practice file themselves rather than ever claiming to do it automatically. Non-Git folders and version-dependent UI labels are both handled as normal, non-error states. Every topic offers Continue/Repeat/Show-example/Pause/Stop, and a topic is never marked Passed without an actually-passed comprehension check (one supportive corrective retry allowed).
+
+**Files changed this round:** `output/skill-documentation/skill-documentation-table-v5.html`, `output/skill-documentation/inputs/Skills_documentation_table -Final.csv`, plus `.claude/skills/claude-code-basics/SKILL.md` (new, 88 lines) and `CLAUDE.md` (inventory bumped 18→19) as separate, direct skill-authoring changes outside the catalog itself.
+
+**Row 019 added** with full Files treatment and a new `skill-install-data` entry (single file, `SKILL.md`, sha256 `a4ffdb11f50dc32b72c1b8102a9b8eedc42842e9fabd4ce8bf6086a27509011d`), matching the pattern used for every prior addition. Workflow group: **Getting Started** (with start, new-joinee, project-discovery, mcp-access-guide) — it's an onboarding/orientation skill. `fileContent` verified byte-identical to the real file (11,096 bytes) both post-splice and via a real headless-Chrome click-through of the install-prompt modal.
+
+**Testing note:** because `disable-model-invocation: true` also blocks Claude's own `Skill` tool (confirmed live — attempting to invoke it returned "Skill claude-code-basics cannot be used with Skill tool due to disable-model-invocation"), this skill's actual interactive lesson flow could not be self-tested in this session. Only structural correctness (frontmatter, file-path consistency, checklist compliance) was verified. The reviewer should run `/claude-code-basics` directly at least once, especially Topic 9's live permission/diff prompts, before treating it as fully validated.
+
+**Stat/footer text:** "Currently discoverable" bumped 18→19. Footer date unchanged (already 2026-07-27 from §32).
+
+**CSV:** row 019 appended (20 total lines including header). No other rows touched.
+
+**Payload change:** `v5.html` grew from 360,424 to 387,306 bytes (+26,882 bytes, +7.5%).
+
+**Execution and verification:** same scratch-build-script method as §32 — asserted exactly 18 entries existed everywhere before touching anything, verified 19/19/19 after with the full 001–019 ID set present and nothing duplicated, and confirmed 019's embedded content/hash matches the real file exactly. A real headless-Chrome run confirmed 19 rendered rows, 19 install buttons, and a successful click-through of row 019's install prompt with zero console errors.

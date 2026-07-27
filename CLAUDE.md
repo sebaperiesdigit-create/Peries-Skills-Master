@@ -8,11 +8,11 @@ Peries-Skills-Master is a content repository for Claude Code **skills** — it c
 
 ## Repository layout
 
-Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 17 skill folders — nothing else. All 17 are discoverable/invocable as of the last restructure.
+Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 19 skill folders — nothing else. All 19 are discoverable/invocable as of the last restructure.
 
 ```
 .claude/skills/
-  <skill-name>/SKILL.md         # one folder per skill (17 total), skill definitions only
+  <skill-name>/SKILL.md         # one folder per skill (19 total), skill definitions only
   new-joinee/company-workflow.md, glossary.md
   start/company-workflow.md
   skill-builder/reference.md
@@ -69,5 +69,7 @@ These are the rules the skills in this repo follow when authoring/editing them �
 | `grill-me` | Stress-tests any plan/design one question at a time (with a recommended answer) until every decision, dependency, assumption, risk, and branch is resolved |
 | `evidence-pack-builder` | Builds a traceable evidence pack for completed work (task brief, sources, queries, raw extracts, validation, screenshots, assumptions, decision log, final output) — reusable across departments |
 | `mcp-access-guide` | Teaches beginners how MCP connects Claude to company systems via one interactive diagram; verifies connector availability, never handles credentials or modifies config |
+| `task-closure` | Verifies whether a task is genuinely ready to close — nine dimensions checked against evidence (requirement-level traceability, freshness-checked), returns exactly one of COMPLETE / COMPLETE WITH LIMITATIONS / REVIEW REQUIRED / BLOCKED / INCOMPLETE; never modifies/publishes/deletes without per-action approval |
+| `claude-code-basics` | Interactive, slash-command-only beginner lesson in the physical mechanics of VS Code + Claude Code (folders, Explorer, paths, panel, slash commands, prompts, terminal, tool results, real permission/edit-approval UI) — complements `start`/`new-joinee`'s conceptual architecture teaching rather than duplicating it |
 
 The two onboarding skills (`start`, `new-joinee`) only write files under `onboarding-output/`, and only after explicit user confirmation at each write — see the "File-Writing Safety" / "Guardrails" section inside each skill's `SKILL.md` before modifying them.
