@@ -2,6 +2,8 @@
 name: evidence-pack-builder
 description: Use when someone asks to build an evidence pack for this, document proof of this work, compile the evidence for this task, or needs a paper trail for completed work.
 argument-hint: [task or topic]
+disable-model-invocation: true
+allowed-tools: Read, Glob, Grep, Write, Bash(cp *)
 ---
 
 ## What This Skill Does
@@ -53,7 +55,16 @@ Before writing anything to disk, scan all captured content (raw extracts, script
 
 Redact matches with `[REDACTED]` before including them in any file. If a screenshot image itself likely contains sensitive on-screen content, flag it to the user rather than silently including or excluding it.
 
-## Step 7: Write the Pack
+## Step 7: Confirm Before Writing
+
+Before creating anything, show the user:
+- The destination folder path (`output/evidence-packs/<task-slug>/`, or the `-v2`-style path chosen in Step 2)
+- The full list of files that will be created
+- A one-line status per component (Available / Not provided / Not applicable)
+
+Ask via AskUserQuestion: **Write the evidence pack — Recommended** / **Cancel**. Only proceed to Step 8 after explicit confirmation. (This is separate from Step 2's overwrite-vs-versioned question, which only applies when a pack already exists — this gate applies every time, including a fresh pack.)
+
+## Step 8: Write the Pack
 
 Create `output/evidence-packs/<task-slug>/` (or `-v2` etc.) with:
 
@@ -72,7 +83,7 @@ Keep raw evidence (`raw-extracts/`, `screenshots/`, `sources.md`, `queries.md`) 
 
 Mark any of the 10 components not available as **Not provided** (info that should exist but wasn't given) or **Not applicable** (doesn't apply to this task) — never fabricate content to fill a gap.
 
-## Step 8: Report
+## Step 9: Report
 
 Tell the user what was written and where (the full folder path), and summarize which components are Available vs. Not provided/Not applicable.
 
