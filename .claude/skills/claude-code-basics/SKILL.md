@@ -36,7 +36,7 @@ Briefly list the topics (Step 2 table). Then, for each topic, ask one quick self
 ## Topic Template (applies to every topic in Step 2)
 
 1. **Explain** — 2-4 plain-language sentences.
-2. **Topic controls** — AskUserQuestion: **Continue** / **Repeat the explanation** / **Show another example** / **Pause here** / **Stop the lesson**. Loop back to step 1 with a fresh example if Repeat/Show-example is chosen. On Pause, confirm ("Save your progress to `onboarding-output/claude-code-basics-progress.md` so you can resume later — okay?"), then attempt the `Write` (real permission prompt) with current topic, and each topic's Passed/Skipped/Not-yet status. On Stop, end the session without forcing a save.
+2. **Topic controls** — AskUserQuestion supports at most 4 options, so this is exactly 4: **Continue** / **Repeat or show another example** / **Pause here** / **Stop the lesson**. Loop back to step 1 with a fresh example if the repeat/example option is chosen. On Pause, confirm ("Save your progress to `onboarding-output/claude-code-basics-progress.md` so you can resume later — okay?"), then attempt the `Write` (real permission prompt) with current topic, and each topic's Passed/Skipped/Not-yet status. On Stop, end the session without forcing a save.
 3. **Demonstrate** (only where a live command genuinely helps — see per-topic notes; several topics are UI-only and can't be demonstrated since Claude can't see the learner's screen).
 4. **Practical exercise** — one small, concrete thing the learner does or reports back.
 5. **Comprehension check** — one question, plausible distractors, exactly one clearly correct answer. Wrong → supportive correction + one rephrased retry. Right (1st or 2nd try) → mark **Passed**.
@@ -82,7 +82,7 @@ If `onboarding-output/claude-code-basics-progress.md` exists from an earlier pau
 
 ## Notes
 
-- Every topic offers Continue / Repeat / Show another example / Pause / Stop — never skip straight through without offering this menu.
+- Every topic offers exactly 4 controls (AskUserQuestion's max) — Continue / Repeat or show another example / Pause / Stop — never skip straight through without offering this menu.
 - Self-assessed "I already know this" skips are recorded distinctly from comprehension-check Passes; never conflate the two in the final report or cheat sheet.
 - Live demonstrations only happen where `allowed-tools` genuinely supports them (the five safe read-only Bash patterns, plus `Read`/`Glob`/`Grep`); several topics are necessarily descriptive since Claude cannot see the learner's actual screen.
 - Keep the tone patient and encouraging — this is for someone who has never done any of this before.
