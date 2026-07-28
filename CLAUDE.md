@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-Peries-Skills-Master is a content repository for Claude Code **skills** — it contains no application code, build system, or tests. Everything here is Markdown (skill instructions, reference docs) plus a couple of HTML deliverables. There is nothing to build, lint, compile, or run.
+Peries-Skills-Master is a content repository for Claude Code **skills** — it contains no application code, build system, or tests. Everything here is Markdown (skill instructions, reference docs) plus a couple of HTML deliverables. There is nothing to build, lint, compile, or run. The one exception is `daily-work-tracker/scripts/*.ps1`, small deterministic PowerShell helpers (marker read/write, config update) that the skill invokes directly — they're not part of a build/test pipeline.
 
 ## Repository layout
 
-Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 19 skill folders — nothing else. All 19 are discoverable/invocable as of the last restructure.
+Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 20 skill folders — nothing else. All 20 are discoverable/invocable as of the last restructure.
 
 ```
 .claude/skills/
@@ -71,5 +71,8 @@ These are the rules the skills in this repo follow when authoring/editing them �
 | `mcp-access-guide` | Teaches beginners how MCP connects Claude to company systems via one interactive diagram; verifies connector availability, never handles credentials or modifies config |
 | `task-closure` | Verifies whether a task is genuinely ready to close — nine dimensions checked against evidence (requirement-level traceability, freshness-checked), returns exactly one of COMPLETE / COMPLETE WITH LIMITATIONS / REVIEW REQUIRED / BLOCKED / INCOMPLETE; never modifies/publishes/deletes without per-action approval |
 | `claude-code-basics` | Interactive, slash-command-only beginner lesson in the physical mechanics of VS Code + Claude Code (folders, Explorer, paths, panel, slash commands, prompts, terminal, tool results, real permission/edit-approval UI) — complements `start`/`new-joinee`'s conceptual architecture teaching rather than duplicating it |
+| `daily-work-tracker` | Guides an employee through creating/viewing/editing a daily status entry (what was done, what's next, blockers), first-time setup, completion status checks, and a self-attested admin identity correction; reminder/notification automation is deferred (see its `SKILL.md` "Deferred" section) |
 
 The two onboarding skills (`start`, `new-joinee`) only write files under `onboarding-output/`, and only after explicit user confirmation at each write — see the "File-Writing Safety" / "Guardrails" section inside each skill's `SKILL.md` before modifying them.
+
+`daily-work-tracker` writes durable records (entries, employee config, admin audit log) only under `output/daily-work-tracker/`, always after explicit user confirmation; ephemeral completion markers live outside the repo at `%LOCALAPPDATA%\daily-work-tracker\markers\` and are never committed. Its `admin-update-identity` action is a self-attestation + audit-log control, not a real authorization check — Claude Code has no identity backend to verify against.
