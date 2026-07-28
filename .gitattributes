@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Force LF on checkout for all text files, regardless of a cloning machine's
+# core.autocrlf setting. Skill install prompts embed a sha256 of each file's
+# exact bytes; a CRLF checkout on Windows silently breaks that hash the moment
+# the content passes through any copy/paste path that normalizes line endings.
+* text eol=lf

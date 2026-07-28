@@ -1,0 +1,182 @@
+{
+  ".claude\\skills\\claude-code-basics\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 36
+    },
+    "HORIZONTAL ELLIPSIS": {
+      "char": "…",
+      "count": 1
+    },
+    "RIGHTWARDS ARROW": {
+      "char": "→",
+      "count": 7
+    }
+  },
+  ".claude\\skills\\customer-email-reply-drafter\\SKILL.md": {
+    "RIGHT SINGLE QUOTATION MARK (curly apostrophe)": {
+      "char": "’",
+      "count": 1
+    }
+  },
+  ".claude\\skills\\daily-work-tracker\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 8
+    }
+  },
+  ".claude\\skills\\daily-work-tracker\\assets\\daily-entry-template.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 1
+    }
+  },
+  ".claude\\skills\\daily-work-tracker\\references\\policy.md": {
+    "EN DASH": {
+      "char": "–",
+      "count": 1
+    },
+    "EM DASH": {
+      "char": "—",
+      "count": 12
+    }
+  },
+  ".claude\\skills\\daily-work-tracker\\scripts\\check-completion.ps1": {
+    "EM DASH": {
+      "char": "—",
+      "count": 1
+    }
+  },
+  ".claude\\skills\\daily-work-tracker\\scripts\\start-tracker.ps1": {
+    "EM DASH": {
+      "char": "—",
+      "count": 1
+    }
+  },
+  ".claude\\skills\\evidence-pack-builder\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 30
+    }
+  },
+  ".claude\\skills\\existing-asset-finder\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 18
+    }
+  },
+  ".claude\\skills\\first-task-mapper\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 23
+    }
+  },
+  ".claude\\skills\\grill-me\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 15
+    }
+  },
+  ".claude\\skills\\markdown-document-formatter\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 1
+    }
+  },
+  ".claude\\skills\\mcp-access-guide\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 10
+    },
+    "RIGHTWARDS ARROW": {
+      "char": "→",
+      "count": 4
+    }
+  },
+  ".claude\\skills\\mcp-access-guide\\references\\connector-registry.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 3
+    }
+  },
+  ".claude\\skills\\meeting-note-summariser\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 5
+    }
+  },
+  ".claude\\skills\\new-joinee\\company-workflow.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 33
+    },
+    "RIGHTWARDS ARROW": {
+      "char": "→",
+      "count": 21
+    }
+  },
+  ".claude\\skills\\new-joinee\\glossary.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 3
+    }
+  },
+  ".claude\\skills\\new-joinee\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 22
+    }
+  },
+  ".claude\\skills\\product-description-writer\\SKILL.md": {
+    "RIGHT SINGLE QUOTATION MARK (curly apostrophe)": {
+      "char": "’",
+      "count": 1
+    },
+    "EN DASH": {
+      "char": "–",
+      "count": 1
+    },
+    "EM DASH": {
+      "char": "—",
+      "count": 1
+    }
+  },
+  ".claude\\skills\\project-discovery\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 22
+    },
+    "RIGHTWARDS ARROW": {
+      "char": "→",
+      "count": 1
+    }
+  },
+  ".claude\\skills\\skill-finder\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 13
+    }
+  },
+  ".claude\\skills\\start\\company-workflow.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 6
+    },
+    "RIGHTWARDS ARROW": {
+      "char": "→",
+      "count": 4
+    }
+  },
+  ".claude\\skills\\start\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 34
+    }
+  },
+  ".claude\\skills\\task-closure\\SKILL.md": {
+    "EM DASH": {
+      "char": "—",
+      "count": 41
+    }
+  }
+}

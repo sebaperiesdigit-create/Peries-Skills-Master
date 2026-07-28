@@ -1,0 +1,188 @@
+[
+  {
+    "file": ".claude/skills/claude-code-basics/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 88
+  },
+  {
+    "file": ".claude/skills/customer-email-reply-drafter/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 43
+  },
+  {
+    "file": ".claude/skills/daily-work-tracker/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 111
+  },
+  {
+    "file": ".claude/skills/daily-work-tracker/assets/daily-entry-template.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 33
+  },
+  {
+    "file": ".claude/skills/daily-work-tracker/assets/employee-config.example.json",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 5
+  },
+  {
+    "file": ".claude/skills/daily-work-tracker/references/policy.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 75
+  },
+  {
+    "file": ".claude/skills/daily-work-tracker/scripts/check-completion.ps1",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 27
+  },
+  {
+    "file": ".claude/skills/daily-work-tracker/scripts/start-tracker.ps1",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 40
+  },
+  {
+    "file": ".claude/skills/daily-work-tracker/scripts/update-employee-config.ps1",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 53
+  },
+  {
+    "file": ".claude/skills/evidence-pack-builder/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 123
+  },
+  {
+    "file": ".claude/skills/existing-asset-finder/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 126
+  },
+  {
+    "file": ".claude/skills/first-task-mapper/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 160
+  },
+  {
+    "file": ".claude/skills/grill-me/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 75
+  },
+  {
+    "file": ".claude/skills/markdown-document-formatter/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 45
+  },
+  {
+    "file": ".claude/skills/mcp-access-guide/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 65
+  },
+  {
+    "file": ".claude/skills/mcp-access-guide/references/connector-registry.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 53
+  },
+  {
+    "file": ".claude/skills/meeting-note-summariser/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 55
+  },
+  {
+    "file": ".claude/skills/new-joinee/company-workflow.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 256
+  },
+  {
+    "file": ".claude/skills/new-joinee/glossary.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 129
+  },
+  {
+    "file": ".claude/skills/new-joinee/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 284
+  },
+  {
+    "file": ".claude/skills/order-status-summary/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 42
+  },
+  {
+    "file": ".claude/skills/order-summary-report/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 40
+  },
+  {
+    "file": ".claude/skills/product-description-writer/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 44
+  },
+  {
+    "file": ".claude/skills/project-discovery/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 130
+  },
+  {
+    "file": ".claude/skills/requirements-validator/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 47
+  },
+  {
+    "file": ".claude/skills/skill-builder/reference.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 409
+  },
+  {
+    "file": ".claude/skills/skill-builder/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 285
+  },
+  {
+    "file": ".claude/skills/skill-finder/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 103
+  },
+  {
+    "file": ".claude/skills/start/company-workflow.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 143
+  },
+  {
+    "file": ".claude/skills/start/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 295
+  },
+  {
+    "file": ".claude/skills/task-closure/SKILL.md",
+    "style": "LF",
+    "crlf_lines": 0,
+    "lf_only_lines": 163
+  }
+]
