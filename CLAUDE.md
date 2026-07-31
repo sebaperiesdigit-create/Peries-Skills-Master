@@ -8,7 +8,7 @@ Peries-Skills-Master is a content repository for Claude Code **skills** — it c
 
 ## Repository layout
 
-Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 20 skill folders — nothing else. All 20 are discoverable/invocable as of the last restructure.
+Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 21 skill folders — nothing else. All 21 are discoverable/invocable as of the last restructure.
 
 ```
 .claude/skills/
@@ -72,7 +72,10 @@ These are the rules the skills in this repo follow when authoring/editing them �
 | `task-closure` | Verifies whether a task is genuinely ready to close — nine dimensions checked against evidence (requirement-level traceability, freshness-checked), returns exactly one of COMPLETE / COMPLETE WITH LIMITATIONS / REVIEW REQUIRED / BLOCKED / INCOMPLETE; never modifies/publishes/deletes without per-action approval |
 | `claude-code-basics` | Interactive, slash-command-only beginner lesson in the physical mechanics of VS Code + Claude Code (folders, Explorer, paths, panel, slash commands, prompts, terminal, tool results, real permission/edit-approval UI) — complements `start`/`new-joinee`'s conceptual architecture teaching rather than duplicating it |
 | `daily-work-tracker` | Guides an employee through creating/viewing/editing a daily status entry (what was done, what's next, blockers), first-time setup, completion status checks, and a self-attested admin identity correction; reminder/notification automation is deferred (see its `SKILL.md` "Deferred" section) |
+| `record-a-skill` | Records an existing workflow from supported evidence (transcripts, screenshots, event logs, example inputs/outputs, SOPs) or a live guided text walkthrough, reconstructs it as a confirmed reusable specification with provenance/confidence tagging, screens for sensitive content, checks for overlap via `existing-asset-finder`, and hands the confirmed spec to `skill-builder` (Mode 1 or Mode 2) to build or extend the actual skill; user-only (`disable-model-invocation: true`), never auto-invoked |
 
 The two onboarding skills (`start`, `new-joinee`) only write files under `onboarding-output/`, and only after explicit user confirmation at each write — see the "File-Writing Safety" / "Guardrails" section inside each skill's `SKILL.md` before modifying them.
 
 `daily-work-tracker` writes durable records (entries, employee config, admin audit log) only under `output/daily-work-tracker/`, always after explicit user confirmation; ephemeral completion markers live outside the repo at `%LOCALAPPDATA%\daily-work-tracker\markers\` and are never committed. Its `admin-update-identity` action is a self-attestation + audit-log control, not a real authorization check — Claude Code has no identity backend to verify against.
+
+`record-a-skill` writes only under `output/record-a-skill/<task-slug>/`, always after explicit per-write confirmation: `raw/` and `_staging/` are git-ignored (original evidence copies and temporary extraction material never enter Git history), while `analysis/` and `workflow-specification.md` are committed only after redaction, review, and explicit approval. It never runs `git add`/`commit`/`push`/publish itself, never defaults a skill's install scope (project vs. personal — always an explicit user choice), and never edits a final generated or extended skill directly — that is always delegated to `skill-builder`.
