@@ -104,11 +104,11 @@ conflicting evidence exists, whether missing context could materially change the
 **Required record format** per material item:
 ```
 Statement:            [the rule/decision/step, in reusable form]
-Provenance:            [one category from the list above]
-Confidence:            High | Medium | Low
-Evidence reference:    [which raw/analysis artifact supports this]
-Confirmation status:   Confirmed | Unconfirmed
-Notes:                 [assumptions, conflicts, or limitations, if any]
+Provenance:           [one category from the list above]
+Confidence:           High | Medium | Low
+Evidence reference:   [which raw/analysis artifact supports this]
+Confirmation status:  Confirmed | Unconfirmed
+Notes:                [assumptions, conflicts, or limitations, if any]
 ```
 
 **Control rules:**
