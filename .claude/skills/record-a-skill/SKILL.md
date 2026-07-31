@@ -1,6 +1,6 @@
 ---
 name: record-a-skill
-description: Record an existing workflow from supported evidence or a guided text-based walkthrough, reconstruct it as a confirmed reusable specification, check for overlapping assets, and hand it to skill-builder.
+description: Use when someone asks to record a demonstrated workflow, turn a screen recording or walkthrough into a skill, capture a process as a reusable skill, or check an existing skill before recording a new one.
 argument-hint: [workflow-name-or-evidence-path]
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash(cp *), Bash(git status), Bash(git diff), Skill
