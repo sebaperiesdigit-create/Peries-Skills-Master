@@ -8,7 +8,7 @@ Peries-Skills-Master is a content repository for Claude Code **skills** — it c
 
 ## Repository layout
 
-Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 21 skill folders — nothing else. All 21 are discoverable/invocable as of the last restructure.
+Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 24 skill folders — nothing else. All 24 are discoverable/invocable as of the last restructure.
 
 ```
 .claude/skills/
@@ -73,6 +73,9 @@ These are the rules the skills in this repo follow when authoring/editing them �
 | `claude-code-basics` | Interactive, slash-command-only beginner lesson in the physical mechanics of VS Code + Claude Code (folders, Explorer, paths, panel, slash commands, prompts, terminal, tool results, real permission/edit-approval UI) — complements `start`/`new-joinee`'s conceptual architecture teaching rather than duplicating it |
 | `daily-work-tracker` | Guides an employee through creating/viewing/editing a daily status entry (what was done, what's next, blockers), first-time setup, completion status checks, and a self-attested admin identity correction; reminder/notification automation is deferred (see its `SKILL.md` "Deferred" section) |
 | `record-a-skill` | Records an existing workflow from supported evidence (transcripts, screenshots, event logs, example inputs/outputs, SOPs) or a live guided text walkthrough, reconstructs it as a confirmed reusable specification with provenance/confidence tagging, screens for sensitive content, checks for overlap via `existing-asset-finder`, and hands the confirmed spec to `skill-builder` (Mode 1 or Mode 2) to build or extend the actual skill; user-only (`disable-model-invocation: true`), never auto-invoked |
+| `aios-structure-build` | Scaffolds the frozen AIS-OS starter-kit baseline into an empty target directory, hash-verifying every bundled template before writing and every written file after, with automatic rollback on any failure; portable (works installed personally or project-locally unmodified); user-only, never auto-invoked |
+| `aios-structure-organize` | Additively repairs an existing AIS-OS project — dry-run plan of what's missing, explicit confirmation, then creates only the missing items; never overwrites, deletes, or moves anything that already exists; user-only, never auto-invoked |
+| `aios-structure-validate` | Read-only structural check of an existing AIS-OS project against the frozen baseline (missing items, structural drift, non-empty placeholders, anti-pattern clutter), each with a concrete fix; only possible write is an optional, explicitly-consented saved report; user-only, never auto-invoked |
 
 The two onboarding skills (`start`, `new-joinee`) only write files under `onboarding-output/`, and only after explicit user confirmation at each write — see the "File-Writing Safety" / "Guardrails" section inside each skill's `SKILL.md` before modifying them.
 

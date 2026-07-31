@@ -400,3 +400,32 @@ Added the 21st skill, `record-a-skill` (built and committed earlier this session
 ## 38.
 
 **Pushed on 2026-07-31 06:16:34 UTC** (hub_pages id=4, same slug) — triggered via "push hub" immediately following §37's sync. Diff-checked before pushing: live was 412,245 bytes (md5 `95d1899889fd9930b5eabec7415abe1e`, updated_at 2026-07-28T11:56:42Z), local was 454,261 bytes (the 21-skill version). No local changes remain unpushed as of this push.
+
+## 39.
+
+Added three new skills, `aios-structure-build` / `aios-structure-organize` / `aios-structure-validate` (added to the repo and audited/committed earlier this session — a portable, hash-manifest-verified scaffolding family for a frozen "AIS-OS starter-kit" baseline: build scaffolds a fresh empty directory with rollback; organize additively repairs an existing project via dry-run→confirm→apply, never touching what already exists; validate is a read-only structural check with one optional consented report write), to the catalog as rows **022–024**, in that build→organize→validate order.
+
+**Design decisions (short interrogation before writing, per the standing catalog-sync procedure):**
+- **Description-convention exception:** all three descriptions also don't follow the "Use when someone asks to..." convention (same class of issue as `record-a-skill` in §37), but — unlike `record-a-skill`, which was authored for this repo — these read as a vendored, portable package explicitly designed to "work installed personally or project-locally with no changes." Decided **not** to edit the three `SKILL.md` files this time (reversing the §37 precedent, deliberately): editing a self-contained portable package's source risks diverging from whatever upstream it was copied from, for a purely cosmetic/mechanical-derivation benefit. `tryPhrase` for all three uses each description verbatim (already sentence-cased) as a documented one-off exception instead.
+- **Install-package file scope:** all ~17 files per skill (`SKILL.md`, `manifest.json`, one `scripts/*.ps1`, all 14 `templates/**` files including nested `templates/.claude/skills/{onboard,audit,level-up}/SKILL.md` paths) — by far the largest bundle in the catalog (previous max was `daily-work-tracker`'s 7). Not optional: the bundled script's own preflight step hash-verifies every template against `manifest.json` and hard-fails (exit 10) without them, so the full tree is load-bearing per the established "include every file the workflow depends on to function" rule.
+- **New workflow group:** `AIOS-Project-Scaffolding` (exact name as specified, deviating from the existing "Word & Word" title-case-with-ampersand group-naming style on explicit instruction) — none of the 6 existing groups fit "scaffold/repair/validate a project's file structure against a frozen baseline," a genuinely different category from skill-building, reporting, writing, or record-keeping. Added to both the `skillGroups` JS mapping and the `group-filter` `<select>`'s hardcoded `<option>` list (the latter is easy to miss — flagged in §36's technical reference and double-checked this round).
+
+**Disk-vs-catalog diff run first:** confirmed exactly these 3 gaps (24 folders vs. 21 catalog rows) — the pre-existing 21 rows already matched their 21 folders 1:1.
+
+**Verification performed** (script-based, scratchpad, not committed) — all checks the user explicitly requested, all passed:
+- All 24 catalog entries present, uniquely numbered `001`–`024`, in all three JSON blocks plus `skillGroups`.
+- Each new `skill-install-data` bundle contains exactly 17 files, at paths matching the real on-disk tree exactly (including the nested `templates/.claude/skills/...` paths).
+- Every one of the 51 bundled files (17 × 3) compared against a fresh `fs.readFileSync` of its real source file using CRLF/CR-normalized SHA-256 hashing (matching the same normalization the skills' own `build.ps1`/`organize.ps1`/`validate.ps1` use for their manifest preflight) — all matched.
+- Each `skill-files-data` entry (the single-file download) contains only `SKILL.md`, byte-identical to disk — confirmed separately from the full install bundle.
+- All three skills confirmed under group `AIOS-Project-Scaffolding`, in build→organize→validate order (022/023/024).
+- All three JSON blocks re-parsed cleanly after the edit.
+- Install-prompt completeness confirmed structurally: every bundle includes `manifest.json`, its script, and all 14 templates (i.e. the functionally complete set a real install would need).
+- Every pre-existing entry/row (21 in `skill-data`/`skill-files-data`/`skill-install-data`/`skillGroups`, 21 in the CSV) diffed against the pre-edit `git show HEAD:...` version — zero mutations, purely additive.
+- `git status --porcelain` after the write touched only the HTML and CSV — no file under `.claude/skills/` was modified by this sync.
+- `stat-total` (cosmetic fallback) and "Currently discoverable" both bumped 21→24, footer date to 2026-07-31, `stat-visible` again deliberately left at its pre-existing stale value (unrelated, out of scope, per prior rounds).
+
+No headless-browser click-through of the three new install-prompt modals was done this round (no Puppeteer/Playwright installed) — disclosed as a gap, not claimed as done, consistent with §37 and §34.
+
+**`CLAUDE.md` also updated this round:** skill-folder count bumped 21→24, and three new inventory rows added for the `aios-structure-*` family.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs" and "push hub." Per explicit user instruction this round, nothing was committed or pushed until the verification results above were shown and separately approved.
