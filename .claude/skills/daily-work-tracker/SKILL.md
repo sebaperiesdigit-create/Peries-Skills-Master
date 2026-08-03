@@ -2,6 +2,7 @@
 name: daily-work-tracker
 description: Use when someone asks to record their daily work, update today's tracker, review or view a work entry, edit a past entry, set up daily-work-tracker for the first time, check completion status, or correct employee identity in the tracker.
 argument-hint: [today|YYYY-MM-DD|view [date]|edit [date]|setup|status [date]|admin-update-identity]
+allowed-tools: Read, Write, Glob, Bash(powershell -NoProfile -ExecutionPolicy Bypass -File *)
 ---
 
 # Daily Work Tracker
@@ -25,6 +26,8 @@ Maintain one verified daily status entry per employee and work date. Never mark 
 
 ## Interpret the request
 
+Parse `$ARGUMENTS` against this vocabulary:
+
 - no date or `today`: record or continue today's entry
 - `YYYY-MM-DD`: record or continue that work date
 - `view [date]`: show an entry without changing it
@@ -38,7 +41,11 @@ Use the employee's local date when none is supplied. Ask one focused question wh
 ## Workflow
 
 1. Confirm the requested action and work date.
-2. Run `scripts/start-tracker.ps1` to initialize the local marker directory, clean markers older than 90 days, and report whether employee config exists.
+2. Run `scripts/start-tracker.ps1` to initialize the local marker directory, clean markers older than 90 days, and report whether employee config exists:
+   ```
+   powershell -NoProfile -ExecutionPolicy Bypass -File "<this skill's folder>\scripts\start-tracker.ps1"
+   ```
+   Resolve `<this skill's folder>` from the base directory Claude Code reports for this skill at invocation — never hardcode a path.
 3. If configuration is missing, run first-time setup (below) before continuing with any other action.
 4. Load employee identity from `output/daily-work-tracker/_config/employee.json`. Never substitute the Windows username, and never ask the employee to retype their ID once configured.
 5. If the work date is a Saturday or Sunday, tell the employee tracking is weekdays-only and stop — no entry, no marker.
@@ -53,7 +60,11 @@ Use the employee's local date when none is supplied. Ask one focused question wh
     - preserve prior content when revising (append to Edit History, never erase);
     - write the entry file;
     - read it back and verify the expected content is present;
-    - call `scripts/check-completion.ps1 -MarkComplete` only after verification passes.
+    - only after verification passes, call:
+      ```
+      powershell -NoProfile -ExecutionPolicy Bypass -File "<this skill's folder>\scripts\check-completion.ps1" -EmployeeId "<employee-id>" -Date "<YYYY-MM-DD>" -MarkComplete
+      ```
+      Omit `-MarkComplete` when only checking status (e.g. for the `status [date]` action) rather than marking a date complete.
 12. Report the work date, employee ID, saved path, verification result, and marker result.
 
 If the user cancels, or any validation/write/verification step fails, stop without creating or refreshing the completion marker.
@@ -85,7 +96,10 @@ This is a self-attestation gate, not a real authorization check — Claude Code 
 
 1. Ask for the current employee ID on file, the corrected name and ID, the acting administrator's name/role, and a reason.
 2. Show the proposed change exactly as entered and require explicit confirmation.
-3. Run `scripts/update-employee-config.ps1`, which updates only `output/daily-work-tracker/_config/employee.json` and appends a record to `output/daily-work-tracker/_admin-audit-log.md`.
+3. Run `scripts/update-employee-config.ps1`, which updates only `output/daily-work-tracker/_config/employee.json` and appends a record to `output/daily-work-tracker/_admin-audit-log.md`:
+   ```
+   powershell -NoProfile -ExecutionPolicy Bypass -File "<this skill's folder>\scripts\update-employee-config.ps1" -OldEmployeeId "<current-id>" -NewEmployeeId "<new-id>" -NewEmployeeName "<new-name>" -AdminName "<admin-name>" -Reason "<reason>"
+   ```
 4. Never rewrite past daily entries — historical files keep whatever name/ID was current when they were written.
 
 ## Completion standard
