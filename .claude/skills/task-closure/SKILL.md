@@ -2,7 +2,7 @@
 name: task-closure
 description: Use when someone asks whether a task is ready to close, wants a closure check, needs to verify a task is genuinely done, or asks to confirm a task can be marked complete.
 argument-hint: [task or topic]
-allowed-tools: Read, Glob, Grep, Write, Bash
+allowed-tools: Read, Glob, Grep, Write, Bash(git status), Bash(git log *)
 ---
 
 ## What This Skill Does
@@ -69,7 +69,7 @@ For each dimension, determine status per the vocabulary above, citing evidence a
 
 ### Step 5: Temporary-File Handling (Classified)
 
-Actively scan known scratch/temp locations (the session's scratchpad directory, and any disposable directories mentioned in the conversation) via Glob/Bash for leftover files. Classify each one found:
+Actively scan known scratch/temp locations (the session's scratchpad directory, and any disposable directories mentioned in the conversation) via Glob for leftover files. Classify each one found:
 
 - **Disposable** — pure scratch/intermediate work (scratchpad, OS temp dir, or explicitly described as temporary). Safe to flag for deletion.
 - **Deliverable-adjacent** — sits inside or near the actual output location (e.g. `output/`) and might be part of the intended deliverable. Never classify as safe to delete without explicit confirmation it isn't part of the output.
@@ -85,7 +85,7 @@ Never treat silence or missing evidence as confirmation that no unresolved issue
 
 ### Step 7: Handle Fixable Issues (Approval-Gated)
 
-If a fixable issue was found (most commonly: Disposable temp files to remove), do not act automatically. Ask a specific, scoped question via AskUserQuestion (e.g. "Delete these N disposable files — Recommended" / "Leave them"). Act only on explicit approval, and only on exactly what was approved — never expand scope beyond it. This is the only point in the workflow where this skill may modify or delete anything, and only after this specific gate.
+If a fixable issue was found (most commonly: Disposable temp files to remove), do not act automatically. Ask a specific, scoped question via AskUserQuestion (e.g. "Delete these N disposable files — Recommended" / "Leave them"). Act only on explicit approval, and only on exactly what was approved — never expand scope beyond it. This is the only point in the workflow where this skill may modify or delete anything, and only after this specific gate. Deletion is not in `allowed-tools`, so the delete command itself will separately prompt for permission — an intentional second gate on top of the `AskUserQuestion` approval above.
 
 ### Step 8: Verdict Precedence
 
