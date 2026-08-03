@@ -567,3 +567,13 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing; after editing, all 24 keys present in both blocks, every entry except `021` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read; install `reference.md` re-confirmed still string-equal to disk (untouched, as expected). `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
 
 **Pushed on 2026-08-03 09:09:56 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `5fb4105`. Diff-checked before pushing: live was 751,186 bytes (md5 `649a48c1d83df3fafa92d0a96ad81584`, updated_at 2026-08-03T08:56:31.383Z, the §51-only version), local was 760,607 bytes (md5 `2de17b9c56b25d39e81772acd4a1f1ee`, includes this section's `record-a-skill` sync).
+
+## 53.
+
+**Thirteenth catalog sync, same day** — following a `skill-builder` audit of `daily-work-tracker` (2026-08-03, committed as `e7b8707`): wired up `$ARGUMENTS` (declared via `argument-hint`'s `today|YYYY-MM-DD|view|edit|setup|status|admin-update-identity` vocabulary but never referenced — same gap class as §46/§47), spelled out the exact `powershell -NoProfile -ExecutionPolicy Bypass -File "..."` invocation for all three bundled scripts (verified against each script's own `param()` block rather than assumed), and added `allowed-tools` scoped to `Read, Write, Glob`, plus `Bash` scoped to that exact invocation pattern.
+
+**No CSV/`skill-data` prose changes needed** — Purpose/When to Use/How to Use/Expected Output already accurately describe the vocabulary and script usage; the fixes were internal precision/scoping, not user-facing behavior changes. `guideContent` was already current (correctly lists all 6 supporting files in the 7-file bundle) — only a one-line Notes addition mentioning the new `allowed-tools` scoping was needed, plus `fileContent`/install `SKILL.md` refresh. The other 6 install-data files (`policy.md`, template, config example, 3 scripts) were already byte-identical to disk and left untouched.
+
+**Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing; after editing, all 24 keys present in both blocks, every entry except `020` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
