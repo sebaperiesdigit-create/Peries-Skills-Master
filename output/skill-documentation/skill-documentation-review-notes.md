@@ -485,3 +485,17 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for `skill-files-data` and `skill-install-data` before editing (skill-data was not touched this round, so not re-serialized); after editing, all 24 keys present in both touched blocks, every entry except `005` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only (skill-files-data, skill-install-data) — CSV untouched this round.
 
 **Pushed on 2026-08-03 05:42:28 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed locally as `3ecc9c7` (not yet pushed to `origin/main` as of this push — that's a separate, not-yet-requested step this round). Diff-checked before pushing: live was 742,589 bytes (md5 `657fd9002c6ede70cfbeed573a3e6964`, updated_at 2026-08-03T05:32:38.622Z, the §43-only version), local was 751,205 bytes (md5 `9a8e12be944e336cb1544d1b57694980`, includes this section's `existing-asset-finder` sync).
+
+## 45.
+
+**Fifth catalog sync, same day** — following a `skill-builder` audit of `first-task-mapper` (2026-08-03, committed as `ca94187`): converted Steps 1-4 and 7-9's plain free-text "Ask: ..." questions to `AskUserQuestion` with drafted, context-grounded clickable options (contradicting the standing clickable-questions preference otherwise); replaced Step 6's shallow, standalone frontmatter-only skill scan with an explicit delegation to `existing-asset-finder`, matching `record-a-skill`'s precedent; fixed `allowed-tools` (dropped an invalid `Question` entry, converted YAML-list syntax to the repo's comma-separated string convention, added `Skill` so the new delegation actually works).
+
+**Small Notes addition** in both CSV and `skill-data`, matching the phrasing already used for `start`'s equivalent fix: *"Every clarifying question is now a quick click, not typing (you can still type a custom answer via 'Other')."* Purpose/When to Use/How to Use/Expected Output left untouched — still accurate; the underlying interaction model (a back-and-forth to fill in the map) didn't change, only its format.
+
+**`skill-files-data['006'].guideContent` was pre-restructure-stale**, same recurring pattern as §§42-44. Fully regenerated, including mention of the new click-to-answer format and the `existing-asset-finder` delegation. `tryPhrase` regenerated to match today's reworded frontmatter description. `fileContent` and the install-data `SKILL.md` copy refreshed to match disk.
+
+**CSV edit safety:** quote-codepoint counts checked before and after (12 straight quotes unchanged; curly-quote pairs went from 2 to 3, matching the one new quoted word — "Other" — added). No corruption.
+
+**Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `006` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
