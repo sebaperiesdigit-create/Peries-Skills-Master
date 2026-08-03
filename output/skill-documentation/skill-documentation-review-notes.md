@@ -473,3 +473,15 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `004` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML (skill-data, skill-files-data, skill-install-data).
 
 **Pushed on 2026-08-03 05:32:38 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `4fa1635` and pushed to `origin/main` first. Diff-checked before pushing: live was 741,599 bytes (md5 `037767924328104663f6ae793cfa7c77`, updated_at 2026-08-03T05:17:27.982Z, the §42-only version), local was 750,580 bytes (md5 `657fd9002c6ede70cfbeed573a3e6964`, includes this section's `project-discovery` sync). No local changes remain unpushed as of this push.
+
+## 44.
+
+**Fourth catalog sync, same day** — following a `skill-builder` audit of `existing-asset-finder` (2026-08-03, committed as `7eff9ce`): removed an unused `Bash(git *)` grant from `allowed-tools` (no step in the workflow describes using git; the skill repeatedly claims to be strictly read-only, and unrestricted git access contradicted that), and documented — but did not attempt to technically fix — a residual `Bash(psql *)` limitation: glob-pattern scoping can't distinguish a read-only `SELECT` from destructive SQL passed via `-c`/`--command`, so that rule is enforced by instruction, not tool scoping.
+
+**No CSV/`skill-data` prose changes this round** — Purpose/When to Use/Expected Output/Notes were all already accurate; the fix was purely internal tool scoping with no user-facing behavior change, so those fields were left untouched (same judgment call as §41's `start` sync).
+
+**`skill-files-data['005'].guideContent` was pre-restructure-stale**, same recurring pattern as §§42-43 — claimed "none of its skills sit at the path Claude Code requires" and still listed the now-removed `Bash(git *)` in its tool-access description. Fully regenerated to the current template style, including a Notes line disclosing the psql limitation. `tryPhrase` left unchanged (description text didn't change). `fileContent` and the install-data `SKILL.md` copy refreshed to match disk.
+
+**Verification:** round-trip JSON fidelity confirmed for `skill-files-data` and `skill-install-data` before editing (skill-data was not touched this round, so not re-serialized); after editing, all 24 keys present in both touched blocks, every entry except `005` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only (skill-files-data, skill-install-data) — CSV untouched this round.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
