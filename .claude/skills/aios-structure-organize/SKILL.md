@@ -2,6 +2,7 @@
 name: aios-structure-organize
 description: "Additively repair an existing AIS-OS project by creating whatever's missing against the frozen starter-kit baseline -- never overwrites, deletes, or moves anything that already exists. User-invoked only through /aios-structure-organize."
 disable-model-invocation: true
+allowed-tools: Bash(powershell -NoProfile -ExecutionPolicy Bypass -File *)
 ---
 
 ## What this skill does
