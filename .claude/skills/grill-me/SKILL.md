@@ -2,6 +2,7 @@
 name: grill-me
 description: Use when someone asks to grill me on this, stress-test this plan or idea, poke holes in this, or make sure I've thought of everything before committing to a plan, design, or decision.
 argument-hint: [topic or plan]
+allowed-tools: Read, Glob, Grep, Write
 ---
 
 ## What This Skill Does
@@ -37,7 +38,7 @@ For each open item, in roughly the order that unblocks the most other items firs
 
 1. Formulate the question clearly, scoped to that one item.
 2. Work out your own recommended answer based on the context available (the subject, the conversation, the codebase if relevant).
-3. Ask via AskUserQuestion with the recommended answer as the **first** option, labeled with "(Recommended)" in the label text, plus 2-3 genuinely distinct alternatives. Follow [[feedback-clickable-questions]] conventions — concrete, plausible options, not vague ones.
+3. Ask via AskUserQuestion with the recommended answer as the **first** option, labeled with "(Recommended)" in the label text, plus 2-3 genuinely distinct alternatives grounded in the subject's actual context (the plan's own details, the codebase, prior answers in this session) — never vague or generic placeholder options invented just to fill slots.
 4. When the user answers, mark that item's task complete via TaskUpdate.
 5. If the answer contradicts something already resolved, reopen that earlier task (re-create or mark it back to in_progress) and note the contradiction to the user before continuing — don't silently overwrite it.
 6. Do not re-litigate an item that's already resolved and uncontradicted, even if a later question is related.
@@ -46,7 +47,7 @@ Continue until the open-items list is empty.
 
 ## Step 4: Summarize
 
-Post an in-chat structured summary — no file is written unless the user explicitly asks for one:
+Post an in-chat structured summary. Only if the user explicitly asks to save it, write it to `output/grill-me/<subject-slug>-summary.md`:
 
 ```
 ## Grill Session Summary: [subject]
@@ -69,7 +70,7 @@ Post an in-chat structured summary — no file is written unless the user explic
 
 ## Notes
 
-- **Never build.** This skill only interrogates and produces a resolved plan. Even if the resolved plan becomes completely clear mid-session, do not start writing code, files, or skills as part of this session — hand the resolved plan back to the user (or the relevant build skill, e.g. [[skill-builder]]) as a separate next step.
+- **Never build.** This skill only interrogates and produces a resolved plan. Even if the resolved plan becomes completely clear mid-session, do not start writing code, files, or skills as part of this session — hand the resolved plan back to the user (or the relevant build skill, e.g. `skill-builder`, if installed) as a separate next step.
 - Don't ask about items with an obvious or trivial answer — this erodes trust in the process and wastes the user's time.
-- If the subject is itself a skill idea, this pairs naturally before [[skill-builder]]'s own Discovery Interview, but grill-me is general-purpose and not limited to skills.
+- If the subject is itself a skill idea, this pairs naturally before `skill-builder`'s own Discovery Interview (if that skill is installed), but grill-me is general-purpose and not limited to skills.
 - If nothing about the subject is actually underspecified (a fully-formed plan), say so plainly and skip the interview rather than inventing items.
