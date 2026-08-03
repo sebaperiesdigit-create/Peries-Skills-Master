@@ -511,3 +511,29 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for both touched blocks before editing (skill-data not touched this round); after editing, all 24 keys present in each, every entry except `007` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched this round.
 
 **Pushed on 2026-08-03 06:04:26 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `4ff61ce`. Diff-checked before pushing: live was 746,645 bytes (md5 `f79a9bc01c9ace0f0a99bd7b5ad74305`, updated_at 2026-08-03T05:57:30.861Z, the §45-only version), local was 756,313 bytes (md5 `a6df65659ae6e99f5c4ac5edf78a135b`, includes this section's `requirements-validator` sync).
+
+## 47.
+
+**Seventh catalog sync, same day** — following a `skill-builder` audit of `markdown-document-formatter` (2026-08-03, committed as `4747792`): added a write-confirmation gate (it previously saved `[original-name]-formatted.md` immediately with no confirmation, unlike every other file-writing skill in this repo), wired up `$ARGUMENTS`, added `allowed-tools: Read, Write, Glob`, and closed the known 2026-07-29 sandbox-test gap by giving code block fencing its own fix step (it was listed as a detection target with no corresponding fix rule, unlike headings/lists/spacing/tables/links).
+
+**Table prose updated** in both CSV and `skill-data`: Expected Output now notes the save happens "only after you confirm"; Notes now describes the show-first-then-confirm flow. Purpose/When to Use/How to Use left untouched — still accurate.
+
+**`skill-files-data['008'].guideContent` was pre-restructure-stale**, same recurring pattern as §§42-46. Fully regenerated to describe the new confirmation flow, `$ARGUMENTS` handling, and `allowed-tools` scoping, plus mentions code fence repairs in the fix summary. `tryPhrase` left unchanged (description text didn't change). `fileContent` and the install-data `SKILL.md` copy refreshed to match disk.
+
+**CSV edit safety:** quote-codepoint counts checked before and after (10 straight quotes, zero curly, both before and after — no curly quotes were introduced this round). No corruption.
+
+**Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `008` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML.
+
+## 48.
+
+**Eighth catalog sync, same day** — following a `skill-builder` audit of `meeting-note-summariser` (2026-08-03, committed as `5bc41c0`): added `allowed-tools: Read, Write` (it needed only those two, despite otherwise being one of the better-built skills audited today — correct `$ARGUMENTS` usage, output template, and write-gated-on-explicit-request already in place). No CSV/`skill-data` prose changes needed — purely internal tool scoping. `skill-files-data['009'].guideContent` was pre-restructure-stale, same recurring pattern; fully regenerated. `fileContent` and install `SKILL.md` refreshed to match disk.
+
+## 49.
+
+**Ninth catalog sync, same day** — following a `skill-builder` audit of `aios-structure-build` (2026-08-03, committed as `4d7a840`): scoped `allowed-tools` to exactly `Bash(powershell -NoProfile -ExecutionPolicy Bypass -File *)` — the skill's entire job is running one exact script and relaying its output, yet previously had unrestricted tool access despite extensive prose guarantees ("never write beyond what build.ps1 produces," "never touch git"). Unlike §§42-46/48, this row's `guideContent` was **not** pre-restructure-stale (it's a 2026-07-31 skill, already correctly documents the full 17-file install bundle) — only a one-line Notes addition was needed to mention the new scoping, plus `fileContent`/install `SKILL.md` refresh.
+
+**Combined verification for §§48-49:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing (skill-data untouched this round); after editing, all 24 keys present in both blocks, every entry except `009`/`022` byte-identical to its pre-edit snapshot; both skills' `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 3 lines changed in the HTML (cumulative with §47's still-uncommitted skill-data change) — CSV untouched this round.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
