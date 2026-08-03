@@ -2,6 +2,7 @@
 name: aios-structure-validate
 description: "Read-only structural check of an existing AIS-OS project against the frozen starter-kit baseline (missing/drifted/malformed items, not a maturity score -- see /audit for that). User-invoked only through /aios-structure-validate."
 disable-model-invocation: true
+allowed-tools: Bash(powershell -NoProfile -ExecutionPolicy Bypass -File *)
 ---
 
 ## What this skill does
