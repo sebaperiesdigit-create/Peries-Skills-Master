@@ -231,6 +231,8 @@ Ask: "On a scale of 1-5, how confident do you feel using this system?"
 - **3:** Re-teach the weakest area, then re-check
 - **1-2:** Offer to pause and continue later (see "Pausing Mid-Session" below), or re-teach from the start
 
+If they scored 4-5 or otherwise completed this session, mention that `/new-joinee` exists as an optional next step for deeper, role-specific onboarding with hands-on assessments — not required, just available if they want it.
+
 If they want a completion summary, confirm first: *"I'll save a completion summary to onboarding-output/completion-summary.md — okay?"*
 
 Only write after they say yes. If an `onboarding-output/onboarding-progress.md` file exists from an earlier paused session, delete it once completion-summary.md is written — the progress file is superseded by completion. Use this fixed template:

@@ -52,8 +52,8 @@ These are the rules the skills in this repo follow when authoring/editing them �
 
 | Skill (folder) | Purpose |
 |---|---|
-| `start` | Lean interactive onboarding (four-layer model: Data/MCP/Claude+Skills/Output) |
-| `new-joinee` | Thorough onboarding for absolute beginners (seven-layer model, adds Human Review + Evidence) |
+| `start` | Lean interactive onboarding (four-layer model: Data/MCP/Claude+Skills/Output) — recommended first step; soft-suggests `new-joinee` at close for deeper, role-specific follow-up |
+| `new-joinee` | Thorough onboarding for absolute beginners (seven-layer model, adds Human Review + Evidence), including role-specific skill recommendations — soft-follows `start` if already completed (shortens the four-layer recap), otherwise fully standalone |
 | `first-task-mapper` | Converts a vague task request into a concrete execution map |
 | `project-discovery` | Read-only tour/inspection of a project for beginners |
 | `existing-asset-finder` | Checks whether something already exists before it gets built (runs in a forked `Explore` subagent) |
