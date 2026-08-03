@@ -535,3 +535,13 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Combined verification for §§48-49:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing (skill-data untouched this round); after editing, all 24 keys present in both blocks, every entry except `009`/`022` byte-identical to its pre-edit snapshot; both skills' `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 3 lines changed in the HTML (cumulative with §47's still-uncommitted skill-data change) — CSV untouched this round.
 
 **Pushed on 2026-08-03 08:40:59 UTC** (hub_pages id=4, same slug) — triggered via "push hub," covering §§47-49 together, committed as `58c3a90` and pushed to `origin/main` first. Diff-checked before pushing: live was 748,282 bytes (md5 `a6df65659ae6e99f5c4ac5edf78a135b`, updated_at 2026-08-03T06:04:26.526Z, the §46-only version), local was 758,591 bytes (md5 `190a19db393d37e054d1301552ec898a`, includes all three of §§47-49's syncs).
+
+## 50.
+
+**Tenth catalog sync, same day** — following a `skill-builder` audit of `aios-structure-organize` (2026-08-03, committed as `5630fc8`): scoped `allowed-tools` to exactly `Bash(powershell -NoProfile -ExecutionPolicy Bypass -File *)`, matching the fix already applied to sibling `aios-structure-build` in §49 — this skill self-describes as "the highest-risk skill in the aios-structure-* family" (the only one writing to an existing, in-use project) yet had zero technical enforcement of its extensive "must NOT do" list. `context: fork` was deliberately *not* added here (unlike its sibling), since Step 4's `AskUserQuestion` confirmation gate needs to stay in the main conversation.
+
+**No CSV/`skill-data` prose changes needed** — purely internal tool scoping. Same pattern as `aios-structure-build`: this row's `guideContent` was already current (2026-07-31 skill, correctly documents the full 17-file install bundle) — only a one-line Notes addition was needed, plus `fileContent`/install `SKILL.md` refresh.
+
+**Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing (skill-data not touched); after editing, all 24 keys present in both blocks, every entry except `023` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
