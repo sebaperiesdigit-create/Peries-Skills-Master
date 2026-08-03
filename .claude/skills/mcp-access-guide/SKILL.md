@@ -1,7 +1,6 @@
 ---
 name: mcp-access-guide
 description: Use when someone asks how MCP connects Claude to company systems, wants to understand what data or tools Claude can access, asks to onboard to connectors, wants to check connector availability or permissions, or asks what to do when access is missing. Triggers include "how does MCP work", "what can Claude access", "explain our connectors", "onboard me to MCP", "do I have access to X".
-argument-hint: none
 ---
 
 ## What This Skill Does
@@ -18,13 +17,14 @@ This is a **teaching and diagnostic** skill. It never changes settings, grants a
    - **"Live verified"** — confirmed by inspecting Claude's actual available/connected tools in this session, just now.
    - **"Registry verified"** — confirmed by reading `references/connector-registry.md` and its `Verification date` / `Evidence source` fields.
    - **"Demo only — Needs confirmation"** — simulated or illustrative data used to teach the concept. This is the default for anything not freshly checked.
+   - **"Installed — Not authenticated"** — the connector is detected or configured, but authentication is incomplete, so it cannot yet be treated as usable or Live verified.
 4. **Simulated connectors and sample data must be clearly labeled as such** (e.g., "Example CRM Connector (demo)"). Never let demo data look like a real result.
 5. If the registry has no entry for a connector, or an entry is stale/incomplete, treat it as "Needs confirmation" rather than filling gaps with assumptions.
 
 ## Step-by-Step Workflow
 
 ### Step 1: Check live tools
-At the start of the conversation, check what MCP tools are actually available in this session (look at the tool list / use `tool_search` if connectors may be deferred). This becomes the "Live verified" data source.
+At the start of the conversation, check what MCP tools are actually available in this session (look at the tool list / use `tool_search` if connectors may be deferred). This becomes the "Live verified" data source. If a connector appears in the tool list but a call to it fails or reports an authentication/authorization error, label it "Installed — Not authenticated" rather than "Live verified" — it's present but not yet usable.
 
 ### Step 2: Read the registry
 Read `references/connector-registry.md` for anything live inspection can't tell you: system owner, escalation contact, prohibited actions, permission level detail. Note each entry's `Verification date` — treat entries older than 90 days as stale and label them "Needs confirmation" instead of "Registry verified."
@@ -55,7 +55,7 @@ Re-run Step 1 (live check) before answering, and cross-reference the registry. N
 
 - One Artifact: interactive board per Step 3.
 - Inline conversation: framing, explanations, and check-ins around it.
-- Every connector status string must literally read one of: `Live verified`, `Registry verified`, or `Demo only — Needs confirmation`.
+- Every connector status string must literally read one of: `Live verified`, `Registry verified`, `Demo only — Needs confirmation`, or `Installed — Not authenticated`.
 
 ## Notes / Edge Cases
 
