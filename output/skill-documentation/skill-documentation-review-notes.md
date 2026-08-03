@@ -556,4 +556,4 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 
 **Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing (skill-data not touched); after editing, all 24 keys present in both blocks, every entry except `024` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
 
-**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
+**Pushed on 2026-08-03 08:56:31 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `ae9b20b` (not yet pushed to `origin/main` as of this push — not requested this round). Diff-checked before pushing: live was 750,868 bytes (md5 `5d20f8e1c401a5712602178421923c7e`, updated_at 2026-08-03T08:49:38.298Z, the §50-only version), local was 759,231 bytes (md5 `649a48c1d83df3fafa92d0a96ad81584`, includes this section's `aios-structure-validate` sync).
