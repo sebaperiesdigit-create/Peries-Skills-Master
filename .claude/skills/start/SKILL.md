@@ -1,6 +1,7 @@
 ---
 name: start
-description: Use when someone says "I'm new here", "onboard me", "explain how this works", "how does our AI system work", or shows confusion about MCP/Skills while asking a task question. Interactive training session for new employees.
+description: Use when someone asks to be onboarded, says "I'm new here" or "onboard me", wants "explain how this works" or "how does our AI system work", or shows confusion about MCP/Skills while asking a task question. Interactive training session for new employees.
+allowed-tools: Read, Glob, Grep, Write
 ---
 
 ## What This Skill Does
@@ -24,7 +25,7 @@ Ask the user:
 2. Have you used Claude Code, MCP, or AI coding tools before?
 
 Use their answers to:
-- Adapt examples throughout (dev gets code/PR examples, support gets ticket examples, etc.)
+- Adapt examples throughout, drawing from `company-workflow.md`'s "Common Tasks by Role" section (dev gets code/PR examples, support gets ticket examples, etc.)
 - If their role isn't dev/PM/designer/support/sales/data, ask one follow-up: "What kind of tasks would you bring to Claude day-to-day?" and build examples from that answer instead of guessing a proxy role.
 - Calibrate quiz difficulty (beginner gets recall questions, experienced gets applied questions)
 - If they're advanced, offer to skip to Step 10 (Role Personalization) and Step 7.5 (Real Project Files)
@@ -216,7 +217,7 @@ Write to `onboarding-output/cheat-sheet.md`. Never write anywhere else.
 
 ### Step 10: Role Personalization
 
-Explain what this means for their specific job:
+Explain what this means for their specific job, grounding it in `company-workflow.md`'s "Common Tasks by Role" section for their stated role (or their Step 1 follow-up answer if their role wasn't listed there):
 - What tasks they'll commonly ask Claude to do
 - Which skills are most relevant to their role
 - What output files they'll work with
