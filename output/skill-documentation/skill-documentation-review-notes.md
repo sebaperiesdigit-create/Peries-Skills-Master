@@ -599,3 +599,15 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `017` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML.
 
 **Pushed on 2026-08-03 09:47:00 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `22b9e6d`. Diff-checked before pushing: live was 755,304 bytes (md5 `de077435a6fb5b6a41ebdcdd27f37619`, updated_at 2026-08-03T09:34:03.662Z, the §54-only version), local was 764,277 bytes (md5 `047395cd817c629225b4e585f6ca7213`, includes this section's `mcp-access-guide` sync).
+
+## 56.
+
+**Sixteenth catalog sync, same day** — following a `skill-builder` audit of `grill-me` (2026-08-03, committed as `857d104`). This audit surfaced a genuinely new finding class: `SKILL.md` referenced this user's personal auto-memory system via `[[feedback-clickable-questions]]` and `[[skill-builder]]` wiki-link syntax — meaningless bracket text to anyone installing `grill-me` standalone via this catalog's own install-prompt feature, since they wouldn't have that memory file. A repo-wide grep (`\[\[[a-z][a-z0-9-]+\]\]`) confirmed `grill-me` was the *only* skill with this pattern — not a systemic issue. Fixed by inlining the actual clickable-questions guidance and replacing the skill-builder references with plain prose. Also added `allowed-tools` (`Read, Glob, Grep, Write`) and specified `output/grill-me/<subject-slug>-summary.md` for the optional saved summary, which previously had no defined location.
+
+**Table prose updated** in both CSV and `skill-data`: Expected Output now mentions the `output/grill-me/` save location instead of just "no file is written unless you ask." `guideContent` needed no change — it had already paraphrased away the bracket syntax on its own generation pass, and was otherwise current. `fileContent` and the install-data `SKILL.md` copy refreshed to match disk.
+
+**CSV edit safety:** quote-codepoint counts checked before and after (14 straight, 4+4 curly pairs, unchanged). No corruption.
+
+**Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `015` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
