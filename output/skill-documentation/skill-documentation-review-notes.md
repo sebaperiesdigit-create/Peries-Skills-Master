@@ -499,3 +499,15 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `006` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML.
 
 **Pushed on 2026-08-03 05:57:30 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `fbedd28`. Diff-checked before pushing: live was 743,208 bytes (md5 `9a8e12be944e336cb1544d1b57694980`, updated_at 2026-08-03T05:42:28.543Z, the §44-only version), local was 754,670 bytes (md5 `f79a9bc01c9ace0f0a99bd7b5ad74305`, includes this section's `first-task-mapper` sync).
+
+## 46.
+
+**Sixth catalog sync, same day** — following a `skill-builder` audit of `requirements-validator` (2026-08-03, committed as `8f65f32`): wired up `$ARGUMENTS` (previously declared via `argument-hint` but never referenced anywhere in the Steps — same known gap class already flagged for `order-status-summary`), added `allowed-tools: Read, Glob, Grep` (this skill never needed Write/Edit/Bash), and replaced the prose-only Output section with a concrete structural template.
+
+**No CSV/`skill-data` prose changes needed** — interestingly, the CSV's "How to Use" field *already* said "Type /requirements-validator followed by a file path, or paste the requirements directly," correctly anticipating behavior the actual `SKILL.md` hadn't implemented yet until this fix. Purpose/Notes/Expected Output remained accurate throughout.
+
+**`skill-files-data['007'].guideContent` was pre-restructure-stale**, same recurring pattern as §§42-45 — it had even flagged its own gap ("No output file path is specified in this skill file"), consistent with the missing-template finding. Fully regenerated to describe the new `$ARGUMENTS` handling, the structured Validation Report template, and the `allowed-tools` scoping. `tryPhrase` left unchanged (description text didn't change). `fileContent` and the install-data `SKILL.md` copy refreshed to match disk.
+
+**Verification:** round-trip JSON fidelity confirmed for both touched blocks before editing (skill-data not touched this round); after editing, all 24 keys present in each, every entry except `007` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched this round.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
