@@ -587,3 +587,15 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing; after editing, all 24 keys present in both blocks, every entry except `018` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
 
 **Pushed on 2026-08-03 09:34:03 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `f3b1d67`. Diff-checked before pushing: live was 754,665 bytes (md5 `7f2532f1acc7b29ffe59ba346e9c4335`, updated_at 2026-08-03T09:24:23.270Z, the §53-only version), local was 763,369 bytes (md5 `de077435a6fb5b6a41ebdcdd27f37619`, includes this section's `task-closure` sync).
+
+## 55.
+
+**Fifteenth catalog sync, same day** — following a `skill-builder` audit of `mcp-access-guide` (2026-08-03, committed as `ac05608`): closed the known 2026-07-29 sandbox-test gap by adding a 4th connector status label, `Installed — Not authenticated`, for a connector present in the tool list but failing on an auth check — previously had no accurate label and had to be force-fit into one of the 3 existing ones. Also removed an explicit `argument-hint: none` to match every other no-argument skill's convention of omitting the field.
+
+**Table prose updated** in both CSV and `skill-data`: Expected Output now lists all 4 status labels instead of 3 — this is a genuine user-facing behavior change (the actual set of strings a user could see), not just internal scoping. `guideContent`'s "What you'll get back" section updated to match. `fileContent` and the install-data `SKILL.md` copy refreshed; `references/connector-registry.md`'s install copy re-confirmed still string-equal to disk (untouched, correctly unaffected by this change).
+
+**CSV edit safety:** quote-codepoint counts checked before and after (14 straight, 5+5 curly pairs, unchanged — the new label text used no additional quote characters). No corruption.
+
+**Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `017` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
