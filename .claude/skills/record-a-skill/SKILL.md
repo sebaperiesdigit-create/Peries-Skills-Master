@@ -204,6 +204,15 @@ operation. The user handles any later Git commit separately.
     `record-a-skill` itself must never edit the final generated/extended skill
     directly; that is always `skill-builder`'s action.
   - `Bash(git status)` and `Bash(git diff)` are inspection-only.
+  - Known limitation: `allowed-tools`' `Bash(cp *)` pattern matches on command text, not
+    semantics — it cannot technically prevent a recursive or broad-path `cp` invocation
+    the way the rule above describes. That restriction is enforced by this instruction,
+    not by the tool scoping itself.
+  - Known limitation: the bare `Skill` entry in `allowed-tools` grants access to invoke
+    any skill, not just `existing-asset-finder` and `skill-builder` as the workflow
+    describes — `allowed-tools` currently has no confirmed syntax for scoping which
+    named skill can be invoked. This boundary is enforced by the instructions in steps
+    9-10, not by tool scoping.
 - Never claim to have inspected unsupported media (raw video/audio) — ask for
   conversion first.
 - Never reproduce a detected secret or PII value anywhere — category and safe location
