@@ -598,4 +598,4 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 
 **Verification:** round-trip JSON fidelity confirmed for all three blocks before editing; after editing, all 24 entries present in each block, every entry except `017` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 1 line changed in the CSV, 3 lines changed in the HTML.
 
-**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
+**Pushed on 2026-08-03 09:47:00 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `22b9e6d`. Diff-checked before pushing: live was 755,304 bytes (md5 `de077435a6fb5b6a41ebdcdd27f37619`, updated_at 2026-08-03T09:34:03.662Z, the §54-only version), local was 764,277 bytes (md5 `047395cd817c629225b4e585f6ca7213`, includes this section's `mcp-access-guide` sync).
