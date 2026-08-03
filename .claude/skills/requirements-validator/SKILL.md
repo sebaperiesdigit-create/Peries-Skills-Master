@@ -2,6 +2,7 @@
 name: requirements-validator
 description: "Use when you need to review, validate, and improve requirements documents, acceptance criteria, or implementation briefs."
 argument-hint: [requirements.md]
+allowed-tools: Read, Glob, Grep
 ---
 
 ## Purpose
@@ -12,6 +13,11 @@ Review a requirements document or implementation brief and identify gaps, ambigu
 
 - A requirements document, PRD, ticket, spec, or pasted text.
 - Optional context such as business goals, constraints, or technical assumptions.
+
+If `$ARGUMENTS` is provided and resolves to an existing file path, read that file as the
+requirements document. If `$ARGUMENTS` is plain text rather than a path, treat it as the
+pasted requirements content directly. If `$ARGUMENTS` is empty, ask the user to paste the
+requirements text or provide a file path before proceeding.
 
 ## Steps
 
@@ -33,10 +39,28 @@ Review a requirements document or implementation brief and identify gaps, ambigu
 
 ## Output
 
-- A validated review of the requirements document.
-- A list of issues, risks, and missing details.
-- Improved acceptance criteria and suggested wording where appropriate.
-- Any unresolved questions that should be clarified before implementation.
+Present the review in chat using this structure:
+
+```
+## Validation Report: [document name or topic]
+
+### Summary
+[1-2 sentence overall assessment of readiness]
+
+### Issues Found
+| # | Requirement/Section | Issue Type | Description | Severity |
+|---|---|---|---|---|
+| 1 | [section] | Ambiguous/Missing/Conflicting/Untestable | [detail] | High/Medium/Low |
+
+### Suggested Acceptance Criteria
+- [requirement]: [refined, testable acceptance criterion]
+
+### Open Questions for Stakeholders
+- [question]
+
+### Recommendation
+[Ready to proceed / Needs revision before proceeding] — [1-2 sentence justification]
+```
 
 ## Guardrails
 
