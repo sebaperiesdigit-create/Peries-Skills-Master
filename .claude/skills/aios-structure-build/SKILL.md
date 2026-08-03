@@ -2,6 +2,7 @@
 name: aios-structure-build
 description: "Scaffold and verify the frozen AIS-OS starter-kit baseline in an empty target directory. User-invoked only through /aios-structure-build."
 disable-model-invocation: true
+allowed-tools: Bash(powershell -NoProfile -ExecutionPolicy Bypass -File *)
 ---
 
 ## What this skill does
