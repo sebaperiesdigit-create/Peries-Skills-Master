@@ -2,6 +2,7 @@
 name: meeting-note-summariser
 description: "Use when someone asks to summarize meeting notes, recap a meeting, or format meeting minutes."
 argument-hint: "[meeting topic or date]"
+allowed-tools: Read, Write
 ---
 
 ## What This Skill Does
