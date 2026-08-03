@@ -545,3 +545,15 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing (skill-data not touched); after editing, all 24 keys present in both blocks, every entry except `023` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
 
 **Pushed on 2026-08-03 08:49:38 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `e8051d8`. Diff-checked before pushing: live was 750,550 bytes (md5 `190a19db393d37e054d1301552ec898a`, updated_at 2026-08-03T08:40:59.009Z, the §§47-49-only version), local was 758,911 bytes (md5 `5d20f8e1c401a5712602178421923c7e`, includes this section's `aios-structure-organize` sync).
+
+## 51.
+
+**Eleventh catalog sync, same day — completes the aios-structure-* trio.** Following a `skill-builder` audit of `aios-structure-validate` (2026-08-03, committed as `4e6d916`): scoped `allowed-tools` to exactly `Bash(powershell -NoProfile -ExecutionPolicy Bypass -File *)`, the same fix already applied to siblings `aios-structure-build` (§49) and `aios-structure-organize` (§50) — this skill also had zero technical enforcement of its "must NOT do" list despite being the read-only-est of the three. `context: fork` deliberately not added, same reasoning as `organize`: Step 4's `AskUserQuestion` save-report confirmation needs to stay in the main conversation.
+
+**No CSV/`skill-data` prose changes needed** — purely internal tool scoping. This row's `guideContent` was already current (2026-07-31 skill, correctly documents the full 17-file install bundle), same as its two siblings — only a one-line Notes addition, plus `fileContent`/install `SKILL.md` refresh.
+
+**All three `aios-structure-*` skills are now consistently scoped** — build, organize, and validate each restrict `allowed-tools` to exactly the one PowerShell invocation pattern their own script needs, closing the same gap class across the whole family in one afternoon.
+
+**Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing (skill-data not touched); after editing, all 24 keys present in both blocks, every entry except `024` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
