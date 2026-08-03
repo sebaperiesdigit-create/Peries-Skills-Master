@@ -577,3 +577,13 @@ Updated in `skill-documentation-table-v5.html`: `skill-files-data['001'].fileCon
 **Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing; after editing, all 24 keys present in both blocks, every entry except `020` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
 
 **Pushed on 2026-08-03 09:24:23 UTC** (hub_pages id=4, same slug) — triggered via "push hub," committed as `6a4bc34`. Diff-checked before pushing: live was 752,554 bytes (md5 `2de17b9c56b25d39e81772acd4a1f1ee`, updated_at 2026-08-03T09:09:56.100Z, the §52-only version), local was 762,724 bytes (md5 `7f2532f1acc7b29ffe59ba346e9c4335`, includes this section's `daily-work-tracker` sync).
+
+## 54.
+
+**Fourteenth catalog sync, same day** — following a `skill-builder` audit of `task-closure` (2026-08-03, committed as `ea9319f`): scoped an already-present but unrestricted `Bash` entry down to `Bash(git status), Bash(git log *)` — the only Bash usage the workflow describes — despite the skill's own first Notes bullet promising it never modifies/publishes/deletes without per-action approval. Step 5's scratch-scan now uses `Glob` only (dropped the "Glob/Bash" either-or). Step 7's approval-gated deletion deliberately stays outside `allowed-tools` per explicit user instruction this round, so the delete command itself still triggers a real permission prompt as a second gate on top of the `AskUserQuestion` approval.
+
+**No CSV/`skill-data` prose changes needed** — purely internal tool scoping, no user-facing behavior change. `guideContent` was already current (correctly explains the `context: fork` opt-out and the nine-dimension report) — only a one-line Notes addition, plus `fileContent`/install `SKILL.md` refresh.
+
+**Verification:** round-trip JSON fidelity confirmed for `skill-files-data`/`skill-install-data` before editing; after editing, all 24 keys present in both blocks, every entry except `018` byte-identical to its pre-edit snapshot; `fileContent`/install `SKILL.md` confirmed string-equal to a fresh disk read. `git diff --stat`: 2 lines changed in the HTML only — CSV untouched.
+
+**Not pushed to the hub as part of this entry** — local-only sync, per the standing separation between "update skill docs"/ad-hoc syncs and "push hub."
