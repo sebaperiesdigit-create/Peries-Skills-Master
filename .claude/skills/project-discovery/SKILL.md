@@ -2,12 +2,9 @@
 name: project-discovery
 description: Use when someone asks to explore this project, understand what's in this project, show me around, how do I start here, what can I do in this project, give me a tour, analyze this project, or map the codebase. Read-only project inspection for beginners.
 argument-hint: [path or folder]
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - Question
-  - Bash
+context: fork
+agent: Explore
+allowed-tools: Read, Glob, Grep, Bash(git status), Bash(git branch --show-current), Bash(git log --oneline -5)
 ---
 
 ## What This Skill Does
@@ -46,7 +43,7 @@ Use Glob or the directory listing. Report the structure conversationally. Do not
 
 Examine `.claude/` directory:
 - List all skill directories under `.claude/skills/`
-- For each skill, read its SKILL.md frontmatter to extract: name, description, whether it accepts arguments
+- For each skill, read only the frontmatter block — the text strictly between the first two `---` lines — to extract: name, description, whether it accepts arguments. Do not grep or scan the rest of the file for these fields: some skills (e.g. `skill-builder`) contain example SKILL.md templates with their own `name:`/`description:` lines inside a code fence in the body, which a whole-file search would misattribute.
 - Do not read full skill content unless it is short (< 20 lines)
 - Check for any configuration files or custom rules
 
