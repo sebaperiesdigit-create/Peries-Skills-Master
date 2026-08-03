@@ -4,7 +4,7 @@ description: Use when someone asks to check whether something already exists, fi
 argument-hint: [proposed asset name, problem description, or file path]
 context: fork
 agent: Explore
-allowed-tools: Read, Grep, Glob, Bash(git *), Bash(find *), Bash(ls *), Bash(psql *)
+allowed-tools: Read, Grep, Glob, Bash(find *), Bash(ls *), Bash(psql *)
 ---
 
 ## What This Skill Does
@@ -118,6 +118,10 @@ available; database itself not directly queried, only code references checked"]
   explicit follow-up request.
 - Never run write/DDL SQL. Read-only `SELECT` against `information_schema` or catalog
   views only.
+- Known limitation: `allowed-tools`' `Bash(psql *)` pattern matches on command text, not SQL
+  semantics — it cannot technically distinguish a read-only `SELECT` from a destructive
+  statement passed via `-c`/`--command`. The SELECT-only rule above is enforced by this
+  instruction, not by the tool scoping itself.
 - If a system genuinely can't be searched (no access, no tool, no connector), say so
   plainly in the report rather than omitting it or implying coverage.
 - Prefer functional/synonym search over exact-name search — most duplicates get built
