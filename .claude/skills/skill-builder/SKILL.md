@@ -246,6 +246,7 @@ Use this checklist to audit any existing skill. Read the skill file first before
 - [ ] Notes section covers edge cases, constraints, and what NOT to do
 - [ ] No vague instructions -- every step tells Claude exactly what to do
 - [ ] String substitutions (`$ARGUMENTS`, `$N`) are used where the skill takes input
+- [ ] User questions follow the mandatory clickable-question interaction convention in reference.md; finite choices use clickable options with a recommended answer and custom-response fallback, while genuine free-text intake remains direct when appropriate
 
 ### Integration Audit
 

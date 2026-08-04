@@ -88,6 +88,30 @@ Running `/migrate-component SearchBar React Vue` replaces `$0` with `SearchBar`,
 
 ---
 
+## Interaction Convention: Clickable Questions (Mandatory)
+
+Every skill must use clickable questions (the `AskUserQuestion` tool) wherever a question has a meaningful, finite set of good answers -- this is not limited to interrogation-style skills like `grill-me`.
+
+**Applies to:**
+- Decisions ("which approach", "proceed or not")
+- Configuration and mode selection
+- Confirmations and approvals
+- Structured data-intake, when a short menu of intake methods exists (e.g. "Paste the text" / "Provide a file path" / "Use the uploaded file" as a clickable first step, before requesting the actual content)
+
+**Does not apply to:**
+- Genuine free-text content the skill cannot meaningfully offer choices for -- an email body, a daily work description, raw meeting notes, a file path value itself. Ask for these directly as open text. Don't invent placeholder options just to force a click.
+
+**Requirements whenever a clickable question is used:**
+- Mark a recommended option -- label it "... (Recommended)"
+- Keep a custom-answer path available -- never make a clickable question the only way to respond
+- Use 2-4 genuinely distinct options grounded in the skill's actual context, never generic filler
+
+This is a strict rule for every skill in this repository, not a per-skill judgment call. Apply it during Mode 1 discovery/build and check for it during Mode 2 audits.
+
+**Exemption:** `grill-me` already implements this pattern natively as its core mechanism and is excluded from retrofit -- treat it as compliant by design, not as pending work.
+
+---
+
 ## Skill File Locations
 
 Where you store a skill determines who can use it:
