@@ -6,3 +6,8 @@
 # exact bytes; a CRLF checkout on Windows silently breaks that hash the moment
 # the content passes through any copy/paste path that normalizes line endings.
 * text eol=lf
+
+# Binary skill assets — must never go through text/EOL normalization above,
+# or git silently mangles their bytes on add/checkout.
+*.pdf binary
+*.docx binary

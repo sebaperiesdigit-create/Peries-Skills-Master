@@ -8,15 +8,16 @@ Peries-Skills-Master is a content repository for Claude Code **skills** — it c
 
 ## Repository layout
 
-Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 24 skill folders — nothing else. All 24 are discoverable/invocable as of the last restructure.
+Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 25 skill folders — nothing else. All 25 are discoverable/invocable as of the last restructure.
 
 ```
 .claude/skills/
-  <skill-name>/SKILL.md         # one folder per skill (19 total), skill definitions only
+  <skill-name>/SKILL.md         # one folder per skill (25 total), skill definitions only
   new-joinee/company-workflow.md, glossary.md
   start/company-workflow.md
   skill-builder/reference.md
   mcp-access-guide/references/connector-registry.md
+  new-joiner-guide/references/mini-aios-new-joiner-complete-guide.md, .pdf, .docx
 
 output/                         # generated deliverables live here, NOT under .claude/skills/
   skill-documentation/
@@ -54,6 +55,7 @@ These are the rules the skills in this repo follow when authoring/editing them �
 |---|---|
 | `start` | Lean interactive onboarding (four-layer model: Data/MCP/Claude+Skills/Output) — recommended first step; soft-suggests `new-joinee` at close for deeper, role-specific follow-up |
 | `new-joinee` | Thorough onboarding for absolute beginners (seven-layer model, adds Human Review + Evidence), including role-specific skill recommendations — soft-follows `start` if already completed (shortens the four-layer recap), otherwise fully standalone |
+| `new-joiner-guide` | Coaches a Mini-AIOS company joiner through the company-specific **Mini-AIOS New Joiner Complete Guide** (checked in at `references/` as a runtime `.md` transcription, with the original `.pdf`/`.docx` kept for provenance) — Day One setup, task workflow, publishing, daily work log, handover, governance (GREEN/AMBER/RED), troubleshooting. Deliberately standalone: does not cross-reference or soft-follow `start`/`new-joinee` (those stay generic/role-agnostic; this one is Mini-AIOS-specific and operational) |
 | `first-task-mapper` | Converts a vague task request into a concrete execution map |
 | `project-discovery` | Read-only tour/inspection of a project for beginners |
 | `existing-asset-finder` | Checks whether something already exists before it gets built (runs in a forked `Explore` subagent) |
