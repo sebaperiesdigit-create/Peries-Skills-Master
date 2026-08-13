@@ -25,9 +25,13 @@ output/                         # generated deliverables live here, NOT under .c
     skill-documentation-table-v5.html      # current/live deliverable
     skill-documentation-review-notes.md
     archive/                   # superseded versions, kept for history, not current
+
+handover/                       # repo-wide handover notes, added 2026-08-13
+  README.md                     # living overview of current repo state — keep this current
+  sessions/<date>.md            # dated narrative log, one file per work date
 ```
 
-**Convention:** `.claude/skills/` is Claude Code's skill-discovery path — keep it limited to skill definitions. Task deliverables, CSVs, generated HTML/reports, and their archived prior versions belong under a top-level `output/<task-or-skill-name>/` folder instead, matching the convention already documented inside the skills themselves (e.g. `onboarding-output/`, `output/[skill-name]/`).
+**Convention:** `.claude/skills/` is Claude Code's skill-discovery path — keep it limited to skill definitions. Task deliverables, CSVs, generated HTML/reports, and their archived prior versions belong under a top-level `output/<task-or-skill-name>/` folder instead, matching the convention already documented inside the skills themselves (e.g. `onboarding-output/`, `output/[skill-name]/`). `handover/` is the one exception to "deliverables go in `output/`" — it's repo-wide meta-documentation about the project itself, not a task's generated output, so it gets its own top-level folder. Update `handover/README.md` whenever repo state changes meaningfully; add a new `handover/sessions/<date>.md` per work session rather than editing past ones.
 
 ### Historical note
 
