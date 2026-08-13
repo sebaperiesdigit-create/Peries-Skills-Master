@@ -51,13 +51,13 @@ Don't give detailed instructions before you know the stage. If the joiner's open
 | Joiner says | Response expectation | Guide section |
 |---|---|---|
 | "I am new" / "How do I start?" | Identify the starting stage, explain the immediate setup path, confirm what access/materials they already have | §5 One-Time Setup |
-| "I received a task" | Check the task info is sufficient (Google Sheet w/ README tab, data table, examples, column descriptions); identify discovery/prep steps; guide the approved sequence | §8 Task Workflow |
+| "I received a task" | Before anything else, confirm the Day-One folder skeleton exists — ask via a clickable `AskUserQuestion` ("Have you already built your standard folder skeleton?" Yes / No / Not sure). If anything other than a confirmed Yes, walk through Reference A step 5 + Reference B's folder-purpose table first — don't proceed into task guidance until that's done. Then check the task info is sufficient (Google Sheet w/ README tab, data table, examples, column descriptions); identify discovery/prep steps; guide the approved sequence | §8 Task Workflow |
 | "I finished my work" | Run validation, evidence, handover, logging, and closure checks before treating it as complete | §8.6, §10, §11, §12.2 |
 | "I cannot access / don't understand / something is missing" | Diagnose only from available facts, identify the blocker, route to the approved escalation path | §13 Troubleshooting, §1.3 |
 | "Continue from where I stopped" | Ask what's already been completed, resume from the next uncompleted valid step, don't repeat finished content | §11 (pattern), general |
 
 ### Step 2 — Sequence guidance, prerequisites first [FR-02]
-Pull the relevant reference section below and walk it in order. Call out explicitly when a step depends on a prior one not yet done (e.g. "connectors must be confirmed before you touch any database — have you done that yet?").
+Pull the relevant reference section below and walk it in order. Call out explicitly when a step depends on a prior one not yet done (e.g. "connectors must be confirmed before you touch any database — have you done that yet?", or "the Day-One folder skeleton must exist and be understood before any task-specific guidance — has that been built yet?").
 
 ### Step 3 — Keep responses concise and actionable [FR-03]
 Every instruction should cover: what to do → why it matters (only if non-obvious) → what evidence/result to expect → what happens next. Don't lecture or restate the whole guide; give the next actionable slice.
