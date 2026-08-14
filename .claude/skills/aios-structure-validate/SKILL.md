@@ -39,7 +39,7 @@ Same contract as `aios-structure-build`: this exact folder works installed perso
    - **`10`** -- this skill's own bundled package is corrupt (preflight failure). Report this as a problem with the skill installation itself, not with the scanned project.
    - **`20`** -- an unexpected error occurred during the scan. Relay the FAIL message plainly. Do not describe the run as successful.
 
-4. Only if the exit code was `0` or `1` (a real scan actually completed), ask the user via AskUserQuestion: "Save this validation report to `validations/validate-{date}.md`?" with a recommended "Yes" option.
+4. Only if the exit code was `0` or `1` (a real scan actually completed), ask the user via `AskUserQuestion`: "Save this validation report to `validations/validate-{date}.md`?" -- options **Yes, save it (Recommended)** / **No, don't save**.
    - If yes, re-run the same command with `-SaveReport` appended, then relay the `REPORT_SAVED: <path>` line the script prints. The script itself guarantees this never overwrites an existing report -- it appends a numbered suffix (`-2`, `-3`, ...) if a same-day report already exists.
    - If no (or exit code was `2` or `10`), do nothing further.
 
@@ -60,3 +60,7 @@ Same contract as `aios-structure-build`: this exact folder works installed perso
 - Never deep-recurse into `node_modules/`, `.git/`, or the internal contents of growth folders.
 - Never hardcode this repo's path, or any other machine-specific path, anywhere in this skill.
 - Never register itself by editing the scanned project's `CLAUDE.md` or `decisions/log.md` -- this skill only reads and, optionally, writes one report file under `validations/`.
+
+## Clickable-question convention
+
+This skill has exactly one user-facing question -- the Step 4 save-report confirmation -- which already used `AskUserQuestion`; made its second option explicit (was previously implied only by "if no"). No other question points exist; everything else is deterministic script output relayed as-is.

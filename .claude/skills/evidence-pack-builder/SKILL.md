@@ -40,7 +40,7 @@ Scan the current conversation/session for each of the 10 components below. For e
 ## Step 4: Handle Screenshots
 
 - If the user has already provided screenshot file paths (in this conversation or on request), copy each file into `screenshots/` inside the pack. Never move or modify the original files — copy only.
-- If none are available, ask once: "Do you have any screenshots to include as evidence?" If still none, record "No screenshots provided" in that section and continue — don't block the rest of the pack on this.
+- If none are available, ask once via `AskUserQuestion`: "Do you have any screenshots to include as evidence?" — options `No, none to add` / `Yes, I'll provide file path(s)`. Mark `No, none to add (Recommended)` unless screenshots were already discussed earlier in the conversation, in which case mark `Yes` instead. If yes, ask directly as free text for the file path(s). If still none, record "No screenshots provided" in that section and continue — don't block the rest of the pack on this.
 
 ## Step 5: Fill Genuine Gaps
 
@@ -121,3 +121,4 @@ Each component file opens with the same metadata block (date, owner, source syst
 - Redact before write, not after — never write unredacted content and clean it up later.
 - Reusable across any department or task type — nothing in this skill assumes a specific team, tool, or file format.
 - Not a replacement for the actual deliverable — it documents and proves the work, it doesn't do the work itself.
+- Clickable-question convention: the overwrite-vs-versioned choice (Step 2), the write/cancel gate (Step 7), and the screenshot yes/no (Step 4) use `AskUserQuestion`. Step 1's task-identification question and Step 5's gap-filling questions stay free text — they're requests for the actual content (a task name, a source reference, a decision rationale), not a choice among a finite set of good answers.

@@ -49,3 +49,7 @@ All paths the skill uses are resolved relative to its own script location or to 
 - **Never register this skill by editing the target's `CLAUDE.md` or `decisions/log.md` after scaffolding.** Both are part of the frozen, hash-verified baseline content and must remain byte-identical to the bundled templates. Do not append an "Active Skills" entry, a decision log entry, or any other note to files inside the newly scaffolded project. (This intentionally departs from the general skill-authoring convention of registering new skills in the target project — that convention does not apply here, because the target project isn't this skill's own home and its files are verification-frozen.)
 - Never touch git in the target directory.
 - Never attempt to build `aios-structure-validate` or `aios-structure-organize` behavior — this skill only builds a fresh, empty-directory baseline.
+
+## Clickable-question convention
+
+Not applicable. This skill is entirely non-interactive: the user explicitly invokes `/aios-structure-build`, the bundled script runs to completion deterministically, and Claude only relays its console output and exit code. There is no point where the skill asks the user anything, so there is no question to convert.

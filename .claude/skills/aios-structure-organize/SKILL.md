@@ -53,7 +53,7 @@ Same contract as its siblings: this exact folder works installed personally (`~/
    - **`10`** -- this skill's own bundled package is corrupt (preflight failure). Report this as a problem with the skill installation itself, not with the target project.
    - **`30`** or **`31`** -- (only possible after step 5) the apply run failed. Relay the FAIL and rollback lines plainly. Never describe this as a success.
 
-4. If the exit code was `1`, ask the user via AskUserQuestion to confirm: "Create the missing items listed above?" with a recommended "Yes, create the missing items" option. If the answer is anything other than yes, stop here -- do not proceed to step 5.
+4. If the exit code was `1`, ask the user via `AskUserQuestion` to confirm: "Create the missing items listed above?" -- options **Yes, create the missing items (Recommended)** / **No, don't create anything**. If the answer is anything other than yes, stop here -- do not proceed to step 5.
 
 5. Only on explicit yes, re-run the same command with `-Apply` appended. Relay its output the same way. This is the only point in the entire skill where anything is written.
 
@@ -75,3 +75,7 @@ Same contract as its siblings: this exact folder works installed personally (`~/
 - Never write anything beyond the missing baseline items themselves -- no logs, backups, or extra files in the target project.
 - Never register itself by editing the target project's `CLAUDE.md` or `decisions/log.md` -- if those files are among the missing items, the frozen unfilled templates are created as-is; if they already exist, they are never touched.
 - Never hardcode this repo's path, or any other machine-specific path, anywhere in this skill.
+
+## Clickable-question convention
+
+This skill has exactly one user-facing question -- the Step 4 apply confirmation -- which already used `AskUserQuestion`; made its second option explicit (was previously implied only by "anything other than yes"). No other question points exist; everything else is deterministic script output relayed as-is.

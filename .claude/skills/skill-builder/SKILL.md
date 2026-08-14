@@ -34,39 +34,42 @@ When building a new skill, run the **Discovery Interview** first. Do NOT start w
 
 ### Discovery Interview
 
-Ask questions using AskUserQuestion, one round at a time. Each round covers one topic. Move to the next round only after the user answers. Keep going until you're 95% confident you understand the skill well enough to build it without further clarification.
+Run one round at a time. Each round covers one topic. Move to the next round only after the user answers. Keep going until you're 95% confident you understand the skill well enough to build it without further clarification.
+
+Per the mandatory clickable-question convention in [reference.md](reference.md#interaction-convention-clickable-questions-mandatory): ask genuinely open-ended questions (what it does, trigger phrases, the process walkthrough, inputs/outputs, guardrails) directly as free text. Ask any question that has a finite set of good answers via `AskUserQuestion`, with a recommended option and a custom-answer fallback -- these are marked below.
 
 **Round 1: Goal & Name**
 *Why this matters: A clear goal prevents scope creep. The name becomes the `/slash-command`, so it needs to be memorable and specific.*
 
-- What does this skill do? What problem does it solve or what workflow does it automate?
-- What should we call it? (Suggest a name based on their answer -- lowercase, hyphens, max 64 chars)
+- What does this skill do? What problem does it solve or what workflow does it automate? (free text)
+- Propose a name based on their answer (lowercase, hyphens, max 64 chars), then confirm it via `AskUserQuestion`: `Use "<proposed-name>" (Recommended)` vs a custom-name option (falls back to free text).
 
 **Round 2: Trigger**
 *Why this matters: The `description` field is how Claude decides whether to load your skill. Bad trigger words mean Claude never uses it. Too broad means Claude fires it when you don't want it.*
 
-- What would someone say to trigger this? (Get 2-3 natural language phrases)
-- Should it be user-only (`/slash-command`), Claude-auto-invocable, or both?
-- Does it accept arguments? If so, what? (e.g., a topic, a URL, a file path)
+- What would someone say to trigger this? (Get 2-3 natural language phrases -- free text)
+- `AskUserQuestion`: "Should it be user-only, Claude-auto-invocable, or both?" -- options `User-only (/slash-command)`, `Claude-auto-invocable`, `Both`. Recommend `User-only` if the skill has side effects (file generation, API calls, cost); otherwise recommend `Both`.
+- `AskUserQuestion`: "Does it accept arguments?" -- options `Yes (Recommended)` if the goal description implies a variable input (topic, URL, file path), otherwise `No (Recommended)`, plus the other as the alternative. If yes, ask directly as free text what the argument(s) represent.
 
 **Round 3: Step-by-Step Process**
 *Why this matters: Claude follows instructions literally. Vague steps produce vague results. Specific steps produce consistent output every time.*
 
-- Walk me through exactly what should happen from trigger to output. What's step 1? Step 2? Keep going.
-- For each step: Does Claude do it directly, or delegate to a subagent/script?
-- Does this need to be conversational (back-and-forth with the user) or is it a fire-and-forget task?
+- Walk me through exactly what should happen from trigger to output. What's step 1? Step 2? Keep going. (free text)
+- For any step where delegation is ambiguous, confirm via `AskUserQuestion`: "Does Claude do [step] directly, or delegate it?" -- options `Direct`, `Subagent`, `Script`, marking whichever your best judgment from the walkthrough suggests as `(Recommended)`.
+- `AskUserQuestion`: "Does this need to be conversational (back-and-forth with the user) or is it a fire-and-forget task?" -- options `Conversational` / `Fire-and-forget`, recommended based on whether the walkthrough described any back-and-forth.
 
 **Round 4: Inputs, Outputs & Dependencies**
 *Why this matters: Skills that don't specify where to find inputs or where to put outputs produce inconsistent results. Nailing this down makes the skill reliable.*
 
-- What inputs does the skill need? (Files, API responses, user arguments, live data)
-- What does it produce? (Files, text output, structured data) Where do outputs go?
-- Does it need external APIs, scripts, or tools? Which ones?
-- Does it need reference files, style guides, templates, or examples?
+- What inputs does the skill need? (Files, API responses, user arguments, live data -- free text)
+- What does it produce? (Files, text output, structured data -- free text). Then confirm where outputs go via `AskUserQuestion`: options `output/[skill-name]/ (Recommended -- matches repo convention)` vs a custom-location option (falls back to free text).
+- `AskUserQuestion`: "Does it need external APIs, scripts, or tools?" -- options `Yes` / `No (Recommended)` (default no unless the process walkthrough already mentioned one). If yes, ask directly as free text which ones.
+- `AskUserQuestion`: "Does it need reference files, style guides, templates, or examples?" -- options `Yes` / `No (Recommended)`. If yes, ask directly as free text what and where.
 
 **Round 5: Guardrails & Edge Cases**
 *Why this matters: Skills without guardrails can produce unexpected behavior -- wrong outputs, unnecessary API costs, or actions you didn't intend.*
 
+All free text -- these are open-ended by nature and the repo's clickable-question convention doesn't apply to them:
 - What could go wrong? What are the common failure modes?
 - What should this skill NOT do? Any hard boundaries?
 - Are there cost concerns? (API calls, AI image generation, etc.)
@@ -95,7 +98,7 @@ After all rounds, summarize your understanding back to the user in this format:
 **Guardrails:** [what can go wrong, what to avoid]
 ```
 
-Ask: "Does this capture it? Anything to add or change?" Only proceed to building once the user confirms.
+Then use `AskUserQuestion`: "Does this capture it?" -- options `Yes, build it (Recommended)` / `No, I need to change something` (falls back to free text describing the change). Only proceed to building once the user confirms.
 
 **Skipping rounds:** If the user provides enough context upfront (e.g., they describe the full workflow in their first message), skip rounds that are already answered. Don't re-ask what you already know.
 

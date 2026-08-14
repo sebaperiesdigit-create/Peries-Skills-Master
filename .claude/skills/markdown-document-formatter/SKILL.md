@@ -16,7 +16,9 @@ Read a messy or poorly formatted Markdown file and produce a clean, well-structu
 
 If `$ARGUMENTS` resolves to an existing file path, read that file. If `$ARGUMENTS` is
 plain text rather than a path, treat it as the pasted Markdown content directly. If
-`$ARGUMENTS` is empty, ask the user to paste the Markdown or provide a file path.
+`$ARGUMENTS` is empty, ask via `AskUserQuestion` how to provide it: **Paste the Markdown
+text** / **Provide a file path**. Then request the actual content per their choice as free
+text -- the document content itself has no finite menu.
 
 ## Steps
 
@@ -34,7 +36,7 @@ plain text rather than a path, treat it as the pasted Markdown content directly.
 6. Repair malformed tables and links where the intent is clear; flag ambiguous issues instead of guessing.
 7. Fix code block fencing: ensure every opening fence has a matching closing fence, standardize on triple-backtick fences (converting tilde fences if mixed), and add a language identifier where the code's language is unambiguous from context — flag as a manual-review item if the language can't be determined.
 8. Preserve all content and meaning—formatting and syntax fixes only, no rewrites.
-9. Show the cleaned document and a summary of fixes in chat, then ask: *"Save this to `[original-name]-formatted.md` alongside the original — is that okay?"* Only write after the user explicitly confirms.
+9. Show the cleaned document and a summary of fixes in chat, then ask via `AskUserQuestion`: *"Save this to `[original-name]-formatted.md` alongside the original — is that okay?"* — options **Yes, save it (Recommended)** / **No, don't save**. Only write after the user explicitly confirms.
 10. Report a summary of fixes applied and flag any manual review items.
 
 ## Output
@@ -50,3 +52,7 @@ plain text rather than a path, treat it as the pasted Markdown content directly.
 - Do not overwrite the original file.
 - Always show the cleaned document and fix summary in chat first; save to disk only after the user explicitly confirms.
 - Flag broken syntax that cannot be safely auto-fixed.
+
+## Notes
+
+- Clickable-question convention: the Inputs intake-method choice and the Step 9 save confirmation use `AskUserQuestion`. The Markdown content itself stays free text -- genuine data, not a finite menu.

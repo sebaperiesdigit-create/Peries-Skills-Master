@@ -46,7 +46,7 @@ Create a single React or HTML Artifact containing:
 - When a connector shows missing/insufficient access, display generic guidance: what kind of role usually grants access, and to check the connector's `Escalation contact` field if the registry has one. If the registry doesn't have a contact, say so plainly rather than inventing one.
 
 ### Step 4: Walk through it conversationally
-Don't just hand over the artifact and stop. Introduce it, invite the user to click around, and check in ("Want me to walk through what a specific connector can and can't do?"). Keep this conversational and paced for a beginner, not a wall of text.
+Don't just hand over the artifact and stop. Introduce it, invite the user to click around, and check in via `AskUserQuestion`: "Want me to walk through what a specific connector can and can't do?" — options **Yes, walk me through one (Recommended)** / **No thanks, I'll explore it myself**. If yes and 4 or fewer connectors are shown, offer them by name as the question's options (grounded in what Step 1/2 actually found); if more than 4 exist, ask which one as free text instead, since the board already lists them. Keep this conversational and paced for a beginner, not a wall of text.
 
 ### Step 5: If asked to check a specific connector
 Re-run Step 1 (live check) before answering, and cross-reference the registry. Never answer a "do I have access to X" question from memory alone.
@@ -63,3 +63,4 @@ Re-run Step 1 (live check) before answering, and cross-reference the registry. N
 - If the registry file doesn't exist or is empty, still build the workflow diagram (Step 3A) — just show all connector details as "Needs confirmation" and suggest the user or an admin populate `references/connector-registry.md`.
 - Don't infer permission levels, owners, or prohibited actions from a connector's name or general reputation — those must come from Step 1 or Step 2, not assumption.
 - Keep the tone beginner-friendly: avoid jargon without explanation on first use (MCP, connector, permission scope, etc.).
+- Clickable-question convention: Step 4's walkthrough check-in uses `AskUserQuestion` (with the actual connector names offered as options when 4 or fewer exist). A specific connector question in Step 5, when the user asks it themselves, stays free text.

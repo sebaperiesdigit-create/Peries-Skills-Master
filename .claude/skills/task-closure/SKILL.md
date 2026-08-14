@@ -79,7 +79,7 @@ The "Temporary Files" dimension is Confirmed only if every Disposable file found
 
 ### Step 6: Unresolved Issues
 
-Scan the conversation, project files, git status, the evidence pack (if any), and other tool results for explicit open questions, TODOs, pending approvals, failed checks, caveats, deferred work, dependencies, or promised follow-ups. List each with its evidence and impact. Then ask the user once whether anything else remains outstanding.
+Scan the conversation, project files, git status, the evidence pack (if any), and other tool results for explicit open questions, TODOs, pending approvals, failed checks, caveats, deferred work, dependencies, or promised follow-ups. List each with its evidence and impact. Then ask via `AskUserQuestion`: "Is there anything else outstanding that isn't captured above?" — options **No, that's everything (Recommended)** / **Yes, there's more** (if yes, gather it as free text).
 
 Never treat silence or missing evidence as confirmation that no unresolved issues exist. If confirmation is unavailable, mark this dimension Unknown, not Confirmed.
 
@@ -161,3 +161,4 @@ Only save the report to `output/task-closure/<task-slug>-closure-report.md` if t
 - `context: fork` is intentionally not used — this skill must inspect the current conversation directly, which a forked subagent cannot see.
 - Complements `evidence-pack-builder` (reads its output when present) and pairs naturally with `first-task-mapper` as the opening and closing bookends of a task.
 - Chat output by default; a saved file is only ever written after an explicit request, to `output/task-closure/<task-slug>-closure-report.md`.
+- Clickable-question convention: Step 6's "anything else outstanding?" check and Step 7's approval-gated fix already use `AskUserQuestion`. Task identification (Input section, when ambiguous) stays free text — genuine content, not a finite menu.

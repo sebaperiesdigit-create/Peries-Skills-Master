@@ -36,7 +36,7 @@ Parse `$ARGUMENTS` against this vocabulary:
 - `status [date]`: check the completion marker
 - `admin-update-identity`: perform a self-attested identity correction (see below)
 
-Use the employee's local date when none is supplied. Ask one focused question when intent or date is ambiguous.
+Use the employee's local date when none is supplied. When the date is ambiguous, ask directly as free text (a date value has no finite menu). When the intent is ambiguous, ask via `AskUserQuestion` with the most likely candidates as options — typically **Record/continue today's entry** / **View an entry** / **Edit an entry** / **Check status** — and use the question's free-text option for less common intents (setup, admin-update-identity).
 
 ## Workflow
 
@@ -51,10 +51,10 @@ Use the employee's local date when none is supplied. Ask one focused question wh
 5. If the work date is a Saturday or Sunday, tell the employee tracking is weekdays-only and stop — no entry, no marker.
 6. Locate the canonical entry file for the employee and work date:
    - if none exists, begin from `assets/daily-entry-template.md`;
-   - if one exists, offer `view`, `continue`, or `edit` — never create a competing second entry for the same date.
-7. Gather only work-related fields: working times, completed work, work in progress, blockers, evidence/notes, and next actions. Accept either conversational Q&A (what did you do / what's next / any blockers) or a pasted free-form update.
-8. Show the complete proposed entry or revision. Allow corrections.
-9. Ask for explicit save confirmation.
+   - if one exists, ask via `AskUserQuestion`: **View it** / **Continue it** / **Edit it** — never create a competing second entry for the same date.
+7. Gather only work-related fields: working times, completed work, work in progress, blockers, evidence/notes, and next actions (all free text). Accept either conversational Q&A (what did you do / what's next / any blockers) or a pasted free-form update.
+8. Show the complete proposed entry or revision. Allow corrections (free text).
+9. Ask via `AskUserQuestion` for explicit save confirmation: **Yes, save it (Recommended)** / **No, let me fix something first**.
 10. Validate required identity, date, work content, and destination path.
 11. Save safely:
     - preserve prior content when revising (append to Edit History, never erase);
@@ -71,15 +71,15 @@ If the user cancels, or any validation/write/verification step fails, stop witho
 
 ## First-time setup
 
-1. Ask for the official employee name and employee ID.
+1. Ask for the official employee name and employee ID (free text).
 2. Show both values back exactly as entered.
 3. Explain that later identity changes go through `admin-update-identity`, not an ordinary edit.
-4. Obtain explicit confirmation.
+4. Ask via `AskUserQuestion`: **Yes, that's correct (Recommended)** / **No, let me re-enter it**.
 5. Save to `output/daily-work-tracker/_config/employee.json` only after confirmation.
 
 ## Missing weekday entries and leave/holiday status
 
-When `status` or `view` finds a weekday with no entry, ask the employee whether it was a leave or public holiday day.
+When `status` or `view` finds a weekday with no entry, ask via `AskUserQuestion`: "Was this a leave or public holiday day?" — options **Yes** / **No**.
 
 - If yes: write a skip-status record (not a full entry) noting the reason, and do not create a completed marker.
 - If no: report it as a genuinely missing entry.
@@ -94,8 +94,8 @@ Employees may edit work content, including after completion. Preserve the origin
 
 This is a self-attestation gate, not a real authorization check — Claude Code has no identity backend to verify anyone's authorization against. Treat it as confirmation-and-audit-log control, not access control, and say so plainly if asked.
 
-1. Ask for the current employee ID on file, the corrected name and ID, the acting administrator's name/role, and a reason.
-2. Show the proposed change exactly as entered and require explicit confirmation.
+1. Ask for the current employee ID on file, the corrected name and ID, the acting administrator's name/role, and a reason (all free text).
+2. Show the proposed change exactly as entered and ask via `AskUserQuestion`: **Yes, apply this correction (Recommended)** / **No, cancel**.
 3. Run `scripts/update-employee-config.ps1`, which updates only `output/daily-work-tracker/_config/employee.json` and appends a record to `output/daily-work-tracker/_admin-audit-log.md`:
    ```
    powershell -NoProfile -ExecutionPolicy Bypass -File "<this skill's folder>\scripts\update-employee-config.ps1" -OldEmployeeId "<current-id>" -NewEmployeeId "<new-id>" -NewEmployeeName "<new-name>" -AdminName "<admin-name>" -Reason "<reason>"
@@ -123,3 +123,4 @@ Reminder automation is intentionally out of scope for now: no install-reminders/
 - Never delete a daily entry file.
 - Never write any file without showing the exact content and getting explicit confirmation first.
 - Don't build or reference the deferred reminder scripts above — they don't exist yet.
+- Clickable-question convention: intent disambiguation, the view/continue/edit offer, save confirmation, setup confirmation, the leave/holiday check, and the admin identity-correction confirmation all use `AskUserQuestion`. Date disambiguation, work-content fields, and identity/reason values (name, ID, admin name/role, reason) stay free text — genuine data, not a finite menu.

@@ -24,7 +24,7 @@ Create a ready-to-publish product description from a product name and feature/sp
 5. Lead with the main customer benefit, then describe the key features and what makes the product useful.
 6. Keep the copy concise and direct; avoid unnecessary salesy language.
 7. Present the final result as plain text or simple markdown, ready to copy and paste into a product listing.
-8. End with a prompt offering to revise tone or length if the user wants adjustments.
+8. End with `AskUserQuestion`: **Looks good, no changes needed (Recommended)** / **Adjust tone** / **Adjust length**. If they pick a refinement, ask directly as free text what direction to adjust it (e.g. "more technical" or "shorter"), then redraft and offer this menu again.
 
 ## Output
 
@@ -42,3 +42,4 @@ Create a ready-to-publish product description from a product name and feature/sp
 
 - Default tone: Digitweb Lanka standard e-commerce tone — clear, benefit-focused, concise, UK English.
 - If the user asks for a specific tone, apply it while preserving the product’s key benefits.
+- Clickable-question convention: the Step 8 revise offer uses `AskUserQuestion` (finite set of good answers). The product name, features, and any refinement direction stay free text -- genuine content the skill cannot meaningfully offer a menu for.

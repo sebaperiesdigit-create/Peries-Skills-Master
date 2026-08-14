@@ -36,10 +36,10 @@ Briefly list the topics (Step 2 table). Then, for each topic, ask one quick self
 ## Topic Template (applies to every topic in Step 2)
 
 1. **Explain** — 2-4 plain-language sentences.
-2. **Topic controls** — AskUserQuestion supports at most 4 options, so this is exactly 4: **Continue** / **Repeat or show another example** / **Pause here** / **Stop the lesson**. Loop back to step 1 with a fresh example if the repeat/example option is chosen. On Pause, confirm ("Save your progress to `onboarding-output/claude-code-basics-progress.md` so you can resume later — okay?"), then attempt the `Write` (real permission prompt) with current topic, and each topic's Passed/Skipped/Not-yet status. On Stop, end the session without forcing a save.
+2. **Topic controls** — AskUserQuestion supports at most 4 options, so this is exactly 4: **Continue** / **Repeat or show another example** / **Pause here** / **Stop the lesson**. Loop back to step 1 with a fresh example if the repeat/example option is chosen. On Pause, confirm via AskUserQuestion: **Save progress and stop (Recommended)** / **Actually, don't save — just stop**, then (if saving) attempt the `Write` (real permission prompt) to `onboarding-output/claude-code-basics-progress.md` with current topic, and each topic's Passed/Skipped/Not-yet status. On Stop, end the session without forcing a save.
 3. **Demonstrate** (only where a live command genuinely helps — see per-topic notes; several topics are UI-only and can't be demonstrated since Claude can't see the learner's screen).
 4. **Practical exercise** — one small, concrete thing the learner does or reports back.
-5. **Comprehension check** — one question, plausible distractors, exactly one clearly correct answer. Wrong → supportive correction + one rephrased retry. Right (1st or 2nd try) → mark **Passed**.
+5. **Comprehension check** — one question via AskUserQuestion, plausible distractors, exactly one clearly correct answer as the options. Do **not** mark any option "(Recommended)" here — this is a quiz, and flagging the correct answer would defeat the check; that's the one place in this skill where the clickable-question convention's recommended-option requirement doesn't apply. Wrong → supportive correction + one rephrased retry. Right (1st or 2nd try) → mark **Passed**.
 6. **Topic controls again** — same menu as step 2, offered before moving on.
 
 ## Step 2: The Nine Topics
@@ -76,9 +76,9 @@ A short integrative scenario spanning multiple topics — e.g. "Walk me through,
 
 ## Step 5: Optional Progress / Cheat-Sheet Save
 
-Ask: *"Want me to save a cheat sheet to `onboarding-output/claude-code-basics-cheat-sheet.md`?"* Only attempt the `Write` (real permission prompt, same as any other file operation in this skill) after they say yes. Cheat sheet covers: the nine topics in one line each, and which ones they passed vs. skipped by self-assessment.
+Ask via AskUserQuestion: *"Want me to save a cheat sheet to `onboarding-output/claude-code-basics-cheat-sheet.md`?"* — **Yes, save it (Recommended)** / **No thanks**. Only attempt the `Write` (real permission prompt, same as any other file operation in this skill) if they say yes. Cheat sheet covers: the nine topics in one line each, and which ones they passed vs. skipped by self-assessment.
 
-If `onboarding-output/claude-code-basics-progress.md` exists from an earlier pause, offer to update it to `Status: COMPLETE` (another `Write` attempt) rather than delete it — this skill cannot delete files. Tell the learner they're welcome to remove the progress file themselves once finished, same guidance as the practice file.
+If `onboarding-output/claude-code-basics-progress.md` exists from an earlier pause, ask via AskUserQuestion: **Update it to `Status: COMPLETE` (Recommended)** / **Leave it as-is** — rather than delete it, since this skill cannot delete files. Tell the learner they're welcome to remove the progress file themselves once finished, same guidance as the practice file.
 
 ## Notes
 
@@ -86,3 +86,4 @@ If `onboarding-output/claude-code-basics-progress.md` exists from an earlier pau
 - Self-assessed "I already know this" skips are recorded distinctly from comprehension-check Passes; never conflate the two in the final report or cheat sheet.
 - Live demonstrations only happen where `allowed-tools` genuinely supports them (the five safe read-only Bash patterns, plus `Read`/`Glob`/`Grep`); several topics are necessarily descriptive since Claude cannot see the learner's actual screen.
 - Keep the tone patient and encouraging — this is for someone who has never done any of this before.
+- Clickable-question convention: every decision/confirmation point (resume choice, self-assessment, topic controls, pause-save, readiness confirms, cheat-sheet/progress-file offers) uses `AskUserQuestion`. The one deliberate exception is comprehension-check options never carrying a "(Recommended)" tag, since this is a quiz. Topic 9's final explain-in-your-own-words check and Step 4's integrative scenario stay free text — they require an actual explanation, not a choice among options.

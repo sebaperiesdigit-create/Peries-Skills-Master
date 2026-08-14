@@ -24,7 +24,9 @@ report or table name, a script purpose, a workflow description, or a file path.
 
 If `$ARGUMENTS` is empty or too vague to search on (e.g. a single generic word), ask
 one clarifying question before searching: "What should this asset do, or what would
-someone call it?"
+someone call it?" Ask this directly as free text — a proposed asset's purpose/name has
+no finite menu of good answers, so it's exempt from the clickable-question convention in
+`skill-builder/reference.md`.
 
 ## Step-by-Step Workflow
 
@@ -128,3 +130,6 @@ available; database itself not directly queried, only code references checked"]
   because they were named differently, not because no one looked at all.
 - Keep the report evidence-based: cite the actual file paths, table names, or skill
   names found, not general impressions.
+- Clickable-question convention: this skill has exactly one user-facing question (the
+  Input section's clarifying question), and it's genuine free text with no finite set of
+  good answers, so no `AskUserQuestion` conversion applies here.

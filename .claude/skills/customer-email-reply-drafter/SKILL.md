@@ -29,7 +29,7 @@ Draft a polite, on-brand response to a customer email without sending it automat
    - a direct, helpful response or next step
    - a polite closing and a signature placeholder such as "Digitweb Lanka Customer Support"
 6. Present the result as a draft only; do not send the email.
-7. Offer a quick refinement option for tone, length, or formality.
+7. Offer a quick refinement via `AskUserQuestion`: **Looks good, no changes needed (Recommended)** / **Adjust tone** / **Adjust length** / **Adjust formality**. If they pick a refinement, ask directly as free text what direction to adjust it (e.g. "more formal" or "shorter"), then redraft and offer this menu again.
 
 ## Output
 
@@ -41,3 +41,4 @@ Draft a polite, on-brand response to a customer email without sending it automat
 - Do not fabricate missing order or refund details.
 - Do not send the email automatically.
 - Make any placeholder requirements explicit for human review.
+- Clickable-question convention: the Step 7 refinement offer uses `AskUserQuestion` (finite set of good answers). The customer email content itself, any follow-up refinement direction, and missing-detail placeholders stay free text -- genuine content the skill cannot meaningfully offer a menu for.

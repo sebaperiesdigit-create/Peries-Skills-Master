@@ -131,7 +131,7 @@ After gathering all information, present the execution map in chat using this st
 **Recommended next action:** [one concrete step]
 ```
 
-After showing the map in chat, ask: *"Does this look correct? I can save it to output/first-task-mapper/ for your records."*
+After showing the map in chat, ask via `AskUserQuestion`: *"Does this look correct? I can save it to `output/first-task-mapper/` for your records."* — options **Yes, save it (Recommended)** / **No, let me fix something first**. If they want changes, clarify as free text what to fix, update the map, and ask again.
 
 Write only after the user explicitly confirms. When saving, use the file path:
 
@@ -150,3 +150,4 @@ Write only inside `output/first-task-mapper/` — never elsewhere.
 - If the request is too vague, ask focused clarifying questions — never guess
 - Inspect CLAUDE.md and existing skills before suggesting new workflows
 - If project documentation is missing, flag it as a limitation and continue with questions
+- Clickable-question convention: Steps 1-9 already use `AskUserQuestion` with drafted plausible options plus a free-text "Other". Converted the remaining plain-text save confirmation. Only the initial request description (when `$ARGUMENTS` is absent) and any "Other"/fix-up follow-ups stay free text.

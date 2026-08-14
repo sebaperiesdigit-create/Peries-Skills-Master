@@ -21,14 +21,14 @@ Before Step 1, check in this order:
 ### Step 1: Role & Calibration
 
 Ask the user:
-1. What's your role? (dev, PM, designer, support, sales, data, etc.)
-2. Have you used Claude Code, MCP, or AI coding tools before?
+1. What's your role? (free text — dev, PM, designer, support, sales, data, etc. are illustrative examples, not the full set)
+2. `AskUserQuestion`: "Have you used Claude Code, MCP, or AI coding tools before?" — options `No, this is new to me (Recommended)` / `Yes, I've used similar tools before`.
 
 Use their answers to:
 - Adapt examples throughout, drawing from `company-workflow.md`'s "Common Tasks by Role" section (dev gets code/PR examples, support gets ticket examples, etc.)
-- If their role isn't dev/PM/designer/support/sales/data, ask one follow-up: "What kind of tasks would you bring to Claude day-to-day?" and build examples from that answer instead of guessing a proxy role.
+- If their role isn't dev/PM/designer/support/sales/data, ask one follow-up: "What kind of tasks would you bring to Claude day-to-day?" (free text) and build examples from that answer instead of guessing a proxy role.
 - Calibrate quiz difficulty (beginner gets recall questions, experienced gets applied questions)
-- If they're advanced, offer to skip to Step 10 (Role Personalization) and Step 7.5 (Real Project Files)
+- If they answered "Yes" above, offer via `AskUserQuestion`: "Skip ahead to Role Personalization and Real Project Files (Recommended)" / "Go through the full walkthrough anyway"
 
 ### Step 2: Big Picture
 
@@ -93,7 +93,7 @@ Ask: "Which pair correctly matches a layer to what it does?" with one correct op
 
 If they answer correctly, praise and proceed. If they pick a distractor, re-explain using the restaurant analogy before continuing.
 
-Also offer an interactive visual for hands-on exploration of the four-layer model. Point the user to `output/skill-documentation/inputs/combined-workflow-cycle-start.html` (open/reference it directly), or to the published artifact version at https://claude.ai/public/artifacts/26d37fe5-9ec7-4c51-a020-0c9aa3cc3505 if they'd rather use a link. Either is fine — let the user pick.
+Also offer an interactive visual for hands-on exploration of the four-layer model, via `AskUserQuestion`: **Open the local file (Recommended)** / **Use the published artifact link** / **No thanks, skip this**. Local file: `output/skill-documentation/inputs/combined-workflow-cycle-start.html`. Link: https://claude.ai/public/artifacts/26d37fe5-9ec7-4c51-a020-0c9aa3cc3505
 
 ### Step 3: Data Layer
 
@@ -148,7 +148,7 @@ Walk through a complete example using a sales-report scenario (adapt to user's r
 
 ### Step 7.5: Real Project Files (Optional)
 
-Ask: "Would you like to see what this looks like in your actual project?"
+`AskUserQuestion`: "Would you like to see what this looks like in your actual project?" — options `Yes (Recommended)` / `No, skip this`.
 
 If yes, read (read-only, never print sensitive content):
 - `.claude/skills/` directory — show what skills exist
@@ -167,7 +167,7 @@ Re-teach any weak spots before moving on. Don't skip this gate.
 
 ### Step 9: Generate Cheat Sheet
 
-Before writing, confirm with the user: *"I'd like to save a cheat sheet to onboarding-output/cheat-sheet.md — is that okay?"* Only write after they say yes.
+Before writing, confirm via `AskUserQuestion`: *"I'd like to save a cheat sheet to `onboarding-output/cheat-sheet.md` — is that okay?"* — options `Yes, save it (Recommended)` / `No, don't save`. Only write after they say yes.
 
 Use this fixed template, filling in their specific details:
 
@@ -225,15 +225,15 @@ Explain what this means for their specific job, grounding it in `company-workflo
 
 ### Step 11: Confidence Check + Close
 
-Ask: "On a scale of 1-5, how confident do you feel using this system?"
+`AskUserQuestion`: "How confident do you feel using this system?" — options `Very confident (4-5)` / `Somewhat confident (3)` / `Not very confident (1-2)`. No option is marked Recommended -- this is a genuine self-assessment, not a quiz with a correct answer.
 
-- **4-5:** Offer optional completion summary, confirm they're ready
-- **3:** Re-teach the weakest area, then re-check
-- **1-2:** Offer to pause and continue later (see "Pausing Mid-Session" below), or re-teach from the start
+- **Very confident (4-5):** Ask via `AskUserQuestion`: "Want a completion summary saved before we wrap up?" — options `Yes, save one (Recommended)` / `No thanks, I'm ready to go`
+- **Somewhat confident (3):** Re-teach the weakest area, then re-check
+- **Not very confident (1-2):** Ask via `AskUserQuestion`: "Want to pause and continue later, or re-teach from the start?" — options `Pause and resume later (Recommended)` / `Re-teach from the start` (Pause routes to "Pausing Mid-Session" below)
 
 If they scored 4-5 or otherwise completed this session, mention that `/new-joinee` exists as an optional next step for deeper, role-specific onboarding with hands-on assessments — not required, just available if they want it.
 
-If they want a completion summary, confirm first: *"I'll save a completion summary to onboarding-output/completion-summary.md — okay?"*
+If they wanted a completion summary, confirm the write via `AskUserQuestion`: *"I'll save a completion summary to `onboarding-output/completion-summary.md` — okay?"* — options `Yes, save it (Recommended)` / `No, don't save`.
 
 Only write after they say yes. If an `onboarding-output/onboarding-progress.md` file exists from an earlier paused session, delete it once completion-summary.md is written — the progress file is superseded by completion. Use this fixed template:
 
@@ -262,7 +262,7 @@ Write to `onboarding-output/completion-summary.md`. Never write anywhere else.
 
 ### Pausing Mid-Session
 
-Triggered by the Step 11 low-confidence (1-2) path, or anytime the user goes quiet or says "this is too much" (per Session Guidelines). Confirm first: *"I'll save your progress to onboarding-output/onboarding-progress.md so you can resume later — okay?"* Only write after they say yes.
+Triggered by the Step 11 low-confidence (1-2) path, or anytime the user goes quiet or says "this is too much" (per Session Guidelines). Confirm via `AskUserQuestion`: *"I'll save your progress to `onboarding-output/onboarding-progress.md` so you can resume later — okay?"* — options `Yes, save it (Recommended)` / `No, don't save`. Only write after they say yes.
 
 ```markdown
 # Onboarding Progress
@@ -296,3 +296,4 @@ Write to `onboarding-output/onboarding-progress.md`. This is the one file this s
 - Never fabricate company-specific facts not present in company-workflow.md or CLAUDE.md
 - If user goes quiet or says "this is too much", offer to pause (see "Pausing Mid-Session") or simplify
 - Step 7.5 reads are opt-in only, never automatic
+- Clickable-question convention: Steps 2-8's comprehension checks already used `AskUserQuestion` (correctly with no "(Recommended)" tag, since it's a quiz); Step 0's resume/refresher choices already did too. Converted the remaining plain-text asks (Step 1's prior-experience question and advanced-skip offer, the Step 2 visual-exploration choice, Step 7.5's opt-in, Step 9's and Step 11's write confirmations, Step 11's confidence check and its pause/re-teach branch, and the mid-session pause confirmation). Role intake (Step 1) and the unlisted-role follow-up stay free text.

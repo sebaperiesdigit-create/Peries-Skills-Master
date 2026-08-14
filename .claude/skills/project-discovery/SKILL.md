@@ -125,3 +125,4 @@ Based on everything discovered, suggest one concrete, safe action the employee c
 - Bash is permitted only for: `git status`, `git branch --show-current`, `git log --oneline -5`
 - If Git commands fail, report it and continue — do not attempt destructive git commands
 - Keep the output fully conversational — do not create any report files
+- Clickable-question convention: not applicable. This skill runs with `context: fork` (an isolated subagent with no back-and-forth with the user) and is entirely read-only/report-only — it never asks the user anything, so there are no question points to convert.

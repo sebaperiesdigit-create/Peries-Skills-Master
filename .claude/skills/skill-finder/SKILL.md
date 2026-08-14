@@ -21,7 +21,9 @@ combining skills always requires a separate, explicit follow-up request.
 
 If `$ARGUMENTS` is missing or too vague to compare against the catalog, ask exactly one
 focused clarifying question before proceeding (e.g. "What should this task do, and what
-would trigger it?").
+would trigger it?"). Ask this directly as free text — a proposed task description has no
+finite menu of good answers, so it's exempt from the clickable-question convention in
+`skill-builder/reference.md`.
 
 ## Step-by-Step Workflow
 
@@ -101,3 +103,6 @@ match/gap that drove the decision]
   recommendations consistent across runs.
 - Runs directly in the main conversation (no subagent fork) since Step 1 may need to
   pause and ask the user a clarifying question before continuing.
+- Clickable-question convention: this skill has exactly one user-facing question (the
+  Step 1 clarifying question), and it's genuine free text with no finite set of good
+  answers, so no `AskUserQuestion` conversion applies here.

@@ -16,8 +16,10 @@ Review a requirements document or implementation brief and identify gaps, ambigu
 
 If `$ARGUMENTS` is provided and resolves to an existing file path, read that file as the
 requirements document. If `$ARGUMENTS` is plain text rather than a path, treat it as the
-pasted requirements content directly. If `$ARGUMENTS` is empty, ask the user to paste the
-requirements text or provide a file path before proceeding.
+pasted requirements content directly. If `$ARGUMENTS` is empty, ask via `AskUserQuestion`
+how to provide it: **Paste the requirements text** / **Provide a file path**. Then request
+the actual content per their choice as free text -- the requirements themselves have no
+finite menu.
 
 ## Steps
 
@@ -69,3 +71,7 @@ Present the review in chat using this structure:
 - Preserve the original intent while improving structure and testability.
 - Flag uncertainty instead of guessing.
 - Prefer concrete, verifiable language over vague statements.
+
+## Notes
+
+- Clickable-question convention: the Inputs section's intake-method choice uses `AskUserQuestion`. The requirements content itself stays free text -- genuine data, not a finite menu. No other user-facing questions exist; this skill is report-only.

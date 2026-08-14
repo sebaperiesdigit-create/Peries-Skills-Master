@@ -16,7 +16,7 @@ Read an orders CSV file and produce a plain-text summary of total orders, total 
 
 ## Steps
 
-1. Confirm the user has provided the correct path to the CSV. If the file cannot be found, ask for the correct path.
+1. If a CSV path hasn't already been supplied (via `$ARGUMENTS` or earlier in the conversation), ask via `AskUserQuestion` how to provide it: **Provide a file path** / **Paste the CSV content directly** / **Use the file already referenced earlier in this conversation** (include this option, marked Recommended, only when one genuinely exists). If the file cannot be found, ask directly as free text for the correct path -- a path value has no finite menu.
 2. Read the CSV file in read-only mode and validate that it contains the required columns.
 3. Parse each row into order data, extracting `order_id`, `order_total`, and product/item names.
 4. Skip rows with missing or invalid totals or product information, and track how many rows were skipped and why.
@@ -38,3 +38,7 @@ Read an orders CSV file and produce a plain-text summary of total orders, total 
 - Do not modify the CSV file.
 - Do not invent missing data.
 - Be transparent about skipped or invalid rows.
+
+## Notes
+
+- Clickable-question convention: the Step 1 intake-method choice uses `AskUserQuestion`. The CSV content and any corrected file path stay free text -- genuine data, not a finite menu.

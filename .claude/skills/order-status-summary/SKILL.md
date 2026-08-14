@@ -16,7 +16,7 @@ Read an order export CSV and generate a plain-text report that classifies each o
 
 ## Steps
 
-1. Confirm the user has supplied the correct CSV path or pasted file content.
+1. If a CSV path or pasted content hasn't already been supplied (via `$ARGUMENTS` or earlier in the conversation), ask via `AskUserQuestion` how to provide it: **Provide a file path** / **Paste the CSV content directly** / **Use the file already referenced earlier in this conversation** (include this option, marked Recommended, only when one genuinely exists). Then request the actual path or content as free text per their choice -- the CSV data itself has no finite menu. If it was already supplied, confirm it looks like a valid CSV reference and proceed.
 2. Read the CSV in read-only mode and validate required columns.
 3. Map equivalent column names if the user has a slightly different header, and note the mapping used.
 4. Parse each row and classify it into one bucket:
@@ -39,4 +39,8 @@ Read an order export CSV and generate a plain-text report that classifies each o
 
 - Do not invent missing order details.
 - Do not modify the CSV.
-- If required columns are missing, stop and ask the user to correct the input.
+- If required columns are missing, stop and ask via `AskUserQuestion` how to proceed: **Provide a corrected file (Recommended)** / **Manually tell me which columns map to the missing ones** / **Cancel**. If mapping manually, ask directly as free text which column corresponds to which.
+
+## Notes
+
+- Clickable-question convention: the intake-method choice (Step 1) and the missing-columns recovery choice (Guardrails) use `AskUserQuestion`. The CSV path/content itself and column-mapping details stay free text -- genuine data, not a finite menu.

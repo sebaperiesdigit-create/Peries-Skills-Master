@@ -34,9 +34,9 @@ judgment-based and must not be described as deterministic or complete.
 
 **Layer 3 — user confirmation for uncertainty.** When a finding is ambiguous: never
 reproduce the suspected value; identify only its category and a safe location (file
-name, section, line range); explain why it may be sensitive; ask the user whether to
-redact, exclude, or retain it; default to exclusion from persistent artifacts until
-resolved.
+name, section, line range); explain why it may be sensitive; ask via `AskUserQuestion`:
+**Exclude it (Recommended — safe default until resolved)** / **Redact it** /
+**Retain it**; default to exclusion from persistent artifacts until resolved.
 
 **Classification per finding:** Confirmed secret / Confirmed personal-or-customer data
 / Confirmed confidential information / Contextually sensitive / Possible (needs

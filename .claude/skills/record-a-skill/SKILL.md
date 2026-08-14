@@ -57,9 +57,11 @@ Raw `.mp4`/`.mov`/audio files and other unprocessed media are **not** valid dire
 inputs. Never claim to have inspected such a file — ask the user to convert it into a
 supported artifact (transcript, screenshots, description) first.
 
-Show the recommended mode and why, and get explicit confirmation before inspecting any
-evidence. If the user later wants to add the other mode mid-session, treat that as
-another confirmed scope change, not a silent expansion.
+Show the recommended mode and why, then confirm via `AskUserQuestion`: options
+**Mode A (pre-processed evidence)**, **Mode B (live guided walkthrough)**, and
+**Hybrid (both)** — mark whichever step 1 determined as `(Recommended)`. Do not inspect
+any evidence before this confirms. If the user later wants to add the other mode
+mid-session, treat that as another confirmed scope change, not a silent expansion.
 
 ### 2. Authorize and inspect evidence
 
@@ -96,8 +98,10 @@ reference, Confirmation status, Assumptions/conflicts/limitations**. See
 [reference.md](reference.md) for the full provenance and confidence taxonomies — they
 are two separate axes, not derived from each other.
 
-If evidence conflicts, show the conflict and ask the user which source is
-authoritative. Never silently pick one.
+If evidence conflicts, show the conflict and ask via `AskUserQuestion` which source is
+authoritative — one option per conflicting source (mark the more likely one
+`(Recommended)` only if the evidence itself suggests one; otherwise mark none). Never
+silently pick one.
 
 ### 6. Evidence-sufficiency gate
 
@@ -110,25 +114,28 @@ established.
 
 ### 7. Present the specification for confirmation
 
-Show the reconstructed workflow specification and ask the user to correct or confirm
-it. Do not proceed past this point on an unconfirmed specification.
+Show the reconstructed workflow specification and confirm via `AskUserQuestion`:
+**Confirm this specification (Recommended)** / **I need to correct something**. If
+corrections are needed, gather them as free text, update the specification, and ask
+again. Do not proceed past this point on an unconfirmed specification.
 
 ### 8. Explicit scope selection — no default
 
-Ask the user to choose exactly one:
+Ask via `AskUserQuestion`, options:
 - **Project** — `.claude/skills/<name>/`, this repository only.
 - **Personal** — `~/.claude/skills/<name>/`, available across all the user's projects.
 
-`record-a-skill` may recommend one with a stated reason (project: depends on this
-repo's files/structure/business rules/one team; personal: useful across unrelated
+`record-a-skill` may mark one `(Recommended)` with a stated reason (project: depends on
+this repo's files/structure/business rules/one team; personal: useful across unrelated
 projects, represents a general working method), but **no scope is inferred or
-defaulted**. Before every CREATE, EXTEND, or MERGE handoff, the user must explicitly
-choose project or personal scope and confirm the exact target path. Never silently
-create or modify a personal-scope skill.
+defaulted** — the user must actively pick. Before every CREATE, EXTEND, or MERGE
+handoff, the user must explicitly choose project or personal scope and confirm the
+exact target path. Never silently create or modify a personal-scope skill.
 
 If a same-name skill exists in both scopes, detect it, explain which one takes
-precedence, and ask the user to reuse/rename/extend/merge/stop — never silently create
-a shadowed or shadowing version.
+precedence, and ask via `AskUserQuestion`: **Reuse the existing one** / **Extend it** /
+**Merge them** / **Stop here** — for a rename instead, use the question's free-text
+option. Never silently create a shadowed or shadowing version.
 
 ### 9. Delegate the overlap check
 
@@ -141,8 +148,9 @@ and do not call `skill-finder` by default (only if `existing-asset-finder` expli
 flags a skill-specific uncertainty it can't resolve itself).
 
 If `existing-asset-finder` is unavailable, fails, or returns an incomplete report,
-report the failure and ask the user whether to retry or use an explicitly approved
-limited fallback check — never silently fall back to a hidden reimplementation.
+report the failure and ask via `AskUserQuestion`: **Retry (Recommended)** /
+**Use a limited fallback check** / **Stop here** — never silently fall back to a hidden
+reimplementation.
 
 ### 10. Handle the disposition
 
@@ -150,12 +158,14 @@ limited fallback check — never silently fall back to a hidden reimplementation
 - **EXTEND** — identify the capability gap against the confirmed specification; prepare
   an evidence-backed semantic diff (current behavior / required behavior / proposed
   changes / evidence+provenance / compatibility impact / affected files+tests /
-  unresolved limitations); present it for approval. After approval, invoke
+  unresolved limitations); present it and ask via `AskUserQuestion`: **Approve these
+  changes (Recommended)** / **I need changes to the proposal**. After approval, invoke
   `skill-builder` in **Mode 2** (audit) with the handoff package from
   [reference.md](reference.md). `record-a-skill` never edits the existing skill
   directly.
 - **MERGE** — present the merge target, overlap, compatibility impact, and affected
-  files for approval before any handoff.
+  files, then ask via `AskUserQuestion`: **Approve this merge (Recommended)** /
+  **I need changes to the proposal** — before any handoff.
 - **CREATE** — invoke `skill-builder` in **Mode 1** (build new) with the handoff
   package, including the confirmed scope and target path from step 8.
 - **STOP** — halt the handoff and report the blocking reason clearly.
@@ -230,3 +240,10 @@ operation. The user handles any later Git commit separately.
   generated skill.
 - This is a long, multi-gate, conversational skill by design — not meant to be fast or
   lightweight. Don't shortcut the confirmation gates to save turns.
+- Clickable-question convention: every gate with a finite set of good answers uses
+  `AskUserQuestion` (intake-mode confirm, conflicting-evidence source pick,
+  specification confirm, scope choice, same-name collision handling, overlap-check
+  retry decision, EXTEND/MERGE approval; see also `reference.md`'s Layer 3
+  redact/exclude/retain confirmation). The workflow-name/evidence-path intake, any
+  correction text, and the live Mode B walkthrough content itself stay free text —
+  genuine content, not a finite menu.
