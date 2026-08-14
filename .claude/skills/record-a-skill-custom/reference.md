@@ -1,4 +1,4 @@
-# record-a-skill Reference
+# record-a-skill-custom Reference
 
 Detailed rules referenced from [SKILL.md](SKILL.md): sensitive-content screening
 layers, the provenance/confidence taxonomy, the `existing-asset-finder` and
@@ -162,14 +162,14 @@ operations, outputs, dependencies, boundaries. Consume the returned disposition
 - Test and validation requirements
 - Permission constraints
 
-`record-a-skill` never edits the existing skill directly for an EXTEND — the approved
+`record-a-skill-custom` never edits the existing skill directly for an EXTEND — the approved
 diff is a proposal `skill-builder` Mode 2 implements after its own audit.
 
 ---
 
 ## Test requirements and fidelity gate (executed by skill-builder Step 6)
 
-`record-a-skill` specifies these requirements as part of the handoff; it never
+`record-a-skill-custom` specifies these requirements as part of the handoff; it never
 executes them itself. Applies to every skill created or extended through this
 workflow.
 

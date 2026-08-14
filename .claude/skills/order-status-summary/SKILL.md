@@ -6,7 +6,7 @@ argument-hint: [orders.csv]
 
 ## Purpose
 
-Read an order export CSV and generate a plain-text report that classifies each order into Delivered, Cancelled, Shipped on time, Delayed (not yet shipped), or Delayed (past expected delivery).
+Read an order export CSV and generate a plain-text report that classifies each order into Delivered, Cancelled, Shipped on time, In progress (not yet shipped), Delayed (not yet shipped), or Delayed (past expected delivery).
 
 ## Inputs
 
@@ -23,6 +23,7 @@ Read an order export CSV and generate a plain-text report that classifies each o
    - **Delivered**: status indicates delivered/completed.
    - **Cancelled**: status indicates cancelled/refunded.
    - **Shipped on time**: has `ship_date` and is within expected delivery timing.
+   - **In progress (not yet shipped)**: no `ship_date` and 3 days or fewer since `order_date` -- still within normal processing time, not delayed.
    - **Delayed (not yet shipped)**: no `ship_date` and more than 3 days since `order_date`.
    - **Delayed (past expected delivery)**: expected delivery date has passed without delivery.
 5. Count total orders and bucket totals.

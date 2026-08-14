@@ -1,5 +1,5 @@
 ---
-name: record-a-skill
+name: record-a-skill-custom
 description: Use when someone asks to record a demonstrated workflow, turn a screen recording or walkthrough into a skill, capture a process as a reusable skill, or check an existing skill before recording a new one.
 argument-hint: [workflow-name-or-evidence-path]
 disable-model-invocation: true
@@ -21,17 +21,17 @@ This is a conceptual recreation of the "record a workflow from a demonstration" 
 not a reproduction of any specific product's proprietary implementation.
 
 **Responsibility boundary:**
-- `record-a-skill` owns: evidence intake, sensitivity screening, workflow reconstruction,
+- `record-a-skill-custom` owns: evidence intake, sensitivity screening, workflow reconstruction,
   provenance/confidence analysis, requirements extraction, the confirmed specification.
 - `existing-asset-finder` owns: overlap discovery and the REUSE/EXTEND/MERGE/CREATE/STOP
-  disposition. `record-a-skill` never reimplements this search.
+  disposition. `record-a-skill-custom` never reimplements this search.
 - `skill-builder` owns: final skill design, file construction, frontmatter/config,
   implementation, the full test suite, and the fidelity check against the specification.
 
-Only an explicit `/record-a-skill` invocation starts this workflow. Claude does not and
+Only an explicit `/record-a-skill-custom` invocation starts this workflow. Claude does not and
 cannot auto-discover or auto-invoke it from natural language — `disable-model-invocation`
 is set. If someone asks in conversation to "turn this into a skill" or "record what I
-just did," Claude may point out that `/record-a-skill` exists, but must not begin any
+just did," Claude may point out that `/record-a-skill-custom` exists, but must not begin any
 step of this workflow until the user types it explicitly.
 
 For detailed screening-layer rules, the provenance/confidence taxonomy, the exact
@@ -125,7 +125,7 @@ Ask via `AskUserQuestion`, options:
 - **Project** — `.claude/skills/<name>/`, this repository only.
 - **Personal** — `~/.claude/skills/<name>/`, available across all the user's projects.
 
-`record-a-skill` may mark one `(Recommended)` with a stated reason (project: depends on
+`record-a-skill-custom` may mark one `(Recommended)` with a stated reason (project: depends on
 this repo's files/structure/business rules/one team; personal: useful across unrelated
 projects, represents a general working method), but **no scope is inferred or
 defaulted** — the user must actively pick. Before every CREATE, EXTEND, or MERGE
@@ -161,7 +161,7 @@ reimplementation.
   unresolved limitations); present it and ask via `AskUserQuestion`: **Approve these
   changes (Recommended)** / **I need changes to the proposal**. After approval, invoke
   `skill-builder` in **Mode 2** (audit) with the handoff package from
-  [reference.md](reference.md). `record-a-skill` never edits the existing skill
+  [reference.md](reference.md). `record-a-skill-custom` never edits the existing skill
   directly.
 - **MERGE** — present the merge target, overlap, compatibility impact, and affected
   files, then ask via `AskUserQuestion`: **Approve this merge (Recommended)** /
@@ -174,7 +174,7 @@ reimplementation.
 
 Include the full test-requirements spec skill-builder's Step 6 must execute (the
 10-category suite plus the fidelity gate) — see [reference.md](reference.md) for the
-exact schema. `record-a-skill` specifies these requirements; it never runs its own
+exact schema. `record-a-skill-custom` specifies these requirements; it never runs its own
 separate test pass.
 
 ### 12. Report
@@ -187,7 +187,7 @@ handoff outcome.
 ## Output Format
 
 ```
-output/record-a-skill/<task-slug>/
+output/record-a-skill-custom/<task-slug>/
   raw/                        # authorized copies of original evidence; no analysis (git-ignored)
   analysis/                   # redacted extracts, classifications, provenance+confidence
                                # records, conflicts, reconstruction notes
@@ -197,7 +197,7 @@ output/record-a-skill/<task-slug>/
 
 After redaction, review, and explicit approval, `analysis/` and
 `workflow-specification.md` may be written as persistent project artifacts.
-`record-a-skill` never runs `git add`, `git commit`, `git push`, or any publishing
+`record-a-skill-custom` never runs `git add`, `git commit`, `git push`, or any publishing
 operation. The user handles any later Git commit separately.
 
 ## Notes
@@ -209,9 +209,9 @@ operation. The user handles any later Git commit separately.
     filesystem-root path. Never overwrite an existing copy without showing the
     conflict and obtaining confirmation.
   - `Write` and `Edit` may operate only within the confirmed
-    `output/record-a-skill/<task-slug>/` workspace, or — after the separate scope,
+    `output/record-a-skill-custom/<task-slug>/` workspace, or — after the separate scope,
     path, diff, and write approvals in step 10 — a `skill-builder`-controlled target.
-    `record-a-skill` itself must never edit the final generated/extended skill
+    `record-a-skill-custom` itself must never edit the final generated/extended skill
     directly; that is always `skill-builder`'s action.
   - `Bash(git status)` and `Bash(git diff)` are inspection-only.
   - Known limitation: `allowed-tools`' `Bash(cp *)` pattern matches on command text, not

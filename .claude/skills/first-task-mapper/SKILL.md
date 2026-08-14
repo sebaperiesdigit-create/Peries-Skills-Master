@@ -56,7 +56,7 @@ Label: Confirmed / Assumption / Unknown / Not confirmed
 
 ### Step 6: Check for Existing Skill or SOP
 
-Delegate this check to `existing-asset-finder` (pass the restated request from Step 1 as its input) rather than re-scanning `.claude/skills/` independently — it owns overlap discovery project-wide, per the precedent `record-a-skill` already established. Use its REUSE/EXTEND/MERGE/CREATE/STOP recommendation to fill this field: REUSE or EXTEND means a matching skill exists (note it); CREATE means none exists; MERGE or STOP should be flagged to the employee directly rather than silently folded into this map.
+Delegate this check to `existing-asset-finder` (pass the restated request from Step 1 as its input) rather than re-scanning `.claude/skills/` independently — it owns overlap discovery project-wide, per the precedent `record-a-skill-custom` already established. Use its REUSE/EXTEND/MERGE/CREATE/STOP recommendation to fill this field: REUSE or EXTEND means a matching skill exists (note it); CREATE means none exists; MERGE or STOP should be flagged to the employee directly rather than silently folded into this map.
 
 Label: Confirmed / Assumption / Unknown
 
