@@ -1,6 +1,6 @@
 ---
 name: new-joiner-guide
-description: Use when someone asks to onboard as a new Mini-AIOS joiner, do Mini-AIOS company setup on Day One, start or resume an assigned Mini-AIOS task, confirm connector or database access, publish an HTML output, log daily work, take over or hand over a task, close out a task, or get guidance on the Mini-AIOS New Joiner Guide — including phrases like "I am new to Mini-AIOS", "how do I start my Mini-AIOS setup", "I received a task", "I finished my work", "I can't access X", or "continue from where I stopped on this task".
+description: Use when someone asks to onboard as a new Mini-AIOS joiner, set up on Day One, start or resume an assigned Mini-AIOS task, confirm connector or database access, publish an HTML output, log daily work, take over or hand over a task, close out a task, or get guidance on the Mini-AIOS New Joiner Guide — including phrases like "I am new to Mini-AIOS", "I received a task", "I finished my work", or "I can't access X".
 argument-hint: "[situation]"
 ---
 
@@ -101,7 +101,15 @@ Work through in order; don't skip ahead even if reading further:
 4. **Connectors** — confirm before any real work: `postgres` (read access, Varmen AIOS/Hub), `LEDSone MCP` (read access, varmen_db), `LEDSone MCP DOC` (documentation connector). Missing any → ask Varmens; never add personal DB credentials as a workaround. The guide doesn't specify a UI path for enabling any of these — if asked how, say so plainly and route to Varmens rather than describing menus, buttons, or settings screens you haven't confirmed exist.
 5. **Folder skeleton** — two parts; don't conflate them:
 
-   **5a. One-time onboarding illustration (skill-added, not from the guide — "I'm new" joiners only).** Once account/repo/tool/connectors are confirmed, if this session has local file/repo access: run a quick Existing-Asset-First check (list the repo root) so you don't clobber anything already there, then directly create the full local skeleton yourself — all 12 Reference B folders, each with a short README.md explaining its purpose — and show the Reference B table in the same response. Do **not** push this to GitHub yet; the push happens in 5b below. State plainly in your response that this is a one-time onboarding build for understanding the structure, and that real day-to-day task work always goes through 5b's GPT-discovery-first loop, no exceptions. If this session has no local file/repo access (Claude Chat/Cowork), skip 5a, say so, and go straight to 5b.
+   **5a. One-time onboarding illustration (skill-added, not from the guide — "I'm new" joiners only).** Once account/repo/tool/connectors are confirmed, if this session has local file/repo access: run a quick Existing-Asset-First check (list the repo root) so you don't clobber anything already there, then directly create the full local skeleton yourself — all 12 Reference B folders, each with a short README.md explaining its purpose, using this template:
+
+   ```
+   # <folder-name>
+
+   <one-line purpose, copied from Reference B's Purpose column for that folder>
+   ```
+
+   — and show the Reference B table in the same response. Do **not** push this to GitHub yet; the push happens in 5b below. State plainly in your response that this is a one-time onboarding build for understanding the structure, and that real day-to-day task work always goes through 5b's GPT-discovery-first loop, no exceptions. If this session has no local file/repo access (Claude Chat/Cowork), skip 5a, say so, and go straight to 5b.
 
    **5b. The real GPT→Claude Code discovery+build loop** (confirms/pushes the skeleton to GitHub now, and governs every task build afterward — this is also the joiner's first practice run of the standard task loop). Give them the kickoff prompt below to paste into a *brand-new* ChatGPT chat. GPT will hand back a DISCOVERY prompt, then later a BUILD prompt — if this session *is* Claude Code with repo access, run those prompts directly yourself (GREEN, read-only/scaffolding) instead of making the joiner relay results manually; if you're in Chat/Cowork without that access, have the joiner run them in their own Claude Code and paste results back to GPT.
 6. **Setup checklist** — confirm all before real work: GitHub account (office Gmail) · repo created & accessible · one tool installed · all 3 connectors enabled · all standard folders exist locally with README.md · folders pushed to GitHub · knows where the shared task Google Sheet is.
