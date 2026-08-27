@@ -8,11 +8,11 @@ Peries-Skills-Master is a content repository for Claude Code **skills** — it c
 
 ## Repository layout
 
-Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 25 skill folders — nothing else. All 25 are discoverable/invocable as of the last restructure.
+Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 26 skill folders — nothing else. All 26 are discoverable/invocable as of the last restructure.
 
 ```
 .claude/skills/
-  <skill-name>/SKILL.md         # one folder per skill (25 total), skill definitions only
+  <skill-name>/SKILL.md         # one folder per skill (26 total), skill definitions only
   new-joinee/company-workflow.md, glossary.md
   start/company-workflow.md
   skill-builder/reference.md
@@ -82,6 +82,7 @@ These are the rules the skills in this repo follow when authoring/editing them �
 | `aios-structure-build` | Scaffolds the frozen AIS-OS starter-kit baseline into an empty target directory, hash-verifying every bundled template before writing and every written file after, with automatic rollback on any failure; portable (works installed personally or project-locally unmodified); user-only, never auto-invoked |
 | `aios-structure-organize` | Additively repairs an existing AIS-OS project — dry-run plan of what's missing, explicit confirmation, then creates only the missing items; never overwrites, deletes, or moves anything that already exists; user-only, never auto-invoked |
 | `aios-structure-validate` | Read-only structural check of an existing AIS-OS project against the frozen baseline (missing items, structural drift, non-empty placeholders, anti-pattern clutter), each with a concrete fix; only possible write is an optional, explicitly-consented saved report; user-only, never auto-invoked |
+| `ecommerce-seo-auditor` | Read-only, evidence-led ecommerce SEO audit (technical, content, platform-feasible fixes) for a self-hosted store page (Shopify/WooCommerce/custom) or a marketplace listing (Amazon/Etsy/TikTok Shop); every finding labeled Confirmed/Data-dependent/Not assessed; never modifies a live site/listing/feed/account/campaign |
 
 The two onboarding skills (`start`, `new-joinee`) only write files under `onboarding-output/`, and only after explicit user confirmation at each write — see the "File-Writing Safety" / "Guardrails" section inside each skill's `SKILL.md` before modifying them.
 

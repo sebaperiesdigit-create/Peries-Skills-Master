@@ -78,7 +78,13 @@ Ask via AskUserQuestion, as two questions in one call: "Who needs to review the 
 
 Label: Confirmed / Assumption / Unknown / Not confirmed — use "Not confirmed" rather than inventing a reviewer.
 
-### Step 10: Readiness Decision
+### Step 10: Identify Edge Cases & Alternate Paths
+
+Ask via AskUserQuestion: "Are there edge cases or alternate paths this needs to handle — partial/missing data, error states, more than one valid way to do this?" with options "No unusual cases — straightforward", "Yes — I'll describe them", and "Not sure yet".
+
+Label: Confirmed / Assumption / Unknown
+
+### Step 11: Readiness Decision
 
 Based on all labeled fields, determine readiness:
 
@@ -126,6 +132,9 @@ After gathering all information, present the execution map in chat using this st
 ### Reviewer & Completion Evidence
 [reviewer and evidence] — [Confirmed/Assumption/Unknown/Not confirmed]
 
+### Edge Cases & Alternate Paths
+[cases, or "None identified"] — [Confirmed/Assumption/Unknown]
+
 ### Readiness Decision: **[DECISION]**
 
 **Recommended next action:** [one concrete step]
@@ -150,4 +159,4 @@ Write only inside `output/first-task-mapper/` — never elsewhere.
 - If the request is too vague, ask focused clarifying questions — never guess
 - Inspect CLAUDE.md and existing skills before suggesting new workflows
 - If project documentation is missing, flag it as a limitation and continue with questions
-- Clickable-question convention: Steps 1-9 already use `AskUserQuestion` with drafted plausible options plus a free-text "Other". Converted the remaining plain-text save confirmation. Only the initial request description (when `$ARGUMENTS` is absent) and any "Other"/fix-up follow-ups stay free text.
+- Clickable-question convention: Steps 1-10 already use `AskUserQuestion` with drafted plausible options plus a free-text "Other". Converted the remaining plain-text save confirmation. Only the initial request description (when `$ARGUMENTS` is absent) and any "Other"/fix-up follow-ups stay free text.

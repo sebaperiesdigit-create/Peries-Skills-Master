@@ -29,6 +29,7 @@ finite menu.
    - Ambiguous wording or undefined terms
    - Conflicting requirements or contradictions
    - Missing edge cases, dependencies, or constraints
+   - Unstated assumptions — anything the document treats as given or obvious without saying so explicitly
 3. Evaluate whether each requirement is:
    - Specific and measurable
    - Testable and observable
@@ -52,7 +53,10 @@ Present the review in chat using this structure:
 ### Issues Found
 | # | Requirement/Section | Issue Type | Description | Severity |
 |---|---|---|---|---|
-| 1 | [section] | Ambiguous/Missing/Conflicting/Untestable | [detail] | High/Medium/Low |
+| 1 | [section] | Ambiguous/Missing/Conflicting/Untestable/Assumption | [detail] | High/Medium/Low |
+
+### Unstated Assumptions
+- [assumption the document relies on without stating] — [why it matters / what could go wrong if it's wrong]
 
 ### Suggested Acceptance Criteria
 - [requirement]: [refined, testable acceptance criterion]
