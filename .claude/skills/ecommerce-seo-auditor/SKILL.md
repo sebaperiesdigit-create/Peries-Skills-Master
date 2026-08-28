@@ -11,6 +11,8 @@ Produce an evidence-led ecommerce SEO audit with prioritized, platform-feasible 
 
 **Read-only.** This skill inspects and reports. It must never modify a live website, listing, feed, account setting, or campaign.
 
+For AI-search, answerability, and AI-citation readiness, use the separate `ecommerce-geo-auditor` skill instead. For sales trend/anomaly confirmation once an SEO issue is found, use `ecommerce-sales-tracker`.
+
 ## Usage examples
 
 ```text
