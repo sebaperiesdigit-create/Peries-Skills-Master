@@ -11,7 +11,7 @@ Turn user-supplied sales data into a KPI dashboard, trend analysis, anomaly flag
 
 **Read-only / advisory.** This skill never connects to a live platform account, API, or reporting tool, and never invents or estimates a figure the user didn't supply. Every number in the output traces back to data the user typed, pasted, or uploaded in the conversation.
 
-For a sales drop that might have a traditional SEO cause (rankings, crawlability, on-page issues), use `ecommerce-seo-auditor`. For sales issues tied to AI-shopping/AI-search visibility (whether AI assistants understand, cite, or recommend the product), use `ecommerce-geo-auditor`.
+For a sales drop that might have a traditional SEO cause (rankings, crawlability, on-page issues), use `ecommerce-seo-auditor`. For sales issues tied to AI-shopping/AI-search visibility (whether AI assistants understand, cite, or recommend the product), use `ecommerce-geo-auditor`. For overall channel/budget strategy once trends and anomalies are understood, use `ecommerce-marketing-strategy-builder` — optional, not a dependency.
 
 ## Usage examples
 
@@ -160,6 +160,7 @@ Post this in chat:
 ## Related audits
 - Sales tied to a traffic/ranking drop → run `ecommerce-seo-auditor`.
 - Sales tied to AI-shopping/AI-search visibility → run `ecommerce-geo-auditor`.
+- Overall channel/budget strategy once trends and anomalies are understood → run `ecommerce-marketing-strategy-builder` (optional, not a dependency).
 ```
 
 The complete report posted in chat is the required output on every platform. Only where persistent file writing is actually available, ask the user via a clickable `AskUserQuestion` ("Save this report to `output/ecommerce-sales-tracker/`?" / "Save it (Recommended)" vs "Just the chat copy") before writing anything — never save without that confirmation, and ask it fresh for every report rather than assuming a standing yes from an earlier one. If confirmed, save the same markdown to `output/ecommerce-sales-tracker/<business-or-scope-slug>-<YYYY-MM-DD>-report.md`, using a safe, readable slug and the report date; if a prior report file exists for that slug, create a new dated file rather than overwriting it, so sequential reports stay comparable. Where file writing isn't available, or the user declines, don't claim a file was saved — say the complete copyable report is the one above.

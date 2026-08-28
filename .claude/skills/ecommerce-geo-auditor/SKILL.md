@@ -11,7 +11,7 @@ Produce an evidence-led GEO (AI-search / AI-citation / AI-shopping) readiness au
 
 **Read-only.** This skill inspects and reports. It must never modify a live website, listing, feed, account setting, or campaign.
 
-For classic/traditional search-engine SEO (meta tags, Core Web Vitals, backlinks, crawlability for Googlebot) rather than AI-search readiness, use the `ecommerce-seo-auditor` skill instead. For sales trend/anomaly confirmation once a GEO issue is found, use `ecommerce-sales-tracker`.
+For classic/traditional search-engine SEO (meta tags, Core Web Vitals, backlinks, crawlability for Googlebot) rather than AI-search readiness, use the `ecommerce-seo-auditor` skill instead. For sales trend/anomaly confirmation once a GEO issue is found, use `ecommerce-sales-tracker`. For overall channel/budget strategy this audit's findings should feed into, use `ecommerce-marketing-strategy-builder` — optional, not a dependency.
 
 ## Usage examples
 
