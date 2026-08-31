@@ -7,7 +7,8 @@ stdout. See references/cli-reference.md for the full command/argument/exit-code
 reference and the deferred-scheduling call shape.
 
 Exit codes: 0 success, 1 validation/input error, 2 locked period without a valid
-override, 3 file/path not found.
+override, 3 file/path not found, 4 workbook was changed by someone else since it
+was loaded (concurrent-modification guard, see workbook_builder.py).
 """
 
 from __future__ import annotations
@@ -24,12 +25,10 @@ from employee_master import EmployeeMaster
 from holiday_calendar import HolidayCalendar
 from csv_importer import CsvImporter
 from business_rules import BusinessRulesEngine
-from workbook_builder import WorkbookBuilder
+from workbook_builder import WorkbookBuilder, ConcurrentModificationError
 from period_lock import PeriodLockManager, LockedPeriodError
-
-DEFAULT_WORKBOOK_DIR = Path("output/work-hours-log-automation/workbooks")
-DEFAULT_LOCK_STATE = Path("output/work-hours-log-automation/_config/period-lock.json")
-DEFAULT_AUDIT_LOG = Path("output/work-hours-log-automation/_audit-log.md")
+from location_config import LocationConfig
+import audit_log
 
 
 def _emit(payload: dict, code: int = 0) -> int:
@@ -123,7 +122,7 @@ def cmd_generate(args: argparse.Namespace) -> int:
             f"target month {args.month!r}, skipped"
         )
 
-    lock_mgr = PeriodLockManager(args.lock_state, args.audit_log)
+    lock_mgr = PeriodLockManager(args.lock_state)
     try:
         override_valid = lock_mgr.require_override_if_locked(
             args.month, args.override_name, args.override_reason
@@ -135,6 +134,7 @@ def cmd_generate(args: argparse.Namespace) -> int:
     builder = WorkbookBuilder(workbook_path)
     builder.load_or_create()
 
+    prefilled_count = builder.prefill_month(args.month, employee_master, holiday_calendar)
     upsert_result = builder.upsert_attendance_rows(in_month, employee_master, holiday_calendar)
     warnings.extend(upsert_result.warnings)
 
@@ -142,6 +142,8 @@ def cmd_generate(args: argparse.Namespace) -> int:
     calculated_rows = builder.rebuild_calculation_sheet(engine, employee_master)
     summary_tables = engine.summarize(calculated_rows, employee_master)
     builder.rebuild_summary_sheet(summary_tables)
+    builder.write_front_matter(args.month, employee_master)
+    builder.apply_data_validation_and_formatting()
 
     needs_review = [
         {"employeeId": r.employee_id, "workDate": r.work_date.isoformat()}
@@ -153,6 +155,7 @@ def cmd_generate(args: argparse.Namespace) -> int:
         "month": args.month,
         "workbookPath": str(workbook_path),
         "dryRun": args.dry_run,
+        "prefilledBlankRows": prefilled_count,
         "added": upsert_result.added,
         "updated": upsert_result.updated,
         "warnings": warnings,
@@ -165,12 +168,25 @@ def cmd_generate(args: argparse.Namespace) -> int:
         result["backupPath"] = None
         return _emit(result, 0)
 
+    try:
+        builder.raise_if_modified_since_load()
+    except ConcurrentModificationError as exc:
+        return _emit({"error": str(exc), "month": args.month, "concurrentModification": True}, 4)
+
     backup_path = builder.backup_if_exists(args.workbook_dir / "backups")
     builder.save()
+
+    audit_fields = {
+        "Operator": args.operator_name,
+        "Month": args.month,
+        "Action": "generate",
+        "Added": upsert_result.added,
+        "Updated": upsert_result.updated,
+    }
     if override_valid:
-        lock_mgr.record_override_audit(
-            args.month, args.override_name, args.override_reason, "generate"
-        )
+        audit_fields["Locked override"] = "Yes"
+        audit_fields["Override reason"] = args.override_reason
+    audit_log.append_entry(args.audit_log, audit_fields)
 
     result["saved"] = True
     result["backupPath"] = str(backup_path) if backup_path else None
@@ -233,7 +249,7 @@ def cmd_lock(args: argparse.Namespace) -> int:
         _validate_month(args.month)
     except ValueError:
         return _emit({"error": f"--month {args.month!r} is not YYYY-MM"}, 1)
-    lock_mgr = PeriodLockManager(args.lock_state, DEFAULT_AUDIT_LOG)
+    lock_mgr = PeriodLockManager(args.lock_state)
     lock_mgr.lock(args.month, args.locked_by)
     return _emit({"month": args.month, "locked": True, "lockedBy": args.locked_by}, 0)
 
@@ -247,7 +263,7 @@ def cmd_status(args: argparse.Namespace) -> int:
     except ValueError:
         return _emit({"error": f"--month {args.month!r} is not YYYY-MM"}, 1)
 
-    lock_mgr = PeriodLockManager(args.lock_state, DEFAULT_AUDIT_LOG)
+    lock_mgr = PeriodLockManager(args.lock_state)
     locked = lock_mgr.is_locked(args.month)
 
     workbook_path = _workbook_path(args.workbook_dir, args.month)
@@ -279,6 +295,26 @@ def cmd_status(args: argparse.Namespace) -> int:
     )
 
 
+# ---- set-location / get-location -----------------------------------------------
+
+
+def cmd_set_location(args: argparse.Namespace) -> int:
+    base_folder = args.base_folder.resolve()
+    for sub in ("_config", "workbooks", "workbooks/backups"):
+        (base_folder / sub).mkdir(parents=True, exist_ok=True)
+    LocationConfig().save(base_folder)
+    paths = LocationConfig.derive_paths(base_folder)
+    return _emit({"baseFolder": str(base_folder), "paths": {k: str(v) for k, v in paths.items()}}, 0)
+
+
+def cmd_get_location(args: argparse.Namespace) -> int:
+    base_folder = LocationConfig().load()
+    if base_folder is None:
+        return _emit({"baseFolder": None, "paths": None}, 0)
+    paths = LocationConfig.derive_paths(base_folder)
+    return _emit({"baseFolder": str(base_folder), "paths": {k: str(v) for k, v in paths.items()}}, 0)
+
+
 # ---- argparse wiring ------------------------------------------------------------
 
 
@@ -290,9 +326,10 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--employee-master", required=True, type=Path)
     g.add_argument("--holiday-config", required=True, type=Path)
     g.add_argument("--month", required=True)
-    g.add_argument("--workbook-dir", default=DEFAULT_WORKBOOK_DIR, type=Path)
-    g.add_argument("--lock-state", default=DEFAULT_LOCK_STATE, type=Path)
-    g.add_argument("--audit-log", default=DEFAULT_AUDIT_LOG, type=Path)
+    g.add_argument("--workbook-dir", required=True, type=Path)
+    g.add_argument("--lock-state", required=True, type=Path)
+    g.add_argument("--audit-log", required=True, type=Path)
+    g.add_argument("--operator-name", required=True)
     g.add_argument("--entries-json", type=Path)
     g.add_argument("--csv", type=Path)
     g.add_argument("--mapping-json", type=Path)
@@ -311,14 +348,21 @@ def build_parser() -> argparse.ArgumentParser:
     l = sub.add_parser("lock")
     l.add_argument("--month", required=True)
     l.add_argument("--locked-by", required=True)
-    l.add_argument("--lock-state", default=DEFAULT_LOCK_STATE, type=Path)
+    l.add_argument("--lock-state", required=True, type=Path)
     l.set_defaults(func=cmd_lock)
 
     s = sub.add_parser("status")
     s.add_argument("--month", required=True)
-    s.add_argument("--workbook-dir", default=DEFAULT_WORKBOOK_DIR, type=Path)
-    s.add_argument("--lock-state", default=DEFAULT_LOCK_STATE, type=Path)
+    s.add_argument("--workbook-dir", required=True, type=Path)
+    s.add_argument("--lock-state", required=True, type=Path)
     s.set_defaults(func=cmd_status)
+
+    sl = sub.add_parser("set-location")
+    sl.add_argument("--base-folder", required=True, type=Path)
+    sl.set_defaults(func=cmd_set_location)
+
+    gl = sub.add_parser("get-location")
+    gl.set_defaults(func=cmd_get_location)
 
     return parser
 

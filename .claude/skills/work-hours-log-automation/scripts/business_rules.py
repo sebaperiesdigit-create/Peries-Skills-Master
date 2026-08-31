@@ -46,8 +46,8 @@ class BusinessRulesEngine:
         gross_hours = None
         break_hours = None
         confirmed_hours = None
-        late_arrival = False
-        early_departure = False
+        late_arrival_hours = 0.0
+        early_departure_hours = 0.0
         review_status = ReviewStatus.OK
 
         if day_type != DayType.WORKING_DAY:
@@ -63,8 +63,10 @@ class BusinessRulesEngine:
             gross_hours = round(_hours_between(record.arrival_time, record.departure_time), 2)
             break_hours = BREAK_HOURS
             confirmed_hours = round(gross_hours - BREAK_HOURS, 2)
-            late_arrival = record.arrival_time > employee.shift_start
-            early_departure = record.departure_time < employee.shift_end
+            if record.arrival_time > employee.shift_start:
+                late_arrival_hours = round(_hours_between(employee.shift_start, record.arrival_time), 2)
+            if record.departure_time < employee.shift_end:
+                early_departure_hours = round(_hours_between(record.departure_time, employee.shift_end), 2)
 
         return CalculatedRow(
             work_date=record.work_date,
@@ -79,8 +81,8 @@ class BusinessRulesEngine:
             break_hours=break_hours,
             confirmed_hours=confirmed_hours,
             expected_hours=expected_hours,
-            late_arrival=late_arrival,
-            early_departure=early_departure,
+            late_arrival_hours=late_arrival_hours,
+            early_departure_hours=early_departure_hours,
             review_status=review_status,
         )
 

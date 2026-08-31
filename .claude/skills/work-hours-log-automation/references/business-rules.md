@@ -48,14 +48,20 @@ The "missing scan" rule is absolute: this skill never estimates, defaults, or in
 
 If Departure Time is not strictly after Arrival Time on the same calendar day, the row is treated as a data-quality issue (flagged `Needs Supervisor Review`), not guessed at. Real overnight-shift support (spanning midnight) was an explicitly open, unanswered question in the original requirements gathering and was deliberately left out rather than guessed at — extend `business_rules.py`'s `calculate()` only once a real overnight-shift requirement is confirmed.
 
-## Late Arrival / Early Departure flags
+## Late Arrival / Early Departure — decimal hours, not booleans
 
-Computed only when confirmed hours were computed (both scans present, valid):
+Computed only when confirmed hours were computed (both scans present, valid); `0.0` otherwise:
 
-- `late_arrival` = Arrival Time is after the employee's configured Shift Start.
-- `early_departure` = Departure Time is before the employee's configured Shift End.
+- `late_arrival_hours` = Arrival Time minus the employee's configured Shift Start, floored at 0 (0 if not late).
+- `early_departure_hours` = Shift End minus Departure Time, floored at 0 (0 if not early).
 
-These are informational flags on the Work Hours Calculation sheet — they do not change the confirmed-hours number itself, and they carry no automatic penalty or pay-rate implication (this skill has no concept of pay rates or overtime premiums at all — hours only).
+These are decimal-hour values (consistent with every other hour column — Confirmed Work Hours, Expected Hours, etc.), not `True`/`False` flags — "0.42 hours late" is more useful to a supervisor than just "late." They are informational columns on the Work Hours Calculation sheet — they do not change the confirmed-hours number itself, and they carry no automatic penalty or pay-rate implication (this skill has no concept of pay rates or overtime premiums at all — hours only).
+
+## Pre-filling the month
+
+Per the original spec ("working-day rows are pre-filled for every selected employee"), every `generate` call first ensures a blank row exists on the Attendance Log for **every active employee** × **every Working Day date in the target month** — Arrival/Departure blank, Employee Status defaulted to `Present`, Data Source `Pending`. This never overwrites an existing row (prefill runs before the incoming entries/CSV are upserted, so a date that already has data is left alone), and it's idempotent — re-running `generate` on a month that's already fully pre-filled creates zero new rows. Weekend/Company Holiday dates are never pre-filled, matching the original spec's "no employee attendance rows should be created for weekend or company-holiday dates."
+
+A direct consequence: right after a month is first pre-filled, essentially every row will show `Needs Supervisor Review` (correctly — a Working Day + Present + no scan yet *is* a missing scan, per the table above), until real data is entered. This is expected, not a bug — see SKILL.md's guidance on summarizing this as a count rather than listing every row when it's large.
 
 ## Summary Report scope
 

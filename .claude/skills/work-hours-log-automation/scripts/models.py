@@ -22,6 +22,7 @@ class EmployeeStatus(str, Enum):
 class DataSource(str, Enum):
     MANUAL = "Manual"
     CSV_IMPORT = "CSV Import"
+    PENDING = "Pending"  # prefilled Working Day row, no scan recorded yet
 
 
 class ReviewStatus(str, Enum):
@@ -64,8 +65,8 @@ class CalculatedRow:
     break_hours: Optional[float]
     confirmed_hours: Optional[float]
     expected_hours: float
-    late_arrival: bool
-    early_departure: bool
+    late_arrival_hours: float  # 0.0 if not late; decimal hours, consistent with other hour columns
+    early_departure_hours: float  # 0.0 if not early; decimal hours
     review_status: ReviewStatus
 
 

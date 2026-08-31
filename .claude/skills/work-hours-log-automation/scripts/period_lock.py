@@ -1,9 +1,14 @@
-"""Period-lock and audit-log control for work-hours-log-automation.
+"""Period-lock control for work-hours-log-automation.
 
-This is this skill's own, fully independent mechanism: its own lock-state file,
-its own append-only audit log, its own override gate. It is a self-attestation
-and audit-log control, not a real authorization/access-control system — there is
-no identity backend here to verify a name against. Say so plainly if asked.
+This is this skill's own, fully independent mechanism: its own lock-state
+file, its own override gate. It is a self-attestation control, not a real
+authorization/access-control system — there is no identity backend here to
+verify a name against. Say so plainly if asked.
+
+This module only validates lock state — it never writes the audit log itself.
+Every save (routine or override) is logged once, uniformly, by cli.py via
+audit_log.append_entry(), so there is exactly one audit entry per save
+regardless of whether it was an override.
 """
 
 from __future__ import annotations
@@ -19,9 +24,8 @@ class LockedPeriodError(Exception):
 
 
 class PeriodLockManager:
-    def __init__(self, lock_state_path: Path, audit_log_path: Path):
+    def __init__(self, lock_state_path: Path):
         self.lock_state_path = Path(lock_state_path)
-        self.audit_log_path = Path(audit_log_path)
 
     def _read_state(self) -> dict:
         if not self.lock_state_path.exists():
@@ -58,9 +62,8 @@ class PeriodLockManager:
         override_reason: Optional[str],
     ) -> bool:
         """Read-only check: returns True if the month is locked and a valid override
-        was supplied (caller must still call record_override_audit itself, and only
-        for a real write — never for a --dry-run). Raises LockedPeriodError if the
-        month is locked and no valid override was supplied. Never writes anything."""
+        was supplied. Raises LockedPeriodError if the month is locked and no valid
+        override was supplied. Never writes anything."""
         if not self.is_locked(month):
             return False
         if not override_name or not override_reason:
@@ -69,16 +72,3 @@ class PeriodLockManager:
                 "--override-reason to write anyway."
             )
         return True
-
-    def record_override_audit(self, month: str, name: str, reason: str, action: str) -> None:
-        self.audit_log_path.parent.mkdir(parents=True, exist_ok=True)
-        timestamp = datetime.now().astimezone().isoformat(timespec="seconds")
-        entry = (
-            f"## {timestamp}\n"
-            f"- Month: {month}\n"
-            f"- Overridden by: {name}\n"
-            f"- Reason: {reason}\n"
-            f"- Action: {action} on locked period {month}\n\n"
-        )
-        with self.audit_log_path.open("a", encoding="utf-8") as f:
-            f.write(entry)

@@ -24,11 +24,20 @@ All calculation and workbook writing happens in `scripts/cli.py` and the modules
 
 ## Storage locations
 
-- Config (git-tracked, user-edited except `period-lock.json`): `output/work-hours-log-automation/_config/employee-master.json`, `.../company-holidays.json`, `.../period-lock.json`.
-- Workbooks (git-tracked): `output/work-hours-log-automation/workbooks/<YYYY-MM>-work-hours-log.xlsx`, with backups under `.../workbooks/backups/`.
-- Audit log (git-tracked, append-only): `output/work-hours-log-automation/_audit-log.md`.
+Everything this skill writes — config, workbooks, backups, audit log — lives under **one base folder the user chooses**, anywhere on disk (a company shared drive, a Documents folder, or inside this repo if they prefer). It is asked for once and remembered automatically after that; see First-time setup.
 
-Nothing about a specific company, department, or employee is built into this skill or its scripts — every one of those values lives in the two config files above.
+```
+python "<this skill's folder>\scripts\cli.py" get-location
+```
+returns the remembered base folder (or `null` if never set) plus every derived path below, so this command is always the first thing to run — never guess or hardcode a path.
+
+- Config (user-edited except `period-lock.json`): `<base folder>/_config/employee-master.json`, `.../company-holidays.json`, `.../period-lock.json`.
+- Workbooks: `<base folder>/workbooks/<YYYY-MM>-work-hours-log.xlsx`, with backups under `.../workbooks/backups/`.
+- Audit log (append-only): `<base folder>/_audit-log.md`.
+
+Because the base folder can be anywhere, it is **not necessarily git-tracked** — durability relies on this skill's own backup-before-write behavior, not on version control. The one thing that *is* fixed and machine-local (never asked about, never git-tracked) is the tiny pointer file recording which base folder was chosen — see `references/cli-reference.md`'s `set-location`/`get-location` entries.
+
+Nothing about a specific company, department, or employee is built into this skill or its scripts — every one of those values lives in the config files above, wherever the user chose to keep them.
 
 ## Interpret the request
 
@@ -42,34 +51,66 @@ When the intent is ambiguous, ask via `AskUserQuestion` with the likely candidat
 
 ## Workflow
 
-1. **First-run check.** If `output/work-hours-log-automation/_config/employee-master.json` or `.../company-holidays.json` is missing, walk through First-time setup (below) before anything else.
-2. **Resolve the target month.** Use `$ARGUMENTS` if given; otherwise ask as free text, suggesting the current month as the default (a month value has no finite menu, so this stays free text).
-3. **Check status first**, always:
+1. **First-run check.** Run `cli.py get-location`. If `baseFolder` is `null`, or its `_config/employee-master.json` / `company-holidays.json` don't exist yet, walk through First-time setup (below) before anything else.
+2. **Identify the operator, once per session.** Before the first `generate` call this session, ask "Who's making this entry?" as free text (no finite set of good answers) if not already given in conversation. Remember it for every `generate` call in this session — don't re-ask for later entries in the same session.
+3. **Resolve the target month.** Use `$ARGUMENTS` if given; otherwise ask as free text, suggesting the current month as the default (a month value has no finite menu, so this stays free text).
+4. **Check status first**, always (using the paths from step 1's `get-location`):
    ```
-   python "<this skill's folder>\scripts\cli.py" status --month <YYYY-MM> --workbook-dir output/work-hours-log-automation/workbooks --lock-state output/work-hours-log-automation/_config/period-lock.json
+   python "<this skill's folder>\scripts\cli.py" status --month <YYYY-MM> --workbook-dir <base folder>/workbooks --lock-state <base folder>/_config/period-lock.json
    ```
    If the request was `status`, report the result and stop here.
    If the month is locked and the request is to log/update data, go to Locked-period handling below before continuing.
-4. **Choose input method** via `AskUserQuestion`: **Enter today's attendance conversationally (Recommended)** / **Import from a CSV file**.
-5. **Manual branch** — ask only for what's genuinely missing: for each employee mentioned, gather Arrival Time, Departure Time (either may be "not yet" / missing), and Employee Status (Present is the default — only ask if there's reason to think it might be Leave) as plain free text. Assemble an entries JSON matching the schema in `references/cli-reference.md` and write it to a scratch path.
-6. **CSV branch** — see CSV import below.
-7. **Dry run first, always:**
+5. **Choose input method** via `AskUserQuestion`: **Enter today's attendance conversationally (Recommended)** / **Import from a CSV file**.
+6. **Manual branch** — one employee at a time:
+   1. Ask which employee this entry is for via `AskUserQuestion`, offering every active employee from the master as a clickable option (plus **Done — no more entries** once at least one has been logged this run).
+   2. For the chosen employee, ask Arrival Time then Departure Time as separate free-text turns (either may be "not yet" / missing — no finite set of good answers for a specific time).
+   3. Ask Employee Status only if there's a real reason to think it isn't the Present default (e.g. the user said "mark X on leave"); when it does need asking, use `AskUserQuestion`: **Present (Recommended)** / **Leave**.
+   4. Loop back to step 1 until the user picks **Done**.
+
+   Assemble the collected rows into an entries JSON matching the schema in `references/cli-reference.md` and write it to a scratch path.
+7. **CSV branch** — see CSV import below.
+8. **Dry run first, always:**
    ```
-   python "<this skill's folder>\scripts\cli.py" generate --employee-master output/work-hours-log-automation/_config/employee-master.json --holiday-config output/work-hours-log-automation/_config/company-holidays.json --month <YYYY-MM> --entries-json <path> [--csv <path> --mapping-json <path>] [--override-name "<name>" --override-reason "<reason>"] --dry-run
+   python "<this skill's folder>\scripts\cli.py" generate --employee-master <base folder>/_config/employee-master.json --holiday-config <base folder>/_config/company-holidays.json --month <YYYY-MM> --workbook-dir <base folder>/workbooks --lock-state <base folder>/_config/period-lock.json --audit-log <base folder>/_audit-log.md --operator-name "<operator>" --entries-json <path> [--csv <path> --mapping-json <path>] [--override-name "<name>" --override-reason "<reason>"] --dry-run
    ```
-   Show the proposed `added`/`updated` counts and any `needsSupervisorReview` entries in chat before asking to save.
-8. **Save confirmation** via `AskUserQuestion`: **Yes, save it (Recommended)** / **No, let me fix something first**.
-9. **Real write** — re-run the same `generate` command from step 7, without `--dry-run`.
-10. **Report the result** plainly: saved workbook path, backup path (if one was made), rows added/updated, and every outstanding `Needs Supervisor Review` entry.
+   Show the proposed `added`/`updated`/`prefilledBlankRows` counts in chat before asking to save. For `needsSupervisorReview`: if it's short (say, under ~10), list the actual entries; if it's long — expected right after a month is first pre-filled, since every not-yet-entered Working Day row is correctly flagged until filled in (see `references/business-rules.md`) — report just the count, not a wall of entries, and say why it's high.
+9. **Save confirmation** via `AskUserQuestion`: **Yes, save it (Recommended)** / **No, let me fix something first**.
+10. **Real write** — re-run the same `generate` command from step 8, without `--dry-run`.
+    - If this exits with code `4` (someone else saved this workbook in the meantime — see `references/period-lock-and-audit.md`'s Concurrency guard), don't treat it as a normal error: say plainly that another operator just saved this month, and re-run steps 8–10 from scratch so the new data applies on top of theirs rather than being discarded.
+11. **Report the result** plainly: saved workbook path, backup path (if one was made), rows added/updated, and the outstanding `Needs Supervisor Review` count (or list, per step 8's rule).
 
 ## First-time setup
 
-1. Explain that two config files are needed before anything else: the employee master (who's tracked, their department, shift) and the company-holiday list.
-2. Show `assets/employee-master.example.json` and `assets/company-holidays.example.json` as starting shapes.
-3. Gather the real employee list and holiday dates conversationally (free text — this is genuine data, not a finite menu).
-4. Show the complete proposed JSON content back before writing anything.
-5. Ask via `AskUserQuestion`: **Yes, save this configuration (Recommended)** / **No, let me change something**.
-6. Write both files to `output/work-hours-log-automation/_config/` only after confirmation.
+Explain briefly that two config files are needed (employee master, company holidays) before anything else, plus a folder to keep everything in.
+
+**Before entering either list, ask directly for a file path** (plain free text — a path has no finite set of good answers, so this is never a clickable menu): "Do you already have employee details in a file? If so, give me the path — otherwise say so and we'll add them one by one here." Ask the equivalent for the holiday list too (asked again after the employee list, right before entering holidays): "Do you have a file with company holiday dates, or should we add them one by one?"
+
+- **If a path is given** (either list): read it. For CSV with non-obvious headers, confirm the column mapping one field at a time via `AskUserQuestion` (same spirit as the CSV import mapping flow below — never guess which column is which). Once parsed, show the **complete derived list** back in one review (not a per-row loop — the point of supplying a file is not re-typing it), and confirm with a single `AskUserQuestion`: **Yes, use this list as read (Recommended)** / **No, let me fix something** (falls through to the one-by-one flow below for corrections). This file-derived path never runs through `cli.py` — Claude reads/parses it directly and writes the resulting config JSON itself, same as the one-by-one path does.
+- **If no file** (typical first time): gather **one employee / one holiday at a time**, each field its own turn — never one bulk free-text request for "the employee list." For each field below: free text where no menu could honestly represent the answer (ID, name, date), `AskUserQuestion` with a recommended option everywhere a sensible finite set exists.
+
+**Per employee, in this order:**
+1. Employee ID — free text. Offer a one-click shortcut first via `AskUserQuestion`: **Auto-generate the next ID (Recommended)** (e.g. `EMP-001`, incrementing per employee added this session) / **I'll enter a specific ID** (falls through to free text).
+2. Employee Name — free text (no finite set of good answers).
+3. Department — free text for the first employee. From the second employee onward, ask via `AskUserQuestion` using every department entered so far as clickable options, plus **A new department** (falls through to free text).
+4. Shift Start — `AskUserQuestion`: common presets seen so far this session (or `08:00` / `09:00` / `09:30` if none yet) plus **A different time** (falls through to free text `HH:MM`).
+5. Shift End — same pattern as Shift Start (presets `17:00` / `18:00` / a different time).
+6. Show this one employee's full row back and confirm via `AskUserQuestion`: **Yes, add this employee (Recommended)** / **No, let me redo this one**.
+7. After each confirmed employee, ask via `AskUserQuestion`: **Add another employee (Recommended until at least one exists)** / **Done — that's everyone**.
+
+**Once the employee list is done, ask for the output location** (plain free text — no default is ever suggested, an explicit path is always required): "Where should this skill keep its configuration, workbooks, and audit log? Give me a full folder path — it can be anywhere on disk, it doesn't have to be inside this repo." Show the path back and confirm via `AskUserQuestion`: **Yes, use this folder (Recommended)** / **No, let me give a different path**. Once confirmed, run:
+```
+python "<this skill's folder>\scripts\cli.py" set-location --base-folder "<the confirmed path>"
+```
+This creates the folder structure and remembers the choice (a small machine-local pointer file — see `references/cli-reference.md`) so the user is never asked again on this machine. All following steps in this setup write into `<base folder>/_config/`.
+
+**Per company holiday, in the same one-at-a-time style, after the base folder is set:**
+1. Ask via `AskUserQuestion` whether there are any company holidays to add yet: **Yes, add one (Recommended)** / **No holidays yet — I can add them later**.
+2. Date — free text (`YYYY-MM-DD`; no finite set of good answers).
+3. Holiday name — free text.
+4. Confirm the single holiday back via `AskUserQuestion`: **Yes, add it (Recommended)** / **No, let me redo this one**.
+5. After each confirmed holiday, ask via `AskUserQuestion`: **Add another holiday** / **Done adding holidays (Recommended)**.
+
+Once both lists are complete (whichever source each came from): show the full proposed `employee-master.json` and `company-holidays.json` content back in one final review, then ask via `AskUserQuestion`: **Yes, save this configuration (Recommended)** / **No, let me change something** (routes back into whichever flow above needs fixing). Write both files to `<base folder>/_config/` only after that confirmation. `assets/employee-master.example.json` and `assets/company-holidays.example.json` are the shapes being built toward — reference them for format, don't just dump them at the user as a fill-in-the-blank template.
 
 ## CSV import
 
@@ -79,7 +120,7 @@ When the intent is ambiguous, ask via `AskUserQuestion` with the likely candidat
 4. Confirm date/time format if the sample values suggest something other than the `%Y-%m-%d`/`%H:%M` defaults.
 5. Run:
    ```
-   python "<this skill's folder>\scripts\cli.py" import-csv-preview --csv <path> --mapping-json <path> --employee-master output/work-hours-log-automation/_config/employee-master.json --out <scratch-path>
+   python "<this skill's folder>\scripts\cli.py" import-csv-preview --csv <path> --mapping-json <path> --employee-master <base folder>/_config/employee-master.json --out <scratch-path>
    ```
 6. Show `importedCount`, `skippedCount`, and every warning in chat before proceeding — a skipped row is never silently dropped without being reported.
 7. Continue to Workflow step 7 using `--csv`/`--mapping-json` on the `generate` call (or the produced normalized-entries file as `--entries-json`).
@@ -92,9 +133,13 @@ If `status` reports the target month locked and the request is to add or change 
 
 Only after the user explicitly asks to lock a month (e.g. "this month is finalized," "lock July"):
 ```
-python "<this skill's folder>\scripts\cli.py" lock --month <YYYY-MM> --locked-by "<name>" --lock-state output/work-hours-log-automation/_config/period-lock.json
+python "<this skill's folder>\scripts\cli.py" lock --month <YYYY-MM> --locked-by "<name>" --lock-state <base folder>/_config/period-lock.json
 ```
 Ask for the locking person's name as free text first; confirm via `AskUserQuestion` (**Yes, lock it (Recommended)** / **No, not yet**) before running the command.
+
+## Never leave the user without a next step
+
+Every response that hands control back to the user — after setup completes, after a workbook save is reported, after a status check, after any checkpoint — must end with a clickable `AskUserQuestion` offering the sensible next actions (e.g. **Log attendance for a month** / **Check status** / **Lock a finished month** / **Add another employee to the master**, trimmed to whatever's actually relevant right now), never a bare open-ended question with no menu. The user should never be left wondering what to say next.
 
 ## Notes
 
@@ -102,6 +147,6 @@ Ask for the locking person's name as free text first; confirm via `AskUserQuesti
 - Never guess a missing Arrival or Departure Time. A blank stays blank and is flagged `Needs Supervisor Review`.
 - Never save without an explicit `AskUserQuestion` save confirmation, shown against the dry-run preview first.
 - Never treat the period lock as real access control — it's a self-attestation and audit-log control; say so plainly if asked.
-- Clickable-question convention: intent disambiguation, input-method choice, CSV column-mapping confirmation, save confirmation, setup confirmation, locked-period override choice, and lock confirmation all use `AskUserQuestion`. Employee data (names, IDs, times, holiday dates, override reasons) stays free text — genuine data, not a finite menu.
+- Clickable-question convention, one item at a time: intent disambiguation, input-method choice, CSV column-mapping confirmation, save confirmation, lock confirmation, locked-period override choice, every per-employee/per-holiday "add another?" and confirm-this-one step in First-time setup, shift-time presets, department selection (once at least one exists), which-employee-is-this-entry-for during manual entry, and Employee Status (when it needs asking at all) all use `AskUserQuestion` with a recommended option. Only fields with no finite set of good answers stay free text: Employee ID (unless auto-generated), Employee Name, a brand-new department, a specific date, holiday name, exact arrival/departure times, and override/lock reasons.
 - Ask only for what's genuinely missing — don't re-ask for an employee's department/shift once it's in the employee master, and don't ask about Employee Status unless there's a real reason to think it isn't the Present default.
 - No scheduling trigger exists yet in this version — see `references/cli-reference.md`'s Deferred: Scheduling section. If asked whether this runs automatically, say plainly that it doesn't; a scheduler would need to be wired up separately.
