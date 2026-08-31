@@ -8,11 +8,11 @@ Peries-Skills-Master is a content repository for Claude Code **skills** — it c
 
 ## Repository layout
 
-Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 29 skill folders — nothing else. All 29 are discoverable/invocable as of the last restructure.
+Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.claude/skills/` contains **only** these 30 skill folders — nothing else. All 30 are discoverable/invocable as of the last restructure.
 
 ```
 .claude/skills/
-  <skill-name>/SKILL.md         # one folder per skill (29 total), skill definitions only
+  <skill-name>/SKILL.md         # one folder per skill (30 total), skill definitions only
   new-joinee/company-workflow.md, glossary.md
   start/company-workflow.md
   skill-builder/reference.md
@@ -86,6 +86,7 @@ These are the rules the skills in this repo follow when authoring/editing them �
 | `ecommerce-geo-auditor` | Read-only, evidence-led GEO (AI-search/AI-citation) readiness audit — diagnoses whether a product page is structured for AI answer engines (ChatGPT, Claude, Gemini, Perplexity) to understand and potentially cite it; separates page-readiness signals from actual observed AI mentions/citations, which it never claims to measure; sibling to `ecommerce-seo-auditor`, same platform-feasible-fix and Confirmed/Data-dependent/Not assessed conventions |
 | `ecommerce-sales-tracker` | Read-only, evidence-led sales KPI dashboard, trend analysis, anomaly detection, and cohort analysis built only from sales data the user supplies (typed, pasted, or uploaded) — never connects to a live platform account/API, never invents a missing figure; every finding labeled Calculated/Data-dependent/Not provided; cross-links to `ecommerce-seo-auditor`/`ecommerce-geo-auditor` for sales-drop root-cause diagnosis |
 | `ecommerce-marketing-strategy-builder` | Strategy-only (never live account changes): builds a full omnichannel marketing strategy — persona, competitive landscape, pricing position, 2-4 prioritized channels with budget, 90-day phased plan, KPIs — from user-supplied and/or researched evidence; every material statement labeled Confirmed fact/Research finding/Calculation/Recommendation/Assumption ⚠️/Not assessed; multi-file (SKILL.md + 3 `references/` files: benchmarks, channel guidance, output template); optional (non-required) cross-links with all three other `ecommerce-*` skills |
+| `work-hours-log-automation` | Enterprise-grade employee attendance/work-hours automation: generates and updates a monthly 3-sheet Excel workbook (source Attendance Log a supervisor edits, derived Work Hours Calculation, derived Summary Report of hours only) via a Python/openpyxl CLI (`scripts/cli.py`) the skill calls rather than computing hours itself; fully configurable (no company/department hardcoded), manual entry or generic CSV import with runtime column-mapping confirmation, a self-contained period-lock + audit-logged override control, and a headless-callable CLI designed for — but not yet wired to — future scheduling; multi-file (SKILL.md + 5 `references/` files + `assets/` config templates + `scripts/` Python modules) |
 
 The two onboarding skills (`start`, `new-joinee`) only write files under `onboarding-output/`, and only after explicit user confirmation at each write — see the "File-Writing Safety" / "Guardrails" section inside each skill's `SKILL.md` before modifying them.
 

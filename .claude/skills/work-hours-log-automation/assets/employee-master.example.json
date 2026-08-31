@@ -1,0 +1,21 @@
+{
+  "updatedAt": "2026-01-01T00:00:00+00:00",
+  "employees": [
+    {
+      "employeeId": "EMP-001",
+      "employeeName": "Jane Employee",
+      "department": "Operations",
+      "shiftStart": "09:00",
+      "shiftEnd": "18:00",
+      "active": true
+    },
+    {
+      "employeeId": "EMP-002",
+      "employeeName": "John Employee",
+      "department": "Operations",
+      "shiftStart": "08:00",
+      "shiftEnd": "17:00",
+      "active": true
+    }
+  ]
+}

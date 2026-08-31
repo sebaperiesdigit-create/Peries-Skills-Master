@@ -1,2 +1,5 @@
 output/record-a-skill-custom/*/raw/**
 output/record-a-skill-custom/*/_staging/**
+
+__pycache__/
+*.pyc
