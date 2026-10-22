@@ -1,0 +1,39 @@
+{
+  "manifest_version": 1,
+  "skill": "aios-structure-build",
+  "description": "Exact-tree manifest for the frozen AIS-OS starter-kit baseline. Paths are relative to the scaffold target root. Hashes are SHA-256 of file content after normalizing CRLF and lone CR to LF; copied file bytes are never altered by this normalization.",
+  "hash_algorithm": "sha256",
+  "hash_normalization": "crlf-and-cr-to-lf",
+  "directories": [
+    ".claude",
+    ".claude/skills",
+    ".claude/skills/onboard",
+    ".claude/skills/audit",
+    ".claude/skills/level-up",
+    "archives",
+    "context",
+    "decisions",
+    "references"
+  ],
+  "files": [
+    { "path": ".gitignore", "sha256_normalized": "3f1d258b5914a5f92bf08af4b9ef4d7b2ab59e48a4df9cf1a4bf4667c20a6167" },
+    { "path": "CLAUDE.md", "sha256_normalized": "8e6acf02af4021f1e3e6f39124e3b26dcedc8439a0cf1624c2585e688fd3f5c4" },
+    { "path": "EXPANSIONS.md", "sha256_normalized": "727f4dabf61b3e48108452a7c6e3d8adc03f8d6661c1603dde29d1f4d68ea924" },
+    { "path": "LICENSE", "sha256_normalized": "79f6fb36dbf642e59321081ffe67eb49476faf19f5cca43c56673a01df202493" },
+    { "path": "README.md", "sha256_normalized": "46720a6b60f64a7b3994a7687cf27d781d6726d190375ee08ad1806c34836a0b" },
+    { "path": "aios-intake.md", "sha256_normalized": "e6699af2a018ce7ed98ded143470c02bef0b8c6d703253383aa10f424f42687f" },
+    { "path": "connections.md", "sha256_normalized": "4c3327a6c34252c3cac7c5e261d9f7c4422501f60e6ddff264ecb7324020eb41" },
+    { "path": "decisions/log.md", "sha256_normalized": "9a6b1bad91a854a1c24bfe53e861f271dac904a007606554776b95f5cc5043ac" },
+    { "path": "references/3ms-framework.md", "sha256_normalized": "4fd7562431a99921b4e9522cc4c5313ba6c26fe583ab49402661fd9ab67718a8" },
+    { "path": "archives/.gitkeep", "sha256_normalized": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    { "path": "context/.gitkeep", "sha256_normalized": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    { "path": ".claude/skills/onboard/SKILL.md", "sha256_normalized": "80a07d5f20b6ba712cd7794a14d069ea65df8caf7775ee14459d2ffbf67b5529" },
+    { "path": ".claude/skills/audit/SKILL.md", "sha256_normalized": "6c6cbdde6d71269ecd7e7f542a5ee6db3e62eb8e6602b759ea0327d31fd31d6b" },
+    { "path": ".claude/skills/level-up/SKILL.md", "sha256_normalized": "fcf8007f2584b5d6cf08e25146e327a77d879f2f2bfa92b74f807bae502c6c3b" }
+  ],
+  "allowlisted_installation_dirs": [
+    ".claude/skills/aios-structure-build",
+    ".claude/skills/aios-structure-validate",
+    ".claude/skills/aios-structure-organize"
+  ]
+}

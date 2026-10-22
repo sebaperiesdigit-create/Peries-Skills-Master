@@ -1,0 +1,9 @@
+{
+  "updatedAt": "2026-08-31T10:00:00+00:00",
+  "employees": [
+    { "employeeId": "EMP-001", "employeeName": "Joy", "department": "Technical", "shiftStart": "08:30", "shiftEnd": "18:00", "active": true },
+    { "employeeId": "EMP-002", "employeeName": "Peri", "department": "Technical", "shiftStart": "09:00", "shiftEnd": "18:30", "active": true },
+    { "employeeId": "EMP-003", "employeeName": "JoPe", "department": "Postage", "shiftStart": "12:30", "shiftEnd": "20:30", "active": true },
+    { "employeeId": "EMP-004", "employeeName": "peries", "department": "Sales", "shiftStart": "09:00", "shiftEnd": "19:00", "active": true }
+  ]
+}

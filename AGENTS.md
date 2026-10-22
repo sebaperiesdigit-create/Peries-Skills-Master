@@ -1,0 +1,100 @@
+# AGENTS.md
+
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
+
+## What this repository is
+
+Peries-Skills-Master is a content repository for Codex **skills** — it contains no application code, build system, or tests. Everything here is Markdown (skill instructions, reference docs) plus a couple of HTML deliverables. There is nothing to build, lint, compile, or run. The one exception is `daily-work-tracker/scripts/*.ps1`, small deterministic PowerShell helpers (marker read/write, config update) that the skill invokes directly — they're not part of a build/test pipeline.
+
+## Repository layout
+
+Skills follow Codex's real discovery convention: `.Codex/skills/<skill-name>/SKILL.md` — one directory per skill, named to match the skill's frontmatter `name:` field, with that skill's supporting files alongside it in the same directory. `.Codex/skills/` contains **only** these 35 skill folders — nothing else. All 35 are discoverable/invocable as of the last restructure.
+
+```
+.Codex/skills/
+  <skill-name>/SKILL.md         # one folder per skill (31 total), skill definitions only
+  new-joinee/company-workflow.md, glossary.md
+  start/company-workflow.md
+  skill-builder/reference.md
+  mcp-access-guide/references/connector-registry.md
+  new-joiner-guide/references/mini-aios-new-joiner-complete-guide.md, .pdf, .docx
+
+output/                         # generated deliverables live here, NOT under .Codex/skills/
+  skill-documentation/
+    inputs/                     # source data used to build a deliverable (e.g. the skills CSV)
+    skill-documentation-table-v5.html      # current/live deliverable
+    skill-documentation-review-notes.md
+    archive/                   # superseded versions, kept for history, not current
+
+handover/                       # repo-wide handover notes, added 2026-08-13
+  README.md                     # living overview of current repo state — keep this current
+  sessions/<date>.md            # dated narrative log, one file per work date
+```
+
+**Convention:** `.Codex/skills/` is Codex's skill-discovery path — keep it limited to skill definitions. Task deliverables, CSVs, generated HTML/reports, and their archived prior versions belong under a top-level `output/<task-or-skill-name>/` folder instead, matching the convention already documented inside the skills themselves (e.g. `onboarding-output/`, `output/[skill-name]/`). `handover/` is the one exception to "deliverables go in `output/`" — it's repo-wide meta-documentation about the project itself, not a task's generated output, so it gets its own top-level folder. Update `handover/README.md` whenever repo state changes meaningfully; add a new `handover/sessions/<date>.md` per work session rather than editing past ones.
+
+### Historical note
+
+This repo previously kept every skill flattened into shared `skill-files/` and `references/` folders (disambiguated by filename, e.g. `SKILL_first_task_mapper.md`), which meant none of them were actually discoverable by Codex, and it also kept task deliverables (`inputs/`, `outputs/`) as siblings of the skill folders inside `.Codex/skills/`. Both were restructured: skills moved into the per-skill-folder layout above, and deliverables moved out to top-level `output/skill-documentation/`. Two gaps left open by that restructure have since been fixed directly: `new-joinee/SKILL.md` no longer links to a nonexistent `templates/` folder — its cheat-sheet and certificate templates are now inlined in Step 14, the same pattern `start/SKILL.md` already used; and both onboarding skills now write exclusively to `onboarding-output/` (previously `start` used `output/onboarding/`). `output/skill-documentation/archive/` holds superseded versions of the skill-documentation-table HTML deliverable (`skill-documentation-table.html`, `-v2`, `-v3`, `-v4`) and the old pre-restructure dashboard preview (`skill_documentation_dashboard_preview.html`) — `skill-documentation-table-v5.html` is the current/live version, rebuilt from `output/skill-documentation/inputs/Skills_documentation_table -Final.csv` once the skills were confirmed discoverable.
+
+### The "rename" maintenance task
+
+When the user says "rename" (or a similar short trigger) after adding a new skill file, check that its frontmatter `name:` matches its directory name (`.Codex/skills/<name>/SKILL.md`), and that any new supporting file's name reflects its purpose. Fix mismatches with `git mv` if tracked, plain rename otherwise (check `git status` first). Don't reorganize further than that without being asked.
+
+## Skill file conventions (per `skill-builder/reference.md`)
+
+These are the rules the skills in this repo follow when authoring/editing them — the canonical reference lives at `.Codex/skills/skill-builder/reference.md`, sourced from https://code.Codex.com/docs/en/skills.
+
+- Frontmatter `name` — lowercase, hyphens, max 64 chars, matches the directory name.
+- Frontmatter `description` — written as "Use when someone asks to [action], [action], or [action]." This is what Codex uses to decide whether to auto-invoke the skill, so it must contain the natural keywords a user would actually say.
+- Only set additional frontmatter fields (`argument-hint`, `disable-model-invocation`, `allowed-tools`, `context: fork` + `agent`, `model`, `hooks`) when the skill actually needs them — don't add frontmatter just because it's available.
+- Keep each `SKILL.md` under 500 lines; move detailed reference material into a separate supporting file in the same folder and link to it.
+- `$ARGUMENTS`, `$N` / `$ARGUMENTS[N]` are the substitution placeholders for arguments passed via `/skill-name`.
+- When building a new skill, run the Discovery Interview process described in `skill-builder/SKILL.md` before writing any files — don't skip straight to authoring.
+- When auditing an existing skill, always read it first, then run the Frontmatter / Content / Integration / Quality checklist in `skill-builder/SKILL.md`.
+
+## Skill inventory
+
+| Skill (folder) | Purpose |
+|---|---|
+| `start` | Lean interactive onboarding (four-layer model: Data/MCP/Codex+Skills/Output) — recommended first step; soft-suggests `new-joinee` at close for deeper, role-specific follow-up |
+| `new-joinee` | Thorough onboarding for absolute beginners (seven-layer model, adds Human Review + Evidence), including role-specific skill recommendations — soft-follows `start` if already completed (shortens the four-layer recap), otherwise fully standalone |
+| `new-joiner-guide` | Coaches a Mini-AIOS company joiner through the company-specific **Mini-AIOS New Joiner Complete Guide** (checked in at `references/` as a runtime `.md` transcription, with the original `.pdf`/`.docx` kept for provenance) — Day One setup, task workflow, publishing, daily work log, handover, governance (GREEN/AMBER/RED), troubleshooting. Deliberately standalone: does not cross-reference or soft-follow `start`/`new-joinee` (those stay generic/role-agnostic; this one is Mini-AIOS-specific and operational) |
+| `first-task-mapper` | Converts a vague task request into a concrete execution map |
+| `project-discovery` | Read-only tour/inspection of a project for beginners |
+| `existing-asset-finder` | Checks whether something already exists before it gets built (runs in a forked `Explore` subagent) |
+| `skill-builder` | Builds new skills (via Discovery Interview) or audits existing ones against the checklist above |
+| `customer-email-reply-drafter` | Drafts replies to customer emails (orders, refunds, delivery, product questions) |
+| `meeting-note-summariser` | Summarizes/recaps meeting notes into structured minutes |
+| `markdown-document-formatter` | Cleans up and polishes a Markdown document's structure |
+| `order-status-summary` | Summarizes order status / delayed-order buckets from a CSV |
+| `order-summary-report` | Revenue totals and top-selling products from an orders CSV |
+| `product-description-writer` | Turns product features into e-commerce listing copy |
+| `requirements-validator` | Reviews and improves requirements docs / acceptance criteria |
+| `skill-finder` | Compares a proposed task against the skill catalog and recommends USE EXISTING / USE WITH PARAMETERS / EXTEND EXISTING / COMBINE EXISTING SKILLS / CREATE NEW / ESCALATE (read-only, chat-only) |
+| `grill-me` | Stress-tests any plan/design one question at a time (with a recommended answer) until every decision, dependency, assumption, risk, and branch is resolved |
+| `evidence-pack-builder` | Builds a traceable evidence pack for completed work (task brief, sources, queries, raw extracts, validation, screenshots, assumptions, decision log, final output) — reusable across departments |
+| `mcp-access-guide` | Teaches beginners how MCP connects Codex to company systems via one interactive diagram; verifies connector availability, never handles credentials or modifies config |
+| `task-closure` | Verifies whether a task is genuinely ready to close — nine dimensions checked against evidence (requirement-level traceability, freshness-checked), returns exactly one of COMPLETE / COMPLETE WITH LIMITATIONS / REVIEW REQUIRED / BLOCKED / INCOMPLETE; never modifies/publishes/deletes without per-action approval |
+| `Codex-basics` | Interactive, slash-command-only beginner lesson in the physical mechanics of VS Code + Codex (folders, Explorer, paths, panel, slash commands, prompts, terminal, tool results, real permission/edit-approval UI) — complements `start`/`new-joinee`'s conceptual architecture teaching rather than duplicating it |
+| `daily-work-tracker` | Guides an employee through creating/viewing/editing a daily status entry (what was done, what's next, blockers), first-time setup, completion status checks, and a self-attested admin identity correction; reminder/notification automation is deferred (see its `SKILL.md` "Deferred" section) |
+| `record-a-skill-custom` | Records an existing workflow from supported evidence (transcripts, screenshots, event logs, example inputs/outputs, SOPs) or a live guided text walkthrough, reconstructs it as a confirmed reusable specification with provenance/confidence tagging, screens for sensitive content, checks for overlap via `existing-asset-finder`, and hands the confirmed spec to `skill-builder` (Mode 1 or Mode 2) to build or extend the actual skill; user-only (`disable-model-invocation: true`), never auto-invoked |
+| `aios-structure-build` | Scaffolds the frozen AIS-OS starter-kit baseline into an empty target directory, hash-verifying every bundled template before writing and every written file after, with automatic rollback on any failure; portable (works installed personally or project-locally unmodified); user-only, never auto-invoked |
+| `aios-structure-organize` | Additively repairs an existing AIS-OS project — dry-run plan of what's missing, explicit confirmation, then creates only the missing items; never overwrites, deletes, or moves anything that already exists; user-only, never auto-invoked |
+| `aios-structure-validate` | Read-only structural check of an existing AIS-OS project against the frozen baseline (missing items, structural drift, non-empty placeholders, anti-pattern clutter), each with a concrete fix; only possible write is an optional, explicitly-consented saved report; user-only, never auto-invoked |
+| `ecommerce-seo-auditor` | Read-only, evidence-led ecommerce SEO audit (technical, content, platform-feasible fixes) for a self-hosted store page (Shopify/WooCommerce/custom) or a marketplace listing (Amazon/Etsy/TikTok Shop); every finding labeled Confirmed/Data-dependent/Not assessed; never modifies a live site/listing/feed/account/campaign |
+| `ecommerce-geo-auditor` | Read-only, evidence-led GEO (AI-search/AI-citation) readiness audit — diagnoses whether a product page is structured for AI answer engines (ChatGPT, Codex, Gemini, Perplexity) to understand and potentially cite it; separates page-readiness signals from actual observed AI mentions/citations, which it never claims to measure; sibling to `ecommerce-seo-auditor`, same platform-feasible-fix and Confirmed/Data-dependent/Not assessed conventions |
+| `ecommerce-sales-tracker` | Read-only, evidence-led sales KPI dashboard, trend analysis, anomaly detection, and cohort analysis built only from sales data the user supplies (typed, pasted, or uploaded) — never connects to a live platform account/API, never invents a missing figure; every finding labeled Calculated/Data-dependent/Not provided; cross-links to `ecommerce-seo-auditor`/`ecommerce-geo-auditor` for sales-drop root-cause diagnosis |
+| `ecommerce-marketing-strategy-builder` | Strategy-only (never live account changes): builds a full omnichannel marketing strategy — persona, competitive landscape, pricing position, 2-4 prioritized channels with budget, 90-day phased plan, KPIs — from user-supplied and/or researched evidence; every material statement labeled Confirmed fact/Research finding/Calculation/Recommendation/Assumption ⚠️/Not assessed; multi-file (SKILL.md + 3 `references/` files: benchmarks, channel guidance, output template); optional (non-required) cross-links with all three other `ecommerce-*` skills |
+| `work-hours-log-automation` | Enterprise-grade employee attendance/work-hours automation: generates and updates a monthly 3-sheet Excel workbook (source Attendance Log a supervisor edits, derived Work Hours Calculation, derived Summary Report of hours only) via a Python/openpyxl CLI (`scripts/cli.py`) the skill calls rather than computing hours itself; fully configurable (no company/department hardcoded), manual entry or generic CSV import with runtime column-mapping confirmation, a self-contained period-lock + audit-logged override control, and a headless-callable CLI designed for — but not yet wired to — future scheduling; multi-file (SKILL.md + 5 `references/` files + `assets/` config templates + `scripts/` Python modules) |
+| `amazon-vendor-asn-submission` | **Codex co-work skill only** (not a Codex file-workflow skill) — prepares, verifies, and, only on the exact approval phrase, executes an Amazon Vendor Central Advanced Shipment Notice (ASN)/postage submission for LEDSone UK from a packing sheet, requiring live browser control (e.g. Codex in Chrome) on an already-signed-in Vendor Central tab; reconciles carton/pallet/weight data, tracks shipments in a Google Sheet master ledger + Live Execution Log tab, saves labels locally and to Drive, and never lets Codex click Amazon's own section-transition or submit buttons |
+| `3d-brain` | Turns a user's actual AIOS knowledge (notes, meetings, projects, Codex memory, Codex memory) into a personalized, local, interactive 3D knowledge-globe app — scaffolds a bundled, prebuilt renderer (no npm install needed to run it) rather than generating a new visual interpretation; user-only (`disable-model-invocation: true`), portable across Codex and Codex, runs entirely locally via Node.js (default `http://localhost:4640`), no deployment or external services |
+| `task-progress-tracker` | Tracks one or more tasks (Task → Phases → Steps) in a single markdown document so progress survives beyond a single reply; platform-independent by design (Codex, Codex.ai web, Codex Cowork, ChatGPT web/desktop, Codex) — uses a real file when file tools exist, falls back to paste-back resume on chat-only platforms; self-contained, doesn't call or depend on `progress-status`/`handoff-builder` |
+| `progress-status` | Turns whatever progress/task-tracking information is already available into a manager-ready status table and one-line summary; pure reporting, platform-independent, and intentionally decoupled from `task-progress-tracker` — reuses its checkbox/tag convention only because it's sensible, not as a dependency |
+| `handoff-builder` | Generates a markdown handoff document so work can continue in a new destination — a new Codex chat, a different Codex project, or a separate AI tool (ChatGPT, Codex, etc.) — with minimal loss of context; platform-independent, self-contained (doesn't require `task-progress-tracker`/`progress-status` to have run), adds a glossary + secret scan for cross-tool destinations |
+
+The two onboarding skills (`start`, `new-joinee`) only write files under `onboarding-output/`, and only after explicit user confirmation at each write — see the "File-Writing Safety" / "Guardrails" section inside each skill's `SKILL.md` before modifying them.
+
+`daily-work-tracker` writes durable records (entries, employee config, admin audit log) only under `output/daily-work-tracker/`, always after explicit user confirmation; ephemeral completion markers live outside the repo at `%LOCALAPPDATA%\daily-work-tracker\markers\` and are never committed. Its `admin-update-identity` action is a self-attestation + audit-log control, not a real authorization check — Codex has no identity backend to verify against.
+
+`record-a-skill-custom` writes only under `output/record-a-skill-custom/<task-slug>/`, always after explicit per-write confirmation: `raw/` and `_staging/` are git-ignored (original evidence copies and temporary extraction material never enter Git history), while `analysis/` and `workflow-specification.md` are committed only after redaction, review, and explicit approval. It never runs `git add`/`commit`/`push`/publish itself, never defaults a skill's install scope (project vs. personal — always an explicit user choice), and never edits a final generated or extended skill directly — that is always delegated to `skill-builder`.

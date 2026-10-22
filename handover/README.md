@@ -57,3 +57,14 @@ Distinct from `start`/`new-joinee` — those are generic, role-agnostic onboardi
 - **`output/skill-documentation/skill-documentation-review-notes.md`** — the detailed, sequentially-numbered changelog for every catalog/hub edit (currently §1–§68).
 - **Auto-memory** (`.claude/projects/.../memory/` on this machine, outside the repo) — durable cross-session notes: user feedback/preferences, project facts, gotchas, reference pointers. `MEMORY.md` there is the index.
 - **`sessions/`** in this folder — dated narrative logs, reconstructed from git history + memory for everything before this folder existed, written live from here on.
+
+## Workflow registry CSV export - 2026-10-01
+
+- Created `output/skill-documentation/skills-workflows.csv`: 35 skill records with the exact 21 columns from the supplied workflow template.
+- Baseline: existing final skill CSV; additional workflow details: current `.claude/skills` instructions. Original CSV, template and skill files were preserved.
+- Attachment URLs and undocumented creators remain blank. Status/version remain source values; no live import or publication was performed.
+- See `sessions/2026-10-01-workflow-registry-csv.md` for mapping and verification.
+
+## Remaining workflows with departments
+
+The user confirmed the simplified one-skill CSV uploaded successfully. Created `output/skill-documentation/skills-workflows-remaining-34-with-departments.csv`, excluding already-uploaded code 001. Retained plain technical headers, UTF-8 without BOM, minimal quoting and one physical line per record. Added `department` after `workflow_code`, assigning one primary department from the user-provided list to every row. Assignments are recommendations based on purpose, not verified organizational ownership. The new department import key has not been live-tested. Original CSVs remain unchanged. Validation passed: 34 unique records, 22 columns, no blank departments, exact read-back equality and 35 physical lines including the header.
