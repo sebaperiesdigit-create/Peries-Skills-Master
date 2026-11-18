@@ -12,7 +12,7 @@ Skills follow Claude Code's real discovery convention: `.claude/skills/<skill-na
 
 ```
 .claude/skills/
-  <skill-name>/SKILL.md         # one folder per skill (31 total), skill definitions only
+  <skill-name>/SKILL.md         # one folder per skill (35 total), skill definitions only
   new-joinee/company-workflow.md, glossary.md
   start/company-workflow.md
   skill-builder/reference.md
